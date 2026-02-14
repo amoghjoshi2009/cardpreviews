@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Special Surprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        :root {
+            --primary: #bf360c; --primary-dark: #870000; --bg-color: #3e2723;
+            --paper-color: #4e342e; --text-color: #ffccbc;
+            --font-header: 'Dancing Script', cursive; 
+            --font-main: 'Poppins', sans-serif;
+            --size-title: 35px;
+            --size-msg: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            height: 100vh; width: 100vw; background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 10% 20%, #5d4037 0%, #3e2723 90%);
+            display: flex; justify-content: center; align-items: center;
+            font-family: var(--font-main); overflow: hidden; color: var(--text-color);
+        }
+        
+        /* --- Login UI --- */
+        #login-overlay {
+            position: fixed; inset: 0; background: var(--bg-color); z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .login-box {
+            background: var(--paper-color); padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); text-align: center; width: 90%; max-width: 350px;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .login-input {
+            width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #ccc; border-radius: 8px;
+            font-size: 1rem; outline: none; text-align: center; background: rgba(255,255,255,0.9);
+        }
+        .login-input:focus { border-color: var(--primary); }
+        .login-btn {
+            background: var(--primary); color: white; border: none; padding: 12px 30px;
+            border-radius: 30px; font-size: 1rem; cursor: pointer; font-weight: 600; width: 100%;
+            transition: transform 0.1s;
+        }
+        .login-btn:active { transform: scale(0.98); }
+        
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%; height: 6px; background: #eee; border-radius: 3px; margin-top: 15px;
+            overflow: hidden; display: none;
+        }
+        .progress-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.2s; }
+        .status-text { font-size: 0.8rem; margin-top: 8px; color: var(--text-color); opacity: 0.7; min-height: 20px;}
+
+        /* --- 3D Scene --- */
+        #view-wrapper { 
+            position: absolute; 
+            top: 50%; left: 50%; /* Critical for centering */
+            width: 0; height: 0; 
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 1s; pointer-events: none;
+        }
+        .scene { perspective: 2500px; width: 1000px; height: 600px; transform-origin: center; display: flex; justify-content: center; align-items: center;}
+        
+        .card-anchor {
+            position: relative; width: 390px; height: 600px; background: var(--paper-color);
+            border-radius: 12px; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25); transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1); padding-top: 20px;
+        }
+        
+        .wing { position: absolute; top: 0; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 12px; cursor: pointer; }
+        .wing-left { right: 100%; transform-origin: right center; transform: rotateY(180deg); z-index: 20; }
+        .wing-right { left: 100%; transform-origin: left center; transform: rotateY(-180deg); z-index: 5; }
+        
+        .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; overflow: hidden; }
+        .wing-left .face-front { background: var(--paper-color); z-index: 2; }
+        .wing-left .face-back { 
+            background: linear-gradient(135deg, var(--bg-color), var(--paper-color)); 
+            transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            border: 12px solid var(--paper-color); 
+        }
+        .wing-right .face-front { background: var(--paper-color); }
+        .wing-right .face-back { background: var(--paper-color); transform: rotateY(180deg); opacity: 0.8; }
+        
+        .card-anchor.open .wing-left, .card-anchor.open .wing-right { transform: rotateY(0deg); }
+
+        /* Typography & Decor */
+        h1, h2 { font-family: var(--font-header); color: var(--primary-dark); text-align: center; }
+        p { font-size: 0.9rem; text-align: center; line-height: 1.6; padding: 0 15px; color: var(--text-color); }
+        
+        .ribbon {
+            position: absolute; top: 0; bottom: 0; left: 40px; width: 40px;
+            background: rgba(255,255,255,0.2);
+            border-left: 2px dashed var(--primary); border-right: 2px dashed var(--primary);
+            pointer-events: none;
+        }
+
+        /* --- Photos & Grids --- */
+        .stack-container { position: relative; width: 240px; height: 280px; margin: 20px auto; cursor: pointer; }
+        .polaroid { 
+            position: absolute; width: 100%; height: 100%; background: #fff; 
+            padding: 10px 10px 45px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+            transition: 0.5s; border: 1px solid #eee; 
+        }
+        .polaroid img, .c-item img { width: 100%; height: 100%; object-fit: cover; background: #eee; }
+        
+        /* Stack Rotations */
+        .p1 { transform: rotate(-4deg); z-index: 5; } .p2 { transform: rotate(3deg); z-index: 4; }
+        .p3 { transform: rotate(-2deg); z-index: 3; } .p4 { transform: rotate(-5deg); z-index: 2; }
+        .p5 { transform: rotate(4deg); z-index: 1; }
+        .polaroid.shuffle-out { transform: translate(150px, 20px) rotate(40deg); opacity: 0; }
+
+        .collage-container { width: 85%; height: 85%; padding: 20px; margin: auto; }
+        
+        /* Grid Layouts */
+        .grid-left { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1.2fr 0.8fr 1.2fr; gap: 8px; height: 100%; }
+        .grid-right { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr 1fr; gap: 8px; height: 100%; }
+        
+        .c-item {position: relative; background: #fff; padding: 4px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.35s ease; transform-origin: center center; will-change: transform;}
+
+        @media (hover: hover) {
+            .c-item:hover {
+                transform:
+                    scale(1.08)
+                    translateY(-6px)
+                    rotateZ(0deg)
+                    perspective(600px)
+                    rotateX(2deg);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+                z-index: 20;
+            }
+        }
+
+        
+        /* Tape Effect */
+        .tape {
+            position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+            width: 30px; height: 10px; background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1); z-index: 5;
+        }
+
+        /* Grid Rotations */
+        .l1 { grid-column: 1; grid-row: 1/span 2; transform: rotate(-2deg); } 
+        .l2 { grid-column: 2; grid-row: 1; transform: rotate(3deg); }
+        .l3 { grid-column: 2; grid-row: 2; transform: rotate(-1deg); } 
+        .l4 { grid-column: 1/span 2; grid-row: 3; transform: rotate(1deg); }
+        
+        .r1 { grid-column: 1; grid-row: 1; transform: rotate(-3deg); } 
+        .r2 { grid-column: 2; grid-row: 1; transform: rotate(2deg); }
+        .r3 { grid-column: 1/span 2; grid-row: 2; transform: rotate(0deg); z-index: 5; }
+        .r4 { grid-column: 1; grid-row: 3; transform: rotate(2deg); } 
+        .r5 { grid-column: 2; grid-row: 3; transform: rotate(-4deg); }
+
+        .audio-controls { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.8); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .tap-hint {
+            margin-top: 15px; font-size: 0.9rem; color: var(--primary-dark);
+            background: rgba(255,255,255,0.8); padding: 5px 12px; border-radius: 20px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+    </style>
+</head>
+<body>
+
+<div id="login-overlay" style="display:none !important;">
+    <div class="login-box">
+        <h2 style="font-size: 2rem; margin-bottom: 15px; color: var(--primary);">Unlock Surprise</h2>
+        <input type="password" id="pass-input" class="login-input" placeholder="Enter Password">
+        <button onclick="startUnlock()" id="btn-unlock" class="login-btn">Open</button>
+        <div class="status-text" id="status-msg"></div>
+        <div class="progress-bar" id="p-bar"><div class="progress-fill" id="p-fill"></div></div>
+        <div style="margin-top:10px; font-size:0.8rem; text-decoration:underline; opacity:0.6; cursor:pointer;" onclick="alert('')">Need a hint?</div>
+    </div>
+</div>
+
+<div id="view-wrapper" style="opacity: 1; pointer-events: all;">
+    <div class="scene" id="scene">
+        <div class="card-anchor" id="card">
+            
+            <!-- Center Content -->
+            <div class="center-content" style="display:flex; flex-direction:column; align-items:center; padding:20px; width:100%;">
+                <h1 style="font-size: 2.2rem; margin-top: 5px;" id="main-title">Design Preview</h1>
+                <p style="margin: 5px 0 15px 0;" id="main-message">This is a generated preview of this theme and font combination. All interactions work without a password.</p>
+                <div class="stack-container" onclick="event.stopPropagation(); shufflePhotos();" id="stack-container">
+                    <!-- Images pre-placed but empty, populated by JS -->
+                    <div class="polaroid p5" id="p5"><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                    <div class="polaroid p4" id="p4"><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                    <div class="polaroid p3" id="p3"><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                    <div class="polaroid p2" id="p2"><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                    <div class="polaroid p1" id="p1"><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                </div>
+                <div style="font-size: 0.75rem; opacity: 0.6;">(Tap photos to shuffle)</div>
+            </div>
+
+            <!-- Left Wing -->
+            <div class="wing wing-left" onclick="toggleCard()">
+                <div class="face face-back">
+                    <div class="ribbon"></div>
+                    <div style="font-size: 5rem;">🎁</div>
+                    <h1 style="font-size: 3rem; margin-top: 10px;" id="cover-title">Preview Card</h1>
+                    <div class="tap-hint">Tap to Open</div>
+                </div>
+                <div class="face face-front">
+                    <div class="collage-container">
+                        <h2 id="left-title">Left Gallery</h2>
+                        <div class="grid-left">
+                            <div class="c-item l1"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item l2"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item l3"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item l4"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Wing -->
+            <div class="wing wing-right">
+                <div class="face face-back"></div>
+                <div class="face face-front">
+                    <div class="collage-container">
+                        <h2 id="right-title">Right Gallery</h2>
+                        <div class="grid-right">
+                            <div class="c-item r1"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item r2"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item r3"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item r4"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                            <div class="c-item r5"><div class="tape"></div><img src="https://placehold.co/400x300?text=IMAGE" style="width:100%; height:100%; object-fit:cover;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<audio id="bg-music"></audio>
+
+<script>
+    // --- Configuration ---
+    const SALT = "";
+    const IV_META = "";
+    const CIPHER_META = "";
+    // Async Chunked Assets
+    const ASSETS = {}; 
+    
+    let derivedKey = null;
+
+    async function startUnlock() {
+        const pass = document.getElementById('pass-input').value;
+        const status = document.getElementById('status-msg');
+        const pBar = document.getElementById('p-bar');
+        const pFill = document.getElementById('p-fill');
+        
+        if(!pass) return;
+        
+        document.getElementById('btn-unlock').disabled = true;
+        status.innerText = "Verifying & Decrypting...";
+        pBar.style.display = 'block';
+
+        // Brief delay to allow UI to render the loading state
+        await new Promise(r => setTimeout(r, 50));
+
+        try {
+            // 1. Derive Key (CPU intensive - Main Thread)
+            const salt = CryptoJS.enc.Hex.parse(SALT);
+            derivedKey = CryptoJS.PBKDF2(pass, salt, { keySize: 256/32, iterations: 1000, hasher: CryptoJS.algo.SHA256 });
+
+            // 2. Decrypt Meta (Titles/Text) - Fast
+            const ivMeta = CryptoJS.enc.Hex.parse(IV_META);
+            const decryptedMeta = CryptoJS.AES.decrypt(CIPHER_META, derivedKey, { iv: ivMeta, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            const metaStr = decryptedMeta.toString(CryptoJS.enc.Utf8);
+            
+            if(!metaStr) throw new Error("Wrong Password");
+            
+            const meta = JSON.parse(metaStr);
+            applyMeta(meta);
+
+            // 3. Start Async Asset Decryption Loop
+            const assetKeys = Object.keys(ASSETS);
+            const total = assetKeys.length;
+            let loaded = 0;
+
+            for (const key of assetKeys) {
+                // IMPORTANT: Yield to main thread every loop to keep UI responsive
+                await new Promise(r => setTimeout(r, 10));
+                
+                try {
+                    const [ivHex, cipherText] = ASSETS[key];
+                    const iv = CryptoJS.enc.Hex.parse(ivHex);
+                    const dec = CryptoJS.AES.decrypt(cipherText, derivedKey, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+                    const b64 = dec.toString(CryptoJS.enc.Utf8);
+                    
+                    if(key === 'audio') {
+                        const audio = document.getElementById('bg-music');
+                        audio.src = b64;
+                    } else {
+                        // Find images with this data index
+                        const imgs = document.querySelectorAll(`img[data-idx="${key}"]`);
+                        imgs.forEach(img => img.src = b64);
+                    }
+                } catch(e) { console.warn("Failed asset", key); }
+
+                loaded++;
+                pFill.style.width = ((loaded / total) * 100) + "%";
+            }
+            
+            // Finish
+            status.innerText = "Ready!";
+            setTimeout(() => {
+                document.getElementById('login-overlay').style.opacity = 0;
+                // Enable interaction
+                const wrapper = document.getElementById('view-wrapper');
+                wrapper.style.opacity = 1;
+                wrapper.style.pointerEvents = "all";
+                
+                setTimeout(() => {
+                    document.getElementById('login-overlay').style.display = 'none';
+                    fireConfetti();
+                    adjustView();
+                    const aud = document.getElementById('bg-music');
+                    if(aud.src) aud.play().catch(e => console.log("Auto-play blocked"));
+                }, 500);
+            }, 500);
+
+        } catch (e) {
+            console.error(e);
+            status.innerText = "Incorrect Password";
+            pBar.style.display = 'none';
+            document.getElementById('btn-unlock').disabled = false;
+        }
+    }
+
+    function applyMeta(meta) {
+        document.getElementById('cover-title').innerText = meta.cover;
+        document.getElementById('main-title').innerText = meta.main_t;
+        document.getElementById('main-message').innerText = meta.main_m;
+        document.getElementById('left-title').innerText = meta.left;
+        document.getElementById('right-title').innerText = meta.right;
+    }
+
+    // --- Interaction Logic ---
+    let isOpen = false;
+    function toggleCard() {
+        document.getElementById('card').classList.toggle('open');
+        isOpen = !isOpen;
+        if(isOpen) {
+            setTimeout(fireConfetti, 800);
+            const hint = document.querySelector('.tap-hint');
+            if(hint) hint.style.display = 'none';
+        }
+    }
+    
+    // Responsive Logic
+    function adjustView() {
+        const wrapper = document.getElementById('view-wrapper');
+        const scene = document.getElementById('scene');
+        const contentWidth = 1100; const contentHeight = 650;
+        const winW = window.innerWidth; const winH = window.innerHeight;
+        let scale;
+        const isPortrait = winH > winW; const isMobile = winW < 768;
+
+        if (isMobile && isPortrait) {
+            const scaleW = winH / contentWidth; const scaleH = winW / contentHeight;
+            scale = Math.min(scaleW, scaleH) * 0.95;
+            wrapper.style.transform = `translate(-50%, -50%) rotate(90deg)`;
+        } else {
+            const scaleW = winW / contentWidth; const scaleH = winH / contentHeight;
+            scale = Math.min(scaleW, scaleH) * 0.95;
+            wrapper.style.transform = `translate(-50%, -50%) rotate(0deg)`;
+        }
+        scene.style.transform = `scale(${Math.min(scale, 1.2)})`;
+    }
+    window.addEventListener('resize', adjustView);
+
+    function shufflePhotos() {
+        if(!isOpen) return;
+        const ids = ['p1', 'p2', 'p3', 'p4', 'p5'];
+        const elements = ids.map(id => document.getElementById(id));
+        let topEl = elements.find(el => el.classList.contains('p1'));
+        if (!topEl) return;
+        topEl.classList.add('shuffle-out');
+        setTimeout(() => {
+            topEl.classList.remove('shuffle-out');
+            elements.forEach(el => {
+                const cls = Array.from(el.classList).find(c => c.startsWith('p') && c.length === 2);
+                let num = parseInt(cls.substring(1));
+                let newNum = (num === 1) ? 5 : num - 1;
+                el.classList.remove(cls); el.classList.add('p' + newNum);
+            });
+        }, 500);
+    }
+
+    function toggleAudio() {
+        const aud = document.getElementById('bg-music');
+        aud.paused ? aud.play() : aud.pause();
+    }
+
+    function fireConfetti() {
+        var count = 200; var defaults = { origin: { y: 0.7 } };
+        function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+        }
+        fire(0.25, { spread: 26, startVelocity: 55, });
+        fire(0.2, { spread: 60, });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45, });
+    }
+</script>
+</body>
+</html>
