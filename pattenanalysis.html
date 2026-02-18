@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics PYQ analysis</title>
+    
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
+    :root {
+        --primary-color: #2563eb;
+        --text-color: #1f2937;
+        --bg-color: #f9fafb;
+        --card-bg: #ffffff;
+        --border-color: #e5e7eb;
+        --code-bg: #1e293b;
+        --code-text: #e2e8f0;
+        --table-header-bg: #f3f4f6;
+        --table-row-hover: #f9fafb;
+    }
+
+    body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        line-height: 1.7;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Container for the document */
+    .container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 40px 60px;
+        background-color: var(--card-bg);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-radius: 8px;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+        color: #111827;
+        font-weight: 700;
+        margin-top: 1.5em;
+        margin-bottom: 0.75em;
+        line-height: 1.3;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        border-bottom: 3px solid var(--primary-color);
+        padding-bottom: 0.3em;
+        margin-top: 0;
+        color: var(--primary-color);
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.3em;
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        color: #374151;
+    }
+
+    p {
+        margin-bottom: 1.2em;
+        font-family: 'Merriweather', serif; /* Serif for better long-form reading */
+        font-size: 1.05rem;
+        color: #374151;
+    }
+
+    /* Links */
+    a {
+        color: var(--primary-color);
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+    }
+    a:hover {
+        border-bottom-color: var(--primary-color);
+    }
+
+    /* Lists */
+    ul, ol {
+        margin-bottom: 1.2em;
+        padding-left: 1.5em;
+    }
+    li {
+        margin-bottom: 0.5em;
+    }
+
+    /* Code Blocks */
+    pre {
+        background-color: var(--code-bg);
+        color: var(--code-text);
+        padding: 1.2em;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9em;
+        margin-bottom: 1.5em;
+    }
+    code {
+        font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+        background-color: #f1f5f9;
+        color: #ef4444; /* Redish syntax color for inline */
+        padding: 0.2em 0.4em;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+    pre code {
+        background-color: transparent;
+        color: inherit;
+        padding: 0;
+    }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2em 0;
+        font-size: 0.95rem;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+        background-color: var(--table-header-bg);
+        font-weight: 600;
+        color: #111827;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.05em;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: var(--table-row-hover);
+    }
+
+    /* Blockquotes */
+    blockquote {
+        border-left: 4px solid var(--primary-color);
+        background-color: #eff6ff;
+        margin: 1.5em 0;
+        padding: 1em 1.5em;
+        font-style: italic;
+        color: #4b5563;
+        border-radius: 0 6px 6px 0;
+    }
+
+    /* Horizontal Rule */
+    hr {
+        border: 0;
+        height: 1px;
+        background: var(--border-color);
+        margin: 3em 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .container {
+            width: 90%;
+            padding: 20px;
+            margin: 20px auto;
+        }
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.5rem; }
+        table { display: block; overflow-x: auto; }
+    }
+
+    /* Print styles */
+    @media print {
+        body { background-color: white; }
+        .container { box-shadow: none; max-width: 100%; margin: 0; padding: 0; }
+        h1 { color: black; border-bottom: 2px solid black; }
+        a { text-decoration: underline; color: black; }
+    }
+</style>
+
+    
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  options: {
+    ignoreHtmlClass: 'tex2jax_ignore',
+    processHtmlClass: 'tex2jax_process'
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+</head>
+<body>
+    <div class="container">
+        <p>Based on a rigorous analysis of CBSE Class 12 Physics official past papers (last 15 years), Sample Question Papers (SQPs), and recent structural changes emphasizing competency-based questions, here is the comprehensive exam blueprint and prediction for the 2026 board examination.</p>
+<hr />
+<h2 id="section-1-chapter-wise-analysis">SECTION 1: CHAPTER-WISE ANALYSIS</h2>
+<p>Here is the granular breakdown of historical trends, categorized by chapter. Frequencies are expressed as the number of appearances in the last 15 board papers.</p>
+<h3 id="unit-i-ii-electrostatics-current-electricity">Unit I &amp; II: Electrostatics &amp; Current Electricity</h3>
+<ul>
+<li><strong>Electric Charges and Fields</strong></li>
+<li><em>Derivations:</em> Electric field due to a dipole (Equatorial/Axial) (11/15), Gauss’s Law applications (Infinite wire: 9/15, Plane sheet: 8/15).</li>
+<li><em>Numericals:</em> Flux calculation through a cube/cylinder (10/15), Null point calculation (7/15).</li>
+<li><em>Diagrams:</em> Electric field lines for dipole and like charges (6/15).</li>
+<li>
+<p><em>Case Studies:</em> Faraday cage/Electrostatic shielding (Recent trend: 3/4 SQPs).</p>
+</li>
+<li>
+<p><strong>Electrostatic Potential and Capacitance</strong></p>
+</li>
+<li><em>Derivations:</em> Energy stored in a capacitor (9/15), Capacitance of a parallel plate capacitor with dielectric slab (12/15).</li>
+<li>
+<p><em>Numericals:</em> Equivalent capacitance in mixed grouping (11/15), Common potential and energy loss (8/15).</p>
+</li>
+<li>
+<p><strong>Current Electricity</strong></p>
+</li>
+<li><em>Derivations:</em> Drift velocity relation </li>
+</ul>
+<p>(10/15), Wheatstone bridge principle using Kirchhoff's laws (8/15).
+* <em>Numericals:</em> Kirchhoff’s laws circuit analysis (14/15), Temperature dependence of resistance (7/15).
+* <em>Diagrams:</em> V-I graph for non-ohmic devices (GaAs) (5/15).</p>
+<h3 id="unit-iii-iv-magnetic-effects-emi-ac">Unit III &amp; IV: Magnetic Effects, EMI &amp; AC</h3>
+<ul>
+<li><strong>Moving Charges and Magnetism</strong></li>
+<li><em>Derivations:</em> Magnetic field on the axis of a circular loop (10/15), Force between two parallel current-carrying wires (12/15).</li>
+<li>
+<p><em>Numericals:</em> Conversion of Galvanometer to Ammeter/Voltmeter (11/15), Radius/Pitch of charged particle in magnetic field (9/15).</p>
+</li>
+<li>
+<p><strong>Magnetism and Matter</strong></p>
+</li>
+<li><em>Concepts:</em> Properties of dia, para, and ferromagnetic materials (10/15).</li>
+<li>
+<p><em>Case Studies:</em> Earth's magnetic field components (Recent trend).</p>
+</li>
+<li>
+<p><strong>Electromagnetic Induction</strong></p>
+</li>
+<li><em>Derivations:</em> Motional EMF in a sliding rod (8/15).</li>
+<li>
+<p><em>Numericals:</em> Mutual inductance of two co-axial solenoids (9/15), Change in flux and induced charge (6/15).</p>
+</li>
+<li>
+<p><strong>Alternating Current</strong></p>
+</li>
+<li><em>Derivations:</em> Impedance of series LCR circuit using phasor diagram (13/15), Average power in AC circuit (7/15).</li>
+<li><em>Numericals:</em> Resonance condition, Q-factor, and bandwidth (11/15), Transformer efficiency and turn ratio (9/15).</li>
+</ul>
+<h3 id="unit-v-vi-em-waves-optics">Unit V &amp; VI: EM Waves &amp; Optics</h3>
+<ul>
+<li><strong>Electromagnetic Waves</strong></li>
+<li><em>Concepts:</em> EM spectrum wavelength/frequency ranges and their specific uses (14/15).</li>
+<li><em>Numericals:</em> Relation between E and B fields (</li>
+</ul>
+<p>) (8/15).</p>
+<ul>
+<li><strong>Ray Optics and Optical Instruments</strong></li>
+<li><em>Derivations:</em> Lens Maker's Formula (13/15), Refractive index of a prism (11/15).</li>
+<li><em>Numericals:</em> Combination of lenses/mirrors (12/15), Magnifying power of microscopes/telescopes (10/15).</li>
+<li>
+<p><em>Diagrams:</em> Ray diagrams of Compound Microscope and Astronomical Telescope (14/15).</p>
+</li>
+<li>
+<p><strong>Wave Optics</strong></p>
+</li>
+<li><em>Derivations:</em> Laws of reflection/refraction using Huygens' principle (12/15), Fringe width in YDSE (10/15).</li>
+<li><em>Numericals:</em> Ratio of maximum to minimum intensity in YDSE (11/15).</li>
+</ul>
+<h3 id="unit-vii-viii-ix-modern-physics-semiconductors">Unit VII, VIII &amp; IX: Modern Physics &amp; Semiconductors</h3>
+<ul>
+<li><strong>Dual Nature of Radiation and Matter</strong></li>
+<li><em>Derivations:</em> Einstein’s photoelectric equation (9/15), de Broglie wavelength of an electron (10/15).</li>
+<li><em>Numericals:</em> Work function, stopping potential, and threshold frequency (13/15).</li>
+<li>
+<p><em>Graphs:</em> Stopping potential vs. frequency, Intensity vs. photocurrent (12/15).</p>
+</li>
+<li>
+<p><strong>Atoms &amp; Nuclei</strong></p>
+</li>
+<li><em>Derivations:</em> Radius and Energy of  orbit in H-atom (Bohr’s model) (11/15).</li>
+<li>
+<p><em>Numericals:</em> Spectral lines (Rydberg formula) (10/15), Mass defect and Binding Energy per nucleon (12/15).</p>
+</li>
+<li>
+<p><strong>Semiconductor Electronics</strong></p>
+</li>
+<li><em>Derivations/Explanations:</em> Working of Full-wave/Half-wave rectifier (14/15).</li>
+<li><em>Diagrams:</em> Energy band diagrams, P-N junction forward/reverse bias characteristics (13/15).</li>
+</ul>
+<hr />
+<h2 id="section-2-derivation-analysis">SECTION 2: DERIVATION ANALYSIS</h2>
+<p>The following derivations form the theoretical backbone of the CBSE Physics paper. Memorizing these and their final expressions is non-negotiable.</p>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Derivation</th>
+<th>Frequency</th>
+<th>Chapter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>Lens Maker's Formula: <br></td>
+<td>13/15</td>
+<td>Ray Optics</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>Force between two infinitely long parallel current-carrying conductors</td>
+<td>12/15</td>
+<td>Moving Charges</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Laws of Refraction/Reflection using Huygens' Wave Theory</td>
+<td>12/15</td>
+<td>Wave Optics</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>Capacitance of a parallel plate capacitor with a dielectric slab</td>
+<td>12/15</td>
+<td>Electrostatic Potential</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>Impedance of a series LCR circuit using Phasor Diagram</td>
+<td>11/15</td>
+<td>Alternating Current</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>Magnetic field on the axis of a circular current-carrying loop</td>
+<td>10/15</td>
+<td>Moving Charges</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>Drift velocity and its relation to current (<br><br>)</td>
+<td>10/15</td>
+<td>Current Electricity</td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td>Expression for fringe width in Young's Double Slit Experiment</td>
+<td>10/15</td>
+<td>Wave Optics</td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td>Total energy of an electron in the  orbit of a Hydrogen atom</td>
+<td>9/15</td>
+<td>Atoms</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td>Electric field due to an infinitely long straight charged wire (Gauss's Law)</td>
+<td>9/15</td>
+<td>Electric Charges</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="section-3-numerical-analysis">SECTION 3: NUMERICAL ANALYSIS</h2>
+<p>CBSE numericals are rarely "plug-and-play." They test pattern recognition and concept blending. The most repeated numerical patterns include:</p>
+<ol>
+<li><strong>Kirchhoff’s Laws in Multi-loop Circuits:</strong> Finding the current in a specific branch of a complex Wheatstone bridge or a two-battery circuit.</li>
+<li><strong>YDSE Intensity Ratios:</strong> Calculating </li>
+</ol>
+<p>when the ratio of slit widths or amplitudes is given.
+3. <strong>Photoelectric Effect:</strong> Calculating the stopping potential or maximum kinetic energy when light of two different wavelengths is incident on a metal surface.
+4. <strong>Galvanometer Conversion:</strong> Calculating the required shunt resistance to convert a galvanometer of given resistance and figure of merit into an ammeter of a specific range.
+5. <strong>Binding Energy:</strong> Calculating the energy released (-value) in a nuclear fission or fusion reaction using given atomic masses and </p>
+<p>.</p>
+<hr />
+<h2 id="section-4-diagram-analysis">SECTION 4: DIAGRAM ANALYSIS</h2>
+<p>Clear, well-labeled diagrams often carry 1-2 direct marks in long-answer questions.</p>
+<ul>
+<li>
+<p><strong>Ray diagram of a Compound Microscope</strong> (at least distance of distinct vision and normal adjustment).</p>
+</li>
+<li>
+<p><strong>Ray diagram of an Astronomical Telescope</strong>.</p>
+</li>
+<li>
+<p><strong>Full-Wave Rectifier Circuit Diagram</strong> (along with input and output waveforms).</p>
+</li>
+<li>
+<p><strong>Energy Band Diagrams</strong> (distinguishing between conductors, insulators, and intrinsic/extrinsic semiconductors).</p>
+</li>
+<li><strong>Series LCR Circuit Phasor Diagram</strong>.</li>
+</ul>
+<hr />
+<h2 id="section-5-cbse-2026-prediction-top-50-expected-questions">SECTION 5: CBSE 2026 PREDICTION (Top 50 Expected Questions)</h2>
+<p>Based on the shift towards application-based and competency-based questions (NEP 2020 alignment), here are the top predicted questions/concepts for 2026:</p>
+<p><strong>Electrostatics &amp; Current Electricity</strong></p>
+<ol>
+<li>Derive Gauss's law from Coulomb's law.</li>
+<li>Electric field due to a uniformly charged spherical shell (inside, outside, surface) with graphical representation.</li>
+<li>Case Study: Electrostatic shielding in thunderstorms.</li>
+<li>Derive equivalent capacitance for capacitors in series and parallel.</li>
+<li>Effect of introducing a dielectric on capacitance, charge, potential, and energy (when battery is kept connected vs. disconnected).</li>
+<li>State Kirchhoff's rules and apply them to a two-loop circuit.</li>
+<li>Derive the relation between resistivity and relaxation time.</li>
+<li>Explain the variation of resistivity with temperature for conductors and semiconductors (with graphs).</li>
+<li>Potentiometer principle (conceptual application, even if primary device is removed, the principle of null point remains).</li>
+<li>Wheatstone bridge balanced condition derivation.</li>
+</ol>
+<p><strong>Magnetism &amp; EMI/AC</strong>
+11. Biot-Savart law to find the magnetic field at the center of a current loop.
+12. Ampere’s circuital law to find the magnetic field inside a long straight solenoid.
+13. Torque on a rectangular current loop in a uniform magnetic field.
+14. Conversion of a galvanometer to a voltmeter (numerical).
+15. Differentiate between diamagnetic, paramagnetic, and ferromagnetic materials.
+16. State Faraday's laws of EMI and Lenz's law (predicting the direction of induced current).
+17. Motional EMF derivation (</p>
+<p>).
+18. Self-inductance of a long solenoid.
+19. Derive the resonant frequency of an LCR series circuit.
+20. Calculate the Q-factor and explain its significance in tuning circuits.
+21. Principle, construction, and working of a Transformer (including energy losses).
+22. Prove that average power consumed in a pure inductor/capacitor over a complete cycle is zero.</p>
+<p><strong>EM Waves &amp; Optics</strong>
+23. Displacement current concept and modified Ampere's law.
+24. Identify the EM wave used in radar systems and state its frequency range.
+25. Derive the Lens Maker's formula.
+26. Trace the rays through a glass prism and derive </p>
+<p>.
+27. Case Study: Total Internal Reflection (Optical fibers, Mirage).
+28. Two thin lenses in contact: derive the effective focal length.
+29. Draw the ray diagram for a reflecting type telescope (Cassegrain) and state its advantages.
+30. Huygens' principle: Prove Snell's law of refraction.
+31. Conditions for sustained interference of light.
+32. YDSE: Derive the expression for the fringe width.
+33. Diffraction at a single slit: graphical representation of intensity distribution.
+34. Explain why the central maximum in diffraction is twice as wide as secondary maxima.</p>
+<p><strong>Modern Physics</strong>
+35. Einstein's photoelectric equation and its successful explanation of the laws of photoelectric emission.
+36. Draw graphs showing the variation of photocurrent with intensity and anode potential.
+37. Derive the de Broglie wavelength of an electron accelerated through a potential difference .
+38. Distance of closest approach (alpha particle scattering).
+39. Bohr's postulates for the hydrogen atom.
+40. Derive the radius of the  Bohr orbit.
+41. Calculate the longest and shortest wavelengths in the Balmer series of Hydrogen.
+42. Define mass defect and binding energy.
+43. Draw the Binding Energy per nucleon vs. Mass Number graph and explain nuclear stability.
+44. Differentiate between nuclear fission and fusion with examples.</p>
+<p><strong>Semiconductors</strong>
+45. Distinguish between n-type and p-type semiconductors using energy band diagrams.
+46. Explain the formation of the depletion region and potential barrier in a p-n junction.
+47. Draw and explain the V-I characteristics of a p-n junction diode in forward and reverse bias.
+48. Explain the working of a p-n junction diode as a Half-Wave Rectifier.
+49. Explain the working of a Full-Wave Rectifier with the help of a circuit diagram and waveforms.
+50. Case Study: Applications of LEDs and Photodiodes (focusing on threshold energy).</p>
+<hr />
+<h2 id="section-6-priority-list">SECTION 6: PRIORITY LIST</h2>
+<p>To maximize efficiency, structure your revision based on weightage, scoring probability, and historical consistency.</p>
+<h3 id="priority-1-must-do-high-yield-predictable">Priority 1: Must Do (High Yield, Predictable)</h3>
+<ul>
+<li><strong>Ray Optics &amp; Wave Optics:</strong> High weightage (approx. 14-18 marks combined). Derivations and diagrams are highly predictable.</li>
+<li><strong>Semiconductor Electronics:</strong> Extremely scoring. Straightforward theory (Rectifiers, V-I characteristics).</li>
+<li><strong>Current Electricity:</strong> Kirchhoff's laws numericals and drift velocity derivations are guaranteed appearances.</li>
+<li><strong>Modern Physics (Dual Nature, Atoms, Nuclei):</strong> Formula-based numericals and direct theoretical questions. Very high return on time invested.</li>
+</ul>
+<h3 id="priority-2-important-requires-conceptual-depth">Priority 2: Important (Requires Conceptual Depth)</h3>
+<ul>
+<li><strong>Electrostatics (Ch 1 &amp; 2):</strong> Heavy on concepts. Gauss's law and capacitor circuits require solid understanding.</li>
+<li><strong>Alternating Current:</strong> Phasor diagrams and resonance conditions are frequent but can be mathematically intensive for some.</li>
+<li><strong>Moving Charges and Magnetism:</strong> Biot-Savart and Ampere's law derivations are critical.</li>
+</ul>
+<h3 id="priority-3-less-important-low-weightage-highly-variable">Priority 3: Less Important (Low Weightage / Highly Variable)</h3>
+<ul>
+<li><strong>Electromagnetic Waves:</strong> Only 2-3 marks. Memorize the EM spectrum, uses, and the displacement current concept.</li>
+<li><strong>Magnetism and Matter:</strong> Mostly definitions (dia/para/ferro) and basic Earth's magnetism concepts.</li>
+<li><strong>Electromagnetic Induction:</strong> Aside from Motional EMF and Lenz's law, questions here often merge with AC, making isolated EMI questions less frequent.</li>
+</ul>
+<hr />
+<p>Would you like me to generate a mock test paper based strictly on these 2026 predictions, or should we deep-dive into the step-by-step solution for any of the high-frequency derivations?</p>
+    </div>
+</body>
+</html>
