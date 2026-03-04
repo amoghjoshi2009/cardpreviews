@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday! - Digital Book</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap');
 
         :root {
+            /* COLORS - Change these hex codes to customize your theme */
             --primary: #fff1f2;
             --accent: #fb7185;
             --text: #4c0519;
             --bg-gradient: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
-            --book-cover: #881337; /* Rose-900 */
-            --paper-color: #fffdfd;
+            --book-cover: #881337; /* The outside cover color */
+            --paper-color: #fffdfd; /* The inside page color */
         }
 
         body {
@@ -25,13 +26,38 @@
             margin: 0;
             height: 100vh;
             width: 100vw;
+            touch-action: none; /* Prevents accidental scrolling/zooming on mobile */
+        }
+
+        /* --- LANDSCAPE ENFORCEMENT --- */
+        #orientation-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--book-cover);
+            z-index: 9999;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Show overlay only on mobile portrait */
+        @media (max-width: 1024px) and (orientation: portrait) {
+            #orientation-overlay {
+                display: flex;
+            }
         }
 
         .script-font {
             font-family: 'Dancing Script', cursive;
         }
 
-        /* Responsive Wrapper */
         .book-wrapper {
             display: flex;
             justify-content: center;
@@ -41,16 +67,13 @@
             perspective: 2500px;
         }
 
-        /* The Book Container */
         .book {
             position: relative;
             width: 860px;
             height: 560px;
-            /* Scaling applied via JS based on screen size */
             transition: transform 0.3s ease; 
         }
 
-        /* Individual Book Leaf */
         .leaf {
             position: absolute;
             top: 0;
@@ -67,7 +90,6 @@
             transform: rotateY(-180deg);
         }
 
-        /* Front and Back Pages */
         .page {
             position: absolute;
             top: 0;
@@ -79,12 +101,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 3rem;
+            padding: 2.5rem;
             text-align: center;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
         }
 
-        /* The Front of a leaf (Right side of a spread) */
         .page.front {
             background: linear-gradient(to left, var(--paper-color) 92%, #eadddd 100%);
             border-radius: 0 12px 12px 0;
@@ -93,7 +114,6 @@
             border-left: none;
         }
 
-        /* The Back of a leaf (Left side of a spread) */
         .page.back {
             background: linear-gradient(to right, var(--paper-color) 92%, #eadddd 100%);
             border-radius: 12px 0 0 12px;
@@ -102,186 +122,132 @@
             border-right: none;
         }
 
-        /* Cover Styles */
         .cover-front {
             background: var(--book-cover) !important;
             color: white !important;
             border-radius: 0 15px 15px 0 !important;
             box-shadow: inset 5px 0 20px rgba(0,0,0,0.2), 10px 10px 30px rgba(0,0,0,0.3) !important;
-            border: 2px solid #5c0b25 !important;
-            border-left: 6px solid #4a091e !important; /* Spine edge */
+            border-left: 6px solid rgba(0,0,0,0.2) !important;
         }
         
         .cover-back {
             background: var(--book-cover) !important;
             color: white !important;
             border-radius: 15px 0 0 15px !important;
-            box-shadow: inset -5px 0 20px rgba(0,0,0,0.2), -10px 10px 30px rgba(0,0,0,0.3) !important;
-            border: 2px solid #5c0b25 !important;
-            border-right: 6px solid #4a091e !important;
+            border-right: 6px solid rgba(0,0,0,0.2) !important;
         }
 
-        /* Decorations */
         .photo-frame {
             position: relative;
-            padding: 12px;
+            padding: 10px;
             background: white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            border-radius: 4px;
-            transform: rotate(-2deg);
-            transition: transform 0.3s ease;
-        }
-        
-        .photo-frame:hover {
-            transform: scale(1.02) rotate(0deg);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 2px;
         }
 
-        .wish-name {
-            font-size: 0.75rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Navigation Buttons */
         .nav-btn {
             position: fixed;
-            bottom: 2rem;
-            padding: 0.75rem 2rem;
+            bottom: 1.5rem;
+            padding: 0.6rem 1.5rem;
             border-radius: 50px;
             background: var(--accent);
             color: white;
             cursor: pointer;
             z-index: 100;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(251, 113, 133, 0.4);
             font-weight: 600;
             border: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.1);
-            box-shadow: 0 6px 20px rgba(251, 113, 133, 0.6);
+        #prevBtn { left: 1.5rem; display: none; }
+        #nextBtn { right: 1.5rem; }
+
+        /* Rotate Icon Animation */
+        .rotate-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            animation: rotateDevice 2s ease-in-out infinite;
         }
 
-        #prevBtn { left: 3rem; display: none; }
-        #nextBtn { right: 3rem; }
-
-        @media (max-width: 640px) {
-            #prevBtn { left: 1rem; padding: 0.6rem 1.2rem; font-size: 0.85rem;}
-            #nextBtn { right: 1rem; padding: 0.6rem 1.2rem; font-size: 0.85rem;}
-            .page { padding: 1.5rem; }
+        @keyframes rotateDevice {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(-90deg); }
+            100% { transform: rotate(0deg); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
+    <!-- Orientation Lock Overlay -->
+    <div id="orientation-overlay">
+        <svg class="rotate-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="2" />
+            <path d="M12 18h.01" />
+        </svg>
+        <h2 class="text-xl font-bold mb-2">Please Rotate Your Device</h2>
+        <p class="opacity-80">This book looks best in landscape mode.</p>
+    </div>
+
+    <!-- Navigation Buttons -->
     <button class="nav-btn" id="prevBtn" onclick="turnPrev()">Previous</button>
     <button class="nav-btn" id="nextBtn" onclick="turnNext()">Next</button>
 
     <div class="book-wrapper">
         <div class="book" id="book">
             
-            <!-- Leaf 0: Cover & Spread 1 Left -->
+            <!-- Leaf 0 -->
             <div class="leaf">
-                <!-- Cover Front -->
                 <div class="page front cover-front">
-                    <h1 class="text-6xl sm:text-7xl mb-8 script-font text-rose-100 drop-shadow-lg">Happy<br>Birthday!</h1>
-                    <div class="w-16 h-1 bg-rose-400 rounded-full mb-8"></div>
-                    <p class="font-light tracking-widest uppercase text-xs text-rose-200">Open to view</p>
+                    <h1 class="text-5xl sm:text-7xl mb-4 script-font">Happy Birthday!</h1>
+                    <p class="text-sm tracking-widest uppercase opacity-70">A Special Keepsake</p>
                 </div>
-                <!-- Spread 1 Left: First Image -->
                 <div class="page back">
                     <div class="photo-frame">
-                        <img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?q=80&w=600" alt="Cake" class="w-64 h-64 object-cover rounded">
+                        <img src="https://images.unsplash.com/photo-1464349153735-7db50ed83c84?q=80&w=400" alt="Cake" class="w-48 h-48 sm:w-64 sm:h-64 object-cover">
                     </div>
                 </div>
             </div>
 
-            <!-- Leaf 1: Spread 1 Right & Spread 2 Left -->
+            <!-- Leaf 1 -->
             <div class="leaf">
-                <!-- Spread 1 Right: Intro Text -->
                 <div class="page front">
-                    <h2 class="text-4xl mb-6 script-font text-rose-600">A special gift...</h2>
-                    <p class="text-lg leading-relaxed text-slate-700">A digital scrapbook filled with memories, laughter, and wishes from all of us.</p>
+                    <h2 class="text-3xl mb-4 script-font text-rose-600">To Someone Special</h2>
+                    <p class="text-base text-slate-600 px-4">Open this book to see all the wonderful messages left just for you on your big day.</p>
                 </div>
-                <!-- Spread 2 Left: Alex's Image -->
                 <div class="page back">
-                    <div class="photo-frame" style="transform: rotate(2deg);">
-                        <img src="" alt="Alex" class="w-56 h-72 object-cover">
+                    <div class="photo-frame">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400" alt="Friend 1" class="w-40 h-56 sm:w-52 sm:h-72 object-cover">
                     </div>
                 </div>
             </div>
 
-            <!-- Leaf 2: Spread 2 Right & Spread 3 Left -->
+            <!-- Leaf 2 -->
             <div class="leaf">
-                <!-- Spread 2 Right: Alex's Text -->
                 <div class="page front">
-                    <span class="wish-name">From: Alex</span>
-                    <h2 class="text-4xl mb-6 script-font">Happy Birthday, Champ!</h2>
-                    <p class="text-base leading-relaxed text-slate-700">To the guy who survived every group project with me—hope your day is as legendary as our late-night study sessions!</p>
+                    <span class="text-xs uppercase text-rose-400 font-bold mb-2">From Alex</span>
+                    <h2 class="text-3xl mb-4 script-font">The Best Times!</h2>
+                    <p class="text-sm text-slate-600 px-6">Happy Birthday! Thanks for being an incredible friend. Here's to many more adventures together!</p>
                 </div>
-                <!-- Spread 3 Left: Sarah's Image -->
                 <div class="page back">
-                    <div class="photo-frame" style="transform: rotate(-3deg);">
-                        <img src="" alt="Sarah" class="w-56 h-72 object-cover">
+                    <div class="photo-frame">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400" alt="Friend 2" class="w-40 h-56 sm:w-52 sm:h-72 object-cover">
                     </div>
                 </div>
             </div>
 
-            <!-- Leaf 3: Spread 3 Right & Spread 4 Left -->
+            <!-- Leaf 3 -->
             <div class="leaf">
-                <!-- Spread 3 Right: Sarah's Text -->
                 <div class="page front">
-                    <span class="wish-name">From: Sarah</span>
-                    <h2 class="text-4xl mb-6 script-font">Another Year Bolder</h2>
-                    <p class="text-base leading-relaxed text-slate-700">Wishing you a year full of adventure and success. You’re not just a classmate, you’re an absolutely great friend.</p>
+                    <span class="text-xs uppercase text-rose-400 font-bold mb-2">From Sarah</span>
+                    <h2 class="text-3xl mb-4 script-font">Keep Shining</h2>
+                    <p class="text-sm text-slate-600 px-6">You light up every room you walk into. Have a day as bright and beautiful as you are!</p>
                 </div>
-                <!-- Spread 4 Left: Jordan's Image -->
-                <div class="page back">
-                    <div class="photo-frame" style="transform: rotate(1deg);">
-                        <img src="" alt="Jordan" class="w-56 h-72 object-cover">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Leaf 4: Spread 4 Right & Spread 5 Left -->
-            <div class="leaf">
-                <!-- Spread 4 Right: Jordan's Text -->
-                <div class="page front">
-                    <span class="wish-name">From: Jordan</span>
-                    <h2 class="text-4xl mb-6 script-font">The "Final" Boss</h2>
-                    <p class="text-base leading-relaxed text-slate-700">Happy Birthday! May your day be bug-free and your coffee be stronger than our last semester's final exams.</p>
-                </div>
-                <!-- Spread 5 Left: Group Image -->
-                <div class="page back">
-                    <div class="photo-frame" style="transform: rotate(-1deg);">
-                        <img src="" alt="Group" class="w-72 h-52 object-cover">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Leaf 5: Spread 5 Right & Back Cover -->
-            <div class="leaf">
-                <!-- Spread 5 Right: Group Text -->
-                <div class="page front">
-                    <h2 class="text-5xl mb-6 script-font text-rose-500">We All Love You!</h2>
-                    <p class="text-lg mb-10 font-light italic text-slate-500">Enjoy your special day to the absolute fullest.</p>
-                    <button onclick="resetBook()" class="px-6 py-2 border-2 border-rose-300 text-rose-600 rounded-full text-sm uppercase tracking-widest hover:bg-rose-50 transition-colors">
-                        Close Book
-                    </button>
-                </div>
-                <!-- Back Cover -->
                 <div class="page back cover-back">
-                    <div class="w-10 h-10 border-2 border-rose-400 rounded-full flex items-center justify-center mb-4">
-                        <span class="script-font text-2xl text-rose-300">♥</span>
-                    </div>
-                    <p class="font-light tracking-widest uppercase text-xs text-rose-200">The End</p>
+                    <h2 class="text-4xl script-font mb-4">The End</h2>
+                    <p class="text-xs uppercase opacity-60">Made with love</p>
+                    <button onclick="resetBook()" class="mt-8 text-[10px] uppercase border border-white/30 px-4 py-1 rounded-full">Read Again</button>
                 </div>
             </div>
 
@@ -295,24 +261,22 @@
         let currentLeaf = 0;
         let isAnimating = false;
 
-        // Ensure pages stack correctly in 3D space.
         function setInitialZIndex() {
             leaves.forEach((leaf, i) => {
                 leaf.style.zIndex = leaves.length - i;
             });
         }
 
-        // Scale book to fit perfectly on all screens while keeping aspect ratio
         function resizeBook() {
             const book = document.getElementById('book');
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
             
-            // Allow some padding around the book (90% width, 80% height)
-            const scaleX = (windowWidth * 0.9) / 860;
-            const scaleY = (windowHeight * 0.8) / 560;
+            // On mobile landscape, we use more of the screen
+            const padding = windowWidth < 1024 ? 0.95 : 0.9;
+            const scaleX = (windowWidth * padding) / 860;
+            const scaleY = (windowHeight * padding) / 560;
             
-            // Apply scale, max 1 (don't zoom in past original size)
             const scale = Math.min(scaleX, scaleY, 1);
             book.style.transform = `scale(${scale})`;
         }
@@ -326,17 +290,12 @@
             if (currentLeaf < leaves.length && !isAnimating) {
                 isAnimating = true;
                 const leaf = leaves[currentLeaf];
-                
-                // Bring flipping page to front temporarily to avoid clipping
                 leaf.style.zIndex = leaves.length + 5;
                 leaf.classList.add('flipped');
-                
                 currentLeaf++;
                 updateButtons();
-
-                // Wait for CSS flip animation to finish before restoring proper left-stack z-index
                 setTimeout(() => {
-                    leaf.style.zIndex = currentLeaf; // Puts it in correct order on the left side
+                    leaf.style.zIndex = currentLeaf;
                     isAnimating = false;
                 }, 800); 
             }
@@ -347,30 +306,23 @@
                 isAnimating = true;
                 currentLeaf--;
                 const leaf = leaves[currentLeaf];
-                
-                // Bring flipping page to front temporarily
                 leaf.style.zIndex = leaves.length + 5;
                 leaf.classList.remove('flipped');
-                
                 updateButtons();
-
                 setTimeout(() => {
-                    leaf.style.zIndex = leaves.length - currentLeaf; // Puts it in correct order on right side
+                    leaf.style.zIndex = leaves.length - currentLeaf;
                     isAnimating = false;
                 }, 800);
             }
         }
 
         function resetBook() {
-            // Flips all pages back rapidly
             if(isAnimating) return;
             isAnimating = true;
-            
             for(let i = currentLeaf - 1; i >= 0; i--) {
                 setTimeout(() => {
                     leaves[i].style.zIndex = leaves.length + 5;
                     leaves[i].classList.remove('flipped');
-                    
                     setTimeout(() => {
                         leaves[i].style.zIndex = leaves.length - i;
                         if(i === 0) {
@@ -379,31 +331,29 @@
                             updateButtons();
                         }
                     }, 800);
-                }, (currentLeaf - 1 - i) * 150); // Stagger the flips slightly
+                }, (currentLeaf - 1 - i) * 150);
             }
         }
 
-        // Add click events to pages directly for intuitive navigation
+        // Tap interactions
         leaves.forEach((leaf, index) => {
-            leaf.addEventListener('click', (e) => {
-                // If clicking the right side (front) and it's the current top page
-                if (!leaf.classList.contains('flipped') && index === currentLeaf) {
-                    turnNext();
-                } 
-                // If clicking the left side (back) and it's the current top page on the left
-                else if (leaf.classList.contains('flipped') && index === currentLeaf - 1) {
-                    turnPrev();
-                }
+            leaf.addEventListener('click', () => {
+                if (!leaf.classList.contains('flipped') && index === currentLeaf) turnNext();
+                else if (leaf.classList.contains('flipped') && index === currentLeaf - 1) turnPrev();
             });
         });
 
-        // Keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') turnNext();
-            if (e.key === 'ArrowLeft') turnPrev();
+        // Swipe interactions for mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+        
+        document.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            if (touchstartX - touchendX > 50) turnNext();
+            if (touchendX - touchstartX > 50) turnPrev();
         });
 
-        // Initialize
         window.addEventListener('resize', resizeBook);
         setInitialZIndex();
         resizeBook();
