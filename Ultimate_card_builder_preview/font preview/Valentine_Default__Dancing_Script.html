@@ -6,11 +6,11 @@
     <title>A Special Surprise</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         :root {
-            --primary: #f48fb1; --primary-dark: #c2185b; --bg-color: #fff0f6;
-            --paper-color: #ffffff; --text-color: #880e4f;
+            --primary: #ff9a9e; --primary-dark: #ff758c; --bg-color: #fceceb;
+            --paper-color: #fffbfb; --text-color: #5d4037;
             --font-header: 'Dancing Script', cursive; 
             --font-main: 'Poppins', sans-serif;
             --size-title: 35px;
@@ -19,7 +19,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             height: 100vh; width: 100vw; background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 10% 20%, #fce4ec 0%, #f8bbd0 90%);
+            background-image: radial-gradient(circle at 10% 20%, rgb(255, 241, 242) 0%, rgb(255, 248, 240) 90%);
             display: flex; justify-content: center; align-items: center;
             font-family: var(--font-main); overflow: hidden; color: var(--text-color);
         }
@@ -73,12 +73,16 @@
         }
         
         .wing { position: absolute; top: 0; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1); border-radius: 12px; cursor: pointer; }
-        .wing-left { right: 100%; transform-origin: right center; transform: rotateY(180deg); z-index: 20;}
-        .wing-right { left: 100%; transform-origin: left center; transform: rotateY(-180deg); z-index: 1; }
+        .wing-left { right: 100%; transform-origin: right center; transform: rotateY(180deg); z-index: 20; }
+        .wing-right { left: 100%; transform-origin: left center; transform: rotateY(-180deg); z-index: 5; }
         
         .face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; overflow: hidden; }
         .wing-left .face-front { background: var(--paper-color); z-index: 2; }
-        .wing-left .face-back { background: linear-gradient(135deg, var(--bg-color), var(--paper-color)); transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 12px solid var(--paper-color); z-index: 5;}
+        .wing-left .face-back { 
+            background: linear-gradient(135deg, var(--bg-color), var(--paper-color)); 
+            transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            border: 12px solid var(--paper-color); 
+        }
         .wing-right .face-front { background: var(--paper-color); }
         .wing-right .face-back { background: var(--paper-color); transform: rotateY(180deg); opacity: 0.8; }
         
@@ -163,32 +167,32 @@
 </head>
 <body>
 
-<div id="login-overlay">
+<div id="login-overlay" style="display:none !important;">
     <div class="login-box">
         <h2 style="font-size: 2rem; margin-bottom: 15px; color: var(--primary);">Unlock Surprise</h2>
         <input type="password" id="pass-input" class="login-input" placeholder="Enter Password">
         <button onclick="startUnlock()" id="btn-unlock" class="login-btn">Open</button>
         <div class="status-text" id="status-msg"></div>
         <div class="progress-bar" id="p-bar"><div class="progress-fill" id="p-fill"></div></div>
-        <div style="margin-top:10px; font-size:0.8rem; text-decoration:underline; opacity:0.6; cursor:pointer;" onclick="alert('Preview — Cherry Blossom')">Need a hint?</div>
+        <div style="margin-top:10px; font-size:0.8rem; text-decoration:underline; opacity:0.6; cursor:pointer;" onclick="alert('')">Need a hint?</div>
     </div>
 </div>
 
-<div id="view-wrapper">
+<div id="view-wrapper" style="opacity: 1; pointer-events: all;">
     <div class="scene" id="scene">
         <div class="card-anchor" id="card">
             
             <!-- Center Content -->
             <div class="center-content" style="display:flex; flex-direction:column; align-items:center; padding:20px; width:100%;">
-                <h1 style="font-size: 2.2rem; margin-top: 5px;" id="main-title"></h1>
-                <p style="margin: 5px 0 15px 0;" id="main-message"></p>
+                <h1 style="font-size: 2.2rem; margin-top: 5px;" id="main-title">Happy Birthday!</h1>
+                <p style="margin: 5px 0 15px 0;" id="main-message">To the one who makes every moment brighter. Here's to you!</p>
                 <div class="stack-container" onclick="event.stopPropagation(); shufflePhotos();" id="stack-container">
                     <!-- Images pre-placed but empty, populated by JS -->
-                    <div class="polaroid p5" id="p5"><img data-idx="s4"></div>
-                    <div class="polaroid p4" id="p4"><img data-idx="s3"></div>
-                    <div class="polaroid p3" id="p3"><img data-idx="s2"></div>
-                    <div class="polaroid p2" id="p2"><img data-idx="s1"></div>
-                    <div class="polaroid p1" id="p1"><img data-idx="s0"></div>
+                    <div class="polaroid p5" id="p5"><img src="https://placehold.co/300x300/fceceb/ff758c?text=Photo+s4" style="width:100%; height:100%; object-fit:cover;" alt="s4"></div>
+                    <div class="polaroid p4" id="p4"><img src="https://placehold.co/300x300/fceceb/ff758c?text=Photo+s3" style="width:100%; height:100%; object-fit:cover;" alt="s3"></div>
+                    <div class="polaroid p3" id="p3"><img src="https://placehold.co/300x300/fceceb/ff758c?text=Photo+s2" style="width:100%; height:100%; object-fit:cover;" alt="s2"></div>
+                    <div class="polaroid p2" id="p2"><img src="https://placehold.co/300x300/fceceb/ff758c?text=Photo+s1" style="width:100%; height:100%; object-fit:cover;" alt="s1"></div>
+                    <div class="polaroid p1" id="p1"><img src="https://placehold.co/300x300/fceceb/ff758c?text=Photo+s0" style="width:100%; height:100%; object-fit:cover;" alt="s0"></div>
                 </div>
                 <div style="font-size: 0.75rem; opacity: 0.6;">(Tap photos to shuffle)</div>
             </div>
@@ -198,17 +202,17 @@
                 <div class="face face-back">
                     <div class="ribbon"></div>
                     <div style="font-size: 5rem;">🎁</div>
-                    <h1 style="font-size: 3rem; margin-top: 10px;" id="cover-title">For You</h1>
+                    <h1 style="font-size: 3rem; margin-top: 10px;" id="cover-title">Preview Card</h1>
                     <div class="tap-hint">Tap to Open</div>
                 </div>
                 <div class="face face-front">
                     <div class="collage-container">
-                        <h2 id="left-title"></h2>
+                        <h2 id="left-title">The Birthday Star</h2>
                         <div class="grid-left">
-                            <div class="c-item l1"><div class="tape"></div><img data-idx="l0"></div>
-                            <div class="c-item l2"><div class="tape"></div><img data-idx="l1"></div>
-                            <div class="c-item l3"><div class="tape"></div><img data-idx="l2"></div>
-                            <div class="c-item l4"><div class="tape"></div><img data-idx="l3"></div>
+                            <div class="c-item l1"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Moment+l0" style="width:100%; height:100%; object-fit:cover;" alt="l0"></div>
+                            <div class="c-item l2"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Portrait+1" style="width:100%; height:100%; object-fit:cover;" alt="l1"></div>
+                            <div class="c-item l3"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Moment+l2" style="width:100%; height:100%; object-fit:cover;" alt="l2"></div>
+                            <div class="c-item l4"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Moment+l3" style="width:100%; height:100%; object-fit:cover;" alt="l3"></div>
                         </div>
                     </div>
                 </div>
@@ -219,13 +223,13 @@
                 <div class="face face-back"></div>
                 <div class="face face-front">
                     <div class="collage-container">
-                        <h2 id="right-title"></h2>
+                        <h2 id="right-title">Best Moments</h2>
                         <div class="grid-right">
-                            <div class="c-item r1"><div class="tape"></div><img data-idx="r0"></div>
-                            <div class="c-item r2"><div class="tape"></div><img data-idx="r1"></div>
-                            <div class="c-item r3"><div class="tape"></div><img data-idx="r2"></div>
-                            <div class="c-item r4"><div class="tape"></div><img data-idx="r3"></div>
-                            <div class="c-item r5"><div class="tape"></div><img data-idx="r4"></div>
+                            <div class="c-item r1"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Memory+r0" style="width:100%; height:100%; object-fit:cover;" alt="r0"></div>
+                            <div class="c-item r2"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Memory+r1" style="width:100%; height:100%; object-fit:cover;" alt="r1"></div>
+                            <div class="c-item r3"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Memory+r2" style="width:100%; height:100%; object-fit:cover;" alt="r2"></div>
+                            <div class="c-item r4"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Memory+r3" style="width:100%; height:100%; object-fit:cover;" alt="r3"></div>
+                            <div class="c-item r5"><div class="tape"></div><img src="https://placehold.co/300x200/fceceb/ff758c?text=Memory+r4" style="width:100%; height:100%; object-fit:cover;" alt="r4"></div>
                         </div>
                     </div>
                 </div>
@@ -235,101 +239,177 @@
 </div>
 <audio id="bg-music"></audio>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-    const META = {"cover": "For You \ud83d\udc95", "main_t": "Happy Birthday!", "main_m": "Here's to the moments we share and the memories we make. Wishing you all the joy in the world today and always.", "left": "Memories", "right": "Adventures"};
-    const IMGS = {"s0": "https://picsum.photos/seed/card_s0/400/500", "s1": "https://picsum.photos/seed/card_s1/400/500", "s2": "https://picsum.photos/seed/card_s2/400/500", "s3": "https://picsum.photos/seed/card_s3/400/500", "s4": "https://picsum.photos/seed/card_s4/400/500", "l0": "https://picsum.photos/seed/card_l0/400/500", "l1": "https://picsum.photos/seed/card_l1/400/400", "l2": "https://picsum.photos/seed/card_l2/400/400", "l3": "https://picsum.photos/seed/card_l3/550/360", "r0": "https://picsum.photos/seed/card_r0/400/400", "r1": "https://picsum.photos/seed/card_r1/400/400", "r2": "https://picsum.photos/seed/card_r2/550/360", "r3": "https://picsum.photos/seed/card_r3/400/400", "r4": "https://picsum.photos/seed/card_r4/400/400"};
+    // --- Configuration ---
+    const SALT = "";
+    const IV_META = "";
+    const CIPHER_META = "";
+    // Async Chunked Assets
+    const ASSETS = {}; 
+    
+    let derivedKey = null;
 
-    // Inject text
-    document.getElementById('cover-title').innerText  = META.cover;
-    document.getElementById('main-title').innerText   = META.main_t;
-    document.getElementById('main-message').innerText = META.main_m;
-    document.getElementById('left-title').innerText   = META.left;
-    document.getElementById('right-title').innerText  = META.right;
+    async function startUnlock() {
+        const pass = document.getElementById('pass-input').value;
+        const status = document.getElementById('status-msg');
+        const pBar = document.getElementById('p-bar');
+        const pFill = document.getElementById('p-fill');
+        
+        if(!pass) return;
+        
+        document.getElementById('btn-unlock').disabled = true;
+        status.innerText = "Verifying & Decrypting...";
+        pBar.style.display = 'block';
 
-    // Inject images
-    document.querySelectorAll('img[data-idx]').forEach(img => {
-        const key = img.getAttribute('data-idx');
-        if (IMGS[key]) img.src = IMGS[key];
-    });
+        // Brief delay to allow UI to render the loading state
+        await new Promise(r => setTimeout(r, 50));
 
-    // Show card immediately
-    document.getElementById('login-overlay').style.display = 'none';
-    const wrapper = document.getElementById('view-wrapper');
-    wrapper.style.opacity       = 1;
-    wrapper.style.pointerEvents = 'all';
-    adjustView();
-    setTimeout(fireConfetti, 600);
+        try {
+            // 1. Derive Key (CPU intensive - Main Thread)
+            const salt = CryptoJS.enc.Hex.parse(SALT);
+            derivedKey = CryptoJS.PBKDF2(pass, salt, { keySize: 256/32, iterations: 1000, hasher: CryptoJS.algo.SHA256 });
 
-    // Card toggle
+            // 2. Decrypt Meta (Titles/Text) - Fast
+            const ivMeta = CryptoJS.enc.Hex.parse(IV_META);
+            const decryptedMeta = CryptoJS.AES.decrypt(CIPHER_META, derivedKey, { iv: ivMeta, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+            const metaStr = decryptedMeta.toString(CryptoJS.enc.Utf8);
+            
+            if(!metaStr) throw new Error("Wrong Password");
+            
+            const meta = JSON.parse(metaStr);
+            applyMeta(meta);
+
+            // 3. Start Async Asset Decryption Loop
+            const assetKeys = Object.keys(ASSETS);
+            const total = assetKeys.length;
+            let loaded = 0;
+
+            for (const key of assetKeys) {
+                // IMPORTANT: Yield to main thread every loop to keep UI responsive
+                await new Promise(r => setTimeout(r, 10));
+                
+                try {
+                    const [ivHex, cipherText] = ASSETS[key];
+                    const iv = CryptoJS.enc.Hex.parse(ivHex);
+                    const dec = CryptoJS.AES.decrypt(cipherText, derivedKey, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+                    const b64 = dec.toString(CryptoJS.enc.Utf8);
+                    
+                    if(key === 'audio') {
+                        const audio = document.getElementById('bg-music');
+                        audio.src = b64;
+                    } else {
+                        // Find images with this data index
+                        const imgs = document.querySelectorAll(`img[data-idx="${key}"]`);
+                        imgs.forEach(img => img.src = b64);
+                    }
+                } catch(e) { console.warn("Failed asset", key); }
+
+                loaded++;
+                pFill.style.width = ((loaded / total) * 100) + "%";
+            }
+            
+            // Finish
+            status.innerText = "Ready!";
+            setTimeout(() => {
+                document.getElementById('login-overlay').style.opacity = 0;
+                // Enable interaction
+                const wrapper = document.getElementById('view-wrapper');
+                wrapper.style.opacity = 1;
+                wrapper.style.pointerEvents = "all";
+                
+                setTimeout(() => {
+                    document.getElementById('login-overlay').style.display = 'none';
+                    fireConfetti();
+                    adjustView();
+                    const aud = document.getElementById('bg-music');
+                    if(aud.src) aud.play().catch(e => console.log("Auto-play blocked"));
+                }, 500);
+            }, 500);
+
+        } catch (e) {
+            console.error(e);
+            status.innerText = "Incorrect Password";
+            pBar.style.display = 'none';
+            document.getElementById('btn-unlock').disabled = false;
+        }
+    }
+
+    function applyMeta(meta) {
+        document.getElementById('cover-title').innerText = meta.cover;
+        document.getElementById('main-title').innerText = meta.main_t;
+        document.getElementById('main-message').innerText = meta.main_m;
+        document.getElementById('left-title').innerText = meta.left;
+        document.getElementById('right-title').innerText = meta.right;
+    }
+
+    // --- Interaction Logic ---
     let isOpen = false;
     function toggleCard() {
         document.getElementById('card').classList.toggle('open');
         isOpen = !isOpen;
-        if (isOpen) {
+        if(isOpen) {
             setTimeout(fireConfetti, 800);
             const hint = document.querySelector('.tap-hint');
-            if (hint) hint.style.display = 'none';
+            if(hint) hint.style.display = 'none';
         }
     }
-
-    // Responsive scaling
+    
+    // Responsive Logic
     function adjustView() {
         const wrapper = document.getElementById('view-wrapper');
-        const scene   = document.getElementById('scene');
-        const cW = 1100, cH = 650;
-        const wW = window.innerWidth, wH = window.innerHeight;
-        const portrait = wH > wW, mobile = wW < 768;
+        const scene = document.getElementById('scene');
+        const contentWidth = 1100; const contentHeight = 650;
+        const winW = window.innerWidth; const winH = window.innerHeight;
         let scale;
-        if (mobile && portrait) {
-            scale = Math.min(wH / cW, wW / cH) * 0.95;
-            wrapper.style.transform = 'translate(-50%, -50%) rotate(90deg)';
+        const isPortrait = winH > winW; const isMobile = winW < 768;
+
+        if (isMobile && isPortrait) {
+            const scaleW = winH / contentWidth; const scaleH = winW / contentHeight;
+            scale = Math.min(scaleW, scaleH) * 0.95;
+            wrapper.style.transform = `translate(-50%, -50%) rotate(90deg)`;
         } else {
-            scale = Math.min(wW / cW, wH / cH) * 0.95;
-            wrapper.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+            const scaleW = winW / contentWidth; const scaleH = winH / contentHeight;
+            scale = Math.min(scaleW, scaleH) * 0.95;
+            wrapper.style.transform = `translate(-50%, -50%) rotate(0deg)`;
         }
         scene.style.transform = `scale(${Math.min(scale, 1.2)})`;
     }
     window.addEventListener('resize', adjustView);
 
-    // Photo shuffle
     function shufflePhotos() {
-        if (!isOpen) return;
-        const ids = ['p1','p2','p3','p4','p5'];
-        const els = ids.map(id => document.getElementById(id));
-        const top = els.find(el => el.classList.contains('p1'));
-        if (!top) return;
-        top.classList.add('shuffle-out');
+        if(!isOpen) return;
+        const ids = ['p1', 'p2', 'p3', 'p4', 'p5'];
+        const elements = ids.map(id => document.getElementById(id));
+        let topEl = elements.find(el => el.classList.contains('p1'));
+        if (!topEl) return;
+        topEl.classList.add('shuffle-out');
         setTimeout(() => {
-            top.classList.remove('shuffle-out');
-            els.forEach(el => {
-                const cls = Array.from(el.classList).find(c => /^p[1-5]$/.test(c));
-                const n = parseInt(cls[1]);
-                el.classList.remove(cls);
-                el.classList.add('p' + (n === 1 ? 5 : n - 1));
+            topEl.classList.remove('shuffle-out');
+            elements.forEach(el => {
+                const cls = Array.from(el.classList).find(c => c.startsWith('p') && c.length === 2);
+                let num = parseInt(cls.substring(1));
+                let newNum = (num === 1) ? 5 : num - 1;
+                el.classList.remove(cls); el.classList.add('p' + newNum);
             });
         }, 500);
     }
 
-    // Confetti
+    function toggleAudio() {
+        const aud = document.getElementById('bg-music');
+        aud.paused ? aud.play() : aud.pause();
+    }
+
     function fireConfetti() {
-        const c = 200, d = { origin: { y: 0.7 } };
-        [[0.25,{spread:26,startVelocity:55}],[0.2,{spread:60}],
-         [0.35,{spread:100,decay:0.91,scalar:0.8}],
-         [0.1,{spread:120,startVelocity:25,decay:0.92,scalar:1.2}],
-         [0.1,{spread:120,startVelocity:45}]
-        ].forEach(([r,o]) => confetti(Object.assign({},d,o,{particleCount:Math.floor(c*r)})));
+        var count = 200; var defaults = { origin: { y: 0.7 } };
+        function fire(particleRatio, opts) {
+            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+        }
+        fire(0.25, { spread: 26, startVelocity: 55, });
+        fire(0.2, { spread: 60, });
+        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+        fire(0.1, { spread: 120, startVelocity: 45, });
     }
 </script>
-
-    <div style="position:fixed;top:10px;left:50%;transform:translateX(-50%);
-                z-index:99999;background:rgba(0,0,0,0.6);color:#fff;
-                padding:5px 16px;border-radius:50px;font-size:12px;
-                letter-spacing:0.07em;backdrop-filter:blur(8px);
-                font-family:sans-serif;white-space:nowrap;
-                display:flex;align-items:center;gap:12px;">
-        🎨 <strong>Cherry Blossom</strong>
-        <a href="index.html" style="color:rgba(255,255,255,0.55);text-decoration:none;font-size:11px;">← Gallery</a>
-    </div>
 </body>
 </html>

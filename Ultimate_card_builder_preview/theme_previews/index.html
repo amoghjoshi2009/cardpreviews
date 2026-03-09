@@ -2,84 +2,1141 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Card Creator — Theme Gallery</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Card Builder — Theme Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin:0; padding:0; }
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            min-height: 100vh; padding: 52px 24px 72px;
-            color: #f0f0f0;
-        }
-        .header { text-align:center; margin-bottom:48px; }
-        .header h1 { font-size:clamp(1.8rem,4vw,3rem); font-weight:700; letter-spacing:-0.02em; }
-        .header p  { color:rgba(255,255,255,0.5); margin-top:10px; font-size:1rem; }
-        .badge {
-            display:inline-block; margin-top:16px;
-            background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15);
-            padding:4px 16px; border-radius:50px; font-size:13px; color:rgba(255,255,255,0.7);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-        .tip {
-            text-align:center; margin-top:48px;
-            color:rgba(255,255,255,0.3); font-size:0.85rem;
-        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Outfit',sans-serif;
+              background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+              min-height:100vh;padding:52px 24px 80px;color:#f0f0f0}
+        .hdr{text-align:center;margin-bottom:56px}
+        .hdr h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;letter-spacing:-0.02em}
+        .hdr p{color:rgba(255,255,255,0.5);margin-top:10px;font-size:1rem}
+        .pill{display:inline-block;margin-top:16px;
+               background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);
+               padding:5px 20px;border-radius:50px;font-size:13px;color:rgba(255,255,255,0.65)}
+        .gs{max-width:1300px;margin:0 auto 52px}
+        .gl{font-size:.9rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+             color:rgba(255,255,255,0.35);border-bottom:1px solid rgba(255,255,255,0.1);
+             padding-bottom:10px;margin-bottom:16px}
+        .tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+        .tc{border-radius:12px;padding:16px 14px;cursor:pointer;
+             transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px)}
+        .tc:hover{transform:translateY(-4px);box-shadow:0 14px 36px rgba(0,0,0,0.3)}
+        .tip{text-align:center;margin-top:48px;color:rgba(255,255,255,0.25);font-size:.82rem}
     </style>
 </head>
 <body>
-<div class="header">
-<h1>🎂 Theme Gallery</h1>
-<p>Every theme available in Birthday Card Creator PRO</p>
-<div class="badge">41 themes · click any card to preview</div></div>
-<div class="grid">
-<a href="theme_rose_default.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff0f5;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e11d48;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Rose (Default)</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#e11d48; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_cyberpunk.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#00ffcc;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#1a1a1a;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Cyberpunk</div><div style="font-size:0.75rem;color:#aaa;">Font: Sci-Fi</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#00ffcc; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_midnight_neon.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#1a1a2e;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e94560;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#16213e;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Midnight Neon</div><div style="font-size:0.75rem;color:#aaa;">Font: Sci-Fi</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#e94560; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_forest_mist.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#f1f8e9;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#2e7d32;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Forest Mist</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#2e7d32; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_sunset_glow.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff3e0;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ef6c00;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff8e1;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Sunset Glow</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ef6c00; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_royal_purple.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#7b1fa2;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Royal Purple</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#7b1fa2; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_retro_vhs.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#2b2b2b;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ff00ff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#333;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Retro VHS</div><div style="font-size:0.75rem;color:#aaa;">Font: Retro Pixel</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ff00ff; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_lavender_dream.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#9575cd;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Lavender Dream</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#9575cd; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_coffee_cream.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#efebe9;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#5d4037;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#d7ccc8;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Coffee Cream</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#5d4037; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_oceanic.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e1f5fe;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#0277bd;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Oceanic</div><div style="font-size:0.75rem;color:#aaa;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#0277bd; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_vampire.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#1a0000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ff0000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#2a0000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Vampire</div><div style="font-size:0.75rem;color:#aaa;">Font: Gothic</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ff0000; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_matcha.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#f1f8e9;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#558b2f;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#f9fbe7;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Matcha</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#558b2f; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_space.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#050505;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ffffff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#111;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Space</div><div style="font-size:0.75rem;color:#aaa;">Font: Sci-Fi</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ffffff; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_minimalist.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ffffff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#eee;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Minimalist</div><div style="font-size:0.75rem;color:#555;">Font: Minimal</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#000000; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_bubblegum.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fce4ec;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#f06292;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Bubblegum</div><div style="font-size:0.75rem;color:#555;">Font: Cute Handwriting</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#f06292; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_hacker.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#39ff14;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#0a0a0a;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Hacker</div><div style="font-size:0.75rem;color:#aaa;">Font: Monospace</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#39ff14; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_gold_luxury.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fafafa;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#d4af37;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Gold Luxury</div><div style="font-size:0.75rem;color:#555;">Font: Cinematic</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#d4af37; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_deep_sea.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e0f7fa;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#006064;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Deep Sea</div><div style="font-size:0.75rem;color:#aaa;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#006064; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_nordic.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#eceff1;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#455a64;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#cfd8dc;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Nordic</div><div style="font-size:0.75rem;color:#555;">Font: Minimal</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#455a64; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_tropicana.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff9c4;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fbc02d;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Tropicana</div><div style="font-size:0.75rem;color:#555;">Font: Chunky</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#fbc02d; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_vaporwave.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#2b2146;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#d69aff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:rgba(255,255,255,0.4);border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Vaporwave</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#d69aff; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_matrix.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#00ff00;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#0a0a0a;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Matrix</div><div style="font-size:0.75rem;color:#aaa;">Font: Monospace</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#00ff00; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_steampunk.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#2b1e16;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#d4af37;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#3e2723;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Steampunk</div><div style="font-size:0.75rem;color:#555;">Font: Typewriter</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#d4af37; color:#2b1e16;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_blueprint.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#0044cc;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ffffff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#0033aa;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Blueprint</div><div style="font-size:0.75rem;color:#aaa;">Font: Monospace</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ffffff; color:#0044cc;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_pastel_goth.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#2d2d2d;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ffb7b2;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#1a1a1a;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Pastel Goth</div><div style="font-size:0.75rem;color:#aaa;">Font: Gothic</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ffb7b2; color:#2d2d2d;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_candy_land.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ff6b6b;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Candy Land</div><div style="font-size:0.75rem;color:#555;">Font: Cute Handwriting</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ff6b6b; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_terminal.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#33ff00;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:black;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Terminal</div><div style="font-size:0.75rem;color:#aaa;">Font: Monospace</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#33ff00; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_high_contrast.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ffff00;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ffff00;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">High Contrast</div><div style="font-size:0.75rem;color:#555;">Font: Chunky</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#000000; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_dracula.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#282a36;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ff79c6;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#44475a;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Dracula</div><div style="font-size:0.75rem;color:#aaa;">Font: Monospace</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ff79c6; color:#282a36;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_solarized_light.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fdf6e3;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#268bd2;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#eee8d5;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Solarized Light</div><div style="font-size:0.75rem;color:#555;">Font: Minimal</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#268bd2; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_solarized_dark.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#002b36;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#b58900;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#073642;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Solarized Dark</div><div style="font-size:0.75rem;color:#aaa;">Font: Monospace</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#b58900; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_cherry_blossom.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff0f5;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ff69b4;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Cherry Blossom</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#ff69b4; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_mint_choc.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e0f2f1;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#4e342e;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Mint Choc</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#4e342e; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_lemonade.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fffde7;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fdd835;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Lemonade</div><div style="font-size:0.75rem;color:#555;">Font: Cute Handwriting</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#fdd835; color:black;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_gothic_rose.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#000;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e91e63;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#4a0018;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#f0f0f0;margin-bottom:4px;">Gothic Rose</div><div style="font-size:0.75rem;color:#aaa;">Font: Gothic</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#e91e63; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_desert_sand.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#efebe9;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#d84315;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff3e0;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Desert Sand</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#d84315; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_ice_kingdom.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e1f5fe;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#00bcd4;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Ice Kingdom</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#00bcd4; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_emerald_city.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#e8f5e9;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#00c853;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:white;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Emerald City</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#00c853; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_burnt_sienna.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fbe9e7;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#bf360c;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#fff;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Burnt Sienna</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#bf360c; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_twilight.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#311b92;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#b39ddb;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#512da8;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Twilight</div><div style="font-size:0.75rem;color:#555;">Font: Playful Script</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#b39ddb; color:#311b92;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a>
-<a href="theme_monochrome.html" style="text-decoration:none;color:inherit;"><div style="background:rgba(255,255,255,0.92); border:1px solid rgba(0,0,0,0.08);border-radius:14px; padding:22px 20px; cursor:pointer;transition:transform .18s,box-shadow .18s;backdrop-filter:blur(6px);"onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 14px 36px rgba(0,0,0,0.22)'"onmouseout="this.style.transform='';this.style.boxShadow=''"><!-- colour swatches --><div style="display:flex;gap:6px;margin-bottom:14px;align-items:center;"><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#eee;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#333;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span><span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#ccc;border:1px solid rgba(128,128,128,0.25);flex-shrink:0;"></span></div><div style="font-weight:700;font-size:0.95rem;color:#111;margin-bottom:4px;">Monochrome</div><div style="font-size:0.75rem;color:#555;">Font: Minimal</div><div style="margin-top:14px; padding:6px 14px; border-radius:50px; display:inline-block;background:#333; color:white;font-size:11px; letter-spacing:0.06em; font-family:sans-serif;">Preview →</div></div></a></div>
-<p class="tip">Use ← → arrow keys or swipe to navigate inside each preview</p></body></html>
+    <div class="hdr">
+        <h1>🎁 Theme Gallery</h1>
+        <p>Every theme in Ultimate Card Builder — click any card to preview live</p>
+        <div class="pill">97 themes · 9 categories</div>
+    </div>
+    
+    <div class="gs">
+        <h2 class="gl">Birthday, Romance and other genre</h2>
+        <div class="tg">
+        <a href="theme_valentine_default.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff9a9e;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fffbfb;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fceceb;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Valentine (Default)</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff9a9e;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_classic_red_rose.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d32f2f;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffebee;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Classic Red Rose</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Great Vibes</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d32f2f;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_blushing_bride.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f8bbd0;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff0f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Blushing Bride</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Sacramento</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#f8bbd0;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_champagne_gold.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d4af37;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#faf8f0;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Champagne Gold</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d4af37;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_silver_anniversary.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#b0bec5;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f5f5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Silver Anniversary</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#b0bec5;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_lavender_love.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ce93d8;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Lavender Love</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ce93d8;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_midnight_proposal.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#304ffe;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#283593;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1a237e;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Midnight Proposal</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#304ffe;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_sweetheart_pink.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff4081;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffeef5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Sweetheart Pink</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff4081;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_passion_crimson.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#b71c1c;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#3e0a0a;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#210505;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Passion Crimson</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Great Vibes</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#b71c1c;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_tuscan_wedding.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#8d6e63;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff8e1;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#efebe9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Tuscan Wedding</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#8d6e63;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_golden_hour.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffb300;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff8e1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Golden Hour</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ffb300;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_dove_white.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#cfd8dc;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f5f5f5;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Dove White</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#cfd8dc;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Nature & Seasons</h2>
+        <div class="tg">
+        <a href="theme_forest_green.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#43a047;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8f5e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Forest Green</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#43a047;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_ocean_breeze.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#26c6da;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e0f7fa;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Ocean Breeze</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#26c6da;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_autumn_maple.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e65100;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fbe9e7;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Autumn Maple</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#e65100;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_nordic_snow.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#90caf9;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f0f4f8;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Nordic Snow</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#90caf9;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_spring_meadow.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#76ff03;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f1f8e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Spring Meadow</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#76ff03;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_desert_sand.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fbc02d;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff9c4;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Desert Sand</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#fbc02d;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_tropical_rainforest.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00c853;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8f5e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Tropical Rainforest</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00c853;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_sunset_horizon.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff5722;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff3e0;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Sunset Horizon</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff5722;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_deep_sea.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#01579b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e1f5fe;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Deep Sea</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#01579b;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_mountain_slate.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#607d8b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#eceff1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Mountain Slate</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#607d8b;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_cherry_blossom.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f48fb1;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff0f6;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Cherry Blossom</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#f48fb1;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_midnight_sky.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#5c6bc0;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#283593;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1a237e;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Midnight Sky</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#5c6bc0;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_sage_brush.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#9ccc65;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f1f8e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Sage Brush</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#9ccc65;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Parties & Celebrations</h2>
+        <div class="tg">
+        <a href="theme_confetti_pop.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff4081;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff8e1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Confetti Pop</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff4081;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_electric_neon.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00e5ff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#333333;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#212121;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Electric Neon</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00e5ff;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_cotton_candy.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#81d4fa;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e1f5fe;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Cotton Candy</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#81d4fa;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_lemon_zest.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffeb3b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fffde7;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Lemon Zest</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ffeb3b;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_bubblegum.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ea80fc;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Bubblegum</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ea80fc;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_dino_green.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#76ff03;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f1f8e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Dino Green</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#76ff03;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_princess_pink.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff80ab;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fce4ec;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Princess Pink</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff80ab;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_space_cadet.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#7c4dff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#4527a0;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#311b92;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Space Cadet</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#7c4dff;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_circus_red.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d50000;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff8e1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Circus Red</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d50000;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_mermaid_teal.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1de9b6;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e0f2f1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Mermaid Teal</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#1de9b6;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_unicorn_dream.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff80ab;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Unicorn Dream</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff80ab;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Luxury & Elegant</h2>
+        <div class="tg">
+        <a href="theme_elegant_gold.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d4af37;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#222;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#111;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Elegant Gold</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d4af37;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_royal_purple.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#7b1fa2;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Royal Purple</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#7b1fa2;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_midnight_blue.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#4facfe;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1e293b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#0f172a;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Midnight Blue</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#4facfe;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_black_tie.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#212121;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#bdbdbd;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Black Tie</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#212121;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_ruby_red.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#b71c1c;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#3e2723;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#212121;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Ruby Red</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#b71c1c;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_sapphire.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#0d47a1;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e3f2fd;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Sapphire</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#0d47a1;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_emerald.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00695c;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e0f2f1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Emerald</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00695c;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_marble_and_rose.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d81b60;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#eceff1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Marble & Rose</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d81b60;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_onyx_and_gold.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffd700;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1a1a1a;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#000000;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Onyx & Gold</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ffd700;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_pearl_white.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#cfd8dc;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fafafa;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Pearl White</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#cfd8dc;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Holidays & Cultural</h2>
+        <div class="tg">
+        <a href="theme_christmas_classic.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d32f2f;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8f5e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Christmas Classic</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d32f2f;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_halloween_spooky.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff6d00;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#424242;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#212121;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Halloween Spooky</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff6d00;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_easter_pastel.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ce93d8;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff9c4;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Easter Pastel</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ce93d8;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_patricks_green.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00c853;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8f5e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Patricks Green</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00c853;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_thanksgiving.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d84315;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff3e0;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Thanksgiving</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d84315;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_hanukkah_blue.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#29b6f6;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e1f5fe;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Hanukkah Blue</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#29b6f6;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_lunar_new_year.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d50000;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff8e1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Lunar New Year</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d50000;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_diwali_light.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff9800;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#5d4037;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#3e2723;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Diwali Light</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff9800;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_july_4th.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d32f2f;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e3f2fd;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">July 4th</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d32f2f;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_eid_moon.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00897b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e0f2f1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Eid Moon</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00897b;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Food & Drink</h2>
+        <div class="tg">
+        <a href="theme_coffee_mocha.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#8d6e63;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#efebe9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Coffee Mocha</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#8d6e63;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_mint_chocolate.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#80cbc4;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#4e342e;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#3e2723;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Mint Chocolate</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#80cbc4;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_berry_smoothie.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ba68c8;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f3e5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Berry Smoothie</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ba68c8;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_peach_sorbet.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffab91;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff1e6;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Peach Sorbet</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cookie</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ffab91;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_red_wine.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#880e4f;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fce4ec;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Red Wine</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#880e4f;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_matcha_tea.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#aed581;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f1f8e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Matcha Tea</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#aed581;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_blueberry_pie.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#5c6bc0;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8eaf6;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Blueberry Pie</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#5c6bc0;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_caramel_latte.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d7ccc8;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#efebe9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Caramel Latte</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d7ccc8;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_honey_gold.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffb74d;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff3e0;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Honey Gold</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ffb74d;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_dark_chocolate.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#5d4037;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#efebe9;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d7ccc8;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Dark Chocolate</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#5d4037;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Professional & Clean</h2>
+        <div class="tg">
+        <a href="theme_minimal_gray.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#9e9e9e;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f5f5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Minimal Gray</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#9e9e9e;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_corporate_blue.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1976d2;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e3f2fd;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Corporate Blue</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#1976d2;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_clean_slate.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#607d8b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#eceff1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Clean Slate</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#607d8b;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_modern_dark.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#424242;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1e1e1e;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#121212;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Modern Dark</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#424242;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_teal_professional.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#009688;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e0f2f1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Teal Professional</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#009688;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_sepia_document.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#8d6e63;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff3e0;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fbe9e7;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Sepia Document</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#8d6e63;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_architect_black.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#000000;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f5f5f5;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Architect Black</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#000000;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_graphite.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#616161;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f5f5f5;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Graphite</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#616161;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_navy_suit.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#283593;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8eaf6;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Navy Suit</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#283593;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_white_collar.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#b0bec5;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f5f5f5;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">White Collar</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Montserrat</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#b0bec5;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Abstract & Art</h2>
+        <div class="tg">
+        <a href="theme_cyber_neon.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00e5ff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#161b22;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#0d1117;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Cyber Neon</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00e5ff;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_galaxy_violet.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#b388ff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1e014f;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#12002f;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Galaxy Violet</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#b388ff;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_vaporwave.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff4081;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#4527a0;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#311b92;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Vaporwave</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff4081;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_hacker_matrix.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00e676;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1b1b1b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#000000;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Hacker Matrix</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00e676;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_retro_comic.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffeb3b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f44336;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Retro Comic</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ffeb3b;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_pop_art.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00bcd4;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffeb3b;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Pop Art</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00bcd4;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_graffiti.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff4081;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#424242;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#212121;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Graffiti</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff4081;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_pastel_goth.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ce93d8;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#212121;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#000000;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Pastel Goth</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ce93d8;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_steampunk.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#bf360c;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#4e342e;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#3e2723;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Steampunk</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#bf360c;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_glitch_art.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff1744;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#121212;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#000000;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Glitch Art</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff1744;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <div class="gs">
+        <h2 class="gl">Travel & Places</h2>
+        <div class="tg">
+        <a href="theme_santorini_blue.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#0277bd;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e1f5fe;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Santorini Blue</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#0277bd;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_sahara_sunset.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ff9800;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fff3e0;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Sahara Sunset</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ff9800;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_kyoto_garden.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#66bb6a;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e8f5e9;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Kyoto Garden</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#66bb6a;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_london_rain.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#78909c;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#eceff1;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">London Rain</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Playfair Display</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#78909c;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_miami_vice.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ea80fc;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#e0f7fa;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Miami Vice</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#ea80fc;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_parisian_chic.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f48fb1;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fafafa;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Parisian Chic</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#f48fb1;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_safari_khaki.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#dce775;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#f9fbe7;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Safari Khaki</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Pacifico</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#dce775;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_arctic_aurora.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#00e676;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#1b1b1b;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#000000;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#f0f0f0;margin-bottom:2px;">Arctic Aurora</div>
+            <div style="font-size:0.7rem;color:#aaa;margin-bottom:11px;">Cinzel</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#00e676;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_tuscan_sun.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fbc02d;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#fffde7;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Tuscan Sun</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#fbc02d;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_provence_lavender.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#9575cd;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ede7f6;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Provence Lavender</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Dancing Script</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#9575cd;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a>
+        <a href="theme_outback_red.html" style="text-decoration:none;">
+          <div class="tc" style="background:rgba(255,255,255,0.88);border:1px solid rgba(0,0,0,0.09);">
+            <div style="display:flex;gap:5px;margin-bottom:11px;">
+              <span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#d84315;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffffff;border:1px solid rgba(128,128,128,0.2);"></span><span style="display:inline-block;width:15px;height:15px;border-radius:3px;background:#ffe0b2;border:1px solid rgba(128,128,128,0.2);"></span>
+            </div>
+            <div style="font-weight:700;font-size:0.88rem;color:#111;margin-bottom:2px;">Outback Red</div>
+            <div style="font-size:0.7rem;color:#666;margin-bottom:11px;">Lobster</div>
+            <div style="display:inline-block;padding:3px 12px;border-radius:50px;
+                        background:#d84315;color:white;font-size:10px;">Preview →</div>
+          </div>
+        </a></div>
+    </div>
+    <p class="tip">Click the left wing of the card to open it &nbsp;·&nbsp; Tap the photo stack to shuffle</p>
+</body>
+</html>
