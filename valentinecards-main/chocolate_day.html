@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chocolate Day</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #3e2723;
+            background-image: url("data:image/svg+xml,%3Csvg width='42' height='44' viewBox='0 0 42 44' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%235d4037' fill-opacity='0.4'%3E%3Cpath d='M0 0h42v44H0V0zm1 1h40v20H1V1zM1 23h40v20H1V23z'/%3E%3C/g%3E%3C/svg%3E");
+            overscroll-behavior: none;
+        }
+        .choco-box {
+            background: linear-gradient(135deg, #d7ccc8 0%, #8d6e63 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 30px rgba(62, 39, 35, 0.5);
+            transform: perspective(1000px) rotateX(10deg);
+        }
+        .chocolate {
+            background: radial-gradient(circle at 30% 30%, #a1887f, #4e342e);
+            border-radius: 50%;
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        .chocolate:active { transform: scale(0.9); }
+        .chocolate.rectangular {
+            border-radius: 4px;
+            background: radial-gradient(circle at 30% 30%, #8d6e63, #3e2723);
+        }
+        .chocolate.heart {
+            background-color: #5d4037;
+            clip-path: path("M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
+            border-radius: 0;
+            width: 100%; height: 100%; transform: scale(0.9);
+        }
+        .pop-up { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { from { transform: translate(-50%, -50%) scale(0); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="h-screen flex flex-col items-center justify-center overflow-hidden p-4">
+
+    <h1 class="text-3xl md:text-4xl text-[#d7ccc8] font-['Pacifico'] mb-6 drop-shadow-md text-center">Tap a Chocolate! 🍫</h1>
+    
+    <div class="choco-box p-6 rounded-xl grid grid-cols-3 gap-4 md:gap-6 w-full max-w-sm border-4 border-[#5d4037]">
+        <div class="chocolate h-16 w-16" onclick="showSweet('You\'re sweet!')"></div>
+        <div class="chocolate rectangular h-16 w-16" onclick="showSweet('Dark & Lovely!')"></div>
+        <div class="h-16 w-16 flex items-center justify-center"><div class="chocolate heart h-16 w-16" onclick="showSweet('My heart melts!')"></div></div>
+        
+        <div class="chocolate rectangular h-16 w-16" onclick="showSweet('Taste of love!')"></div>
+        <div class="chocolate h-16 w-16 border-2 border-white/30" onclick="showSweet('Pure Joy!')"></div>
+        <div class="chocolate rectangular h-16 w-16" onclick="showSweet('Yummy!')"></div>
+        
+        <div class="h-16 w-16 flex items-center justify-center"><div class="chocolate heart h-16 w-16 bg-red-800" onclick="showSweet('Love bite!')"></div></div>
+        <div class="chocolate h-16 w-16 ring-2 ring-yellow-500/50" onclick="showSweet('Golden!')"></div>
+        <div class="chocolate rectangular h-16 w-16" onclick="showSweet('Forever!')"></div>
+    </div>
+
+    <div id="notify" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/95 backdrop-blur text-[#3e2723] px-8 py-6 rounded-2xl shadow-2xl hidden flex-col items-center border-2 border-[#5d4037] z-50 w-64 text-center">
+        <span id="msg" class="text-xl font-bold font-['Pacifico'] block mb-2"></span>
+        <div class="text-xs text-gray-500">(Tap to close)</div>
+    </div>
+
+    <script>
+        const notify = document.getElementById('notify');
+        
+        function showSweet(message) {
+            const msg = document.getElementById('msg');
+            msg.innerText = message;
+            notify.style.display = 'flex';
+            notify.classList.remove('hidden');
+            notify.classList.add('pop-up');
+        }
+
+        notify.addEventListener('click', () => {
+            notify.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

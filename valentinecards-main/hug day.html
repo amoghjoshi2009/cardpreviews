@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hug Day</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #111827; /* Dark theme base */
+            font-family: 'Fredoka', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+        }
+        .glow-bg {
+            background: radial-gradient(circle, rgba(236,72,153,0.3) 0%, rgba(17,24,39,1) 70%);
+            transition: all 0.2s ease;
+        }
+        .fingerprint-ring {
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            border-radius: 50%;
+            position: absolute;
+            animation: ripple 2s infinite;
+        }
+        .fingerprint-ring:nth-child(2) { animation-delay: 0.5s; }
+        .fingerprint-ring:nth-child(3) { animation-delay: 1s; }
+        
+        @keyframes ripple {
+            0% { width: 100px; height: 100px; opacity: 1; border-width: 2px; }
+            100% { width: 300px; height: 300px; opacity: 0; border-width: 0px; }
+        }
+
+        .breathing { animation: breathe 3s ease-in-out infinite; }
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(236,72,153,0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(236,72,153,0.7); }
+        }
+
+        .holding-anim { animation: shake 0.5s ease-in-out infinite; }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-1px, -1px) rotate(1deg); }
+            100% { transform: translate(1px, -1px) rotate(-1deg); }
+        }
+        
+        .progress-circle {
+            transition: stroke-dashoffset 0.1s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        /* Floating hearts */
+        .floater {
+            position: absolute;
+            animation: floatUp 3s linear forwards;
+            opacity: 0;
+            pointer-events: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="h-screen w-full flex flex-col items-center justify-center relative glow-bg transition-colors duration-500">
+
+    <!-- Ambient Rings -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+        <div class="fingerprint-ring"></div>
+        <div class="fingerprint-ring"></div>
+        <div class="fingerprint-ring"></div>
+    </div>
+
+    <div class="z-20 text-center relative w-full max-w-xs">
+        <h1 class="text-3xl text-pink-400 font-bold mb-2 tracking-wide">HUG TRANSFER</h1>
+        <p id="status-text" class="text-gray-400 text-sm mb-12 uppercase tracking-widest">Hold to charge hug</p>
+
+        <!-- Main Interaction Area -->
+        <div class="relative w-48 h-48 mx-auto flex items-center justify-center">
+            <!-- Progress SVG -->
+            <svg class="absolute w-full h-full pointer-events-none">
+                <circle cx="96" cy="96" r="88" stroke="#374151" stroke-width="8" fill="none" />
+                <circle id="progress" class="progress-circle" cx="96" cy="96" r="88" stroke="#ec4899" stroke-width="8" fill="none" stroke-dasharray="553" stroke-dashoffset="553" stroke-linecap="round" />
+            </svg>
+
+            <!-- Button -->
+            <div id="hugBtn" class="w-36 h-36 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 shadow-[0_0_30px_rgba(236,72,153,0.5)] flex items-center justify-center cursor-pointer breathing active:scale-95 transition-transform z-30">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Success Screen -->
+    <div id="success" class="fixed inset-0 bg-pink-600 hidden flex-col items-center justify-center z-50 text-white text-center">
+        <div class="text-8xl mb-4 animate-bounce">🫂</div>
+        <h2 class="text-4xl font-bold">HUG SENT!</h2>
+        <p class="text-pink-200 mt-2">Warmth delivered successfully.</p>
+    </div>
+
+    <script>
+        const btn = document.getElementById('hugBtn');
+        const progressCircle = document.getElementById('progress');
+        const statusText = document.getElementById('status-text');
+        const body = document.querySelector('body');
+        
+        let interval;
+        const total = 553;
+        let current = total;
+        let isHolding = false;
+
+        function spawnHeart() {
+            const el = document.createElement('div');
+            el.innerHTML = '❤️';
+            el.className = 'floater text-2xl';
+            el.style.left = Math.random() * 100 + '%';
+            el.style.bottom = '20%';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3000);
+        }
+
+        function start(e) {
+            e.preventDefault();
+            if(isHolding) return;
+            isHolding = true;
+            
+            btn.classList.remove('breathing');
+            btn.classList.add('holding-anim');
+            statusText.innerText = "Charging...";
+            statusText.classList.add('text-pink-300');
+            
+            // Intensify background
+            body.style.background = 'radial-gradient(circle, rgba(236,72,153,0.6) 0%, rgba(17,24,39,1) 80%)';
+
+            interval = setInterval(() => {
+                current -= 8; // Speed of fill
+                progressCircle.style.strokeDashoffset = current;
+                
+                // Spawn particles
+                if (current % 20 === 0) spawnHeart();
+
+                if (current <= 0) {
+                    complete();
+                }
+            }, 16);
+        }
+
+        function end() {
+            if(!isHolding) return;
+            isHolding = false;
+            clearInterval(interval);
+            
+            // Reset
+            current = total;
+            progressCircle.style.strokeDashoffset = total;
+            btn.classList.add('breathing');
+            btn.classList.remove('holding-anim');
+            statusText.innerText = "Hold to charge hug";
+            statusText.classList.remove('text-pink-300');
+            body.style.background = ''; // Reset bg
+        }
+
+        function complete() {
+            clearInterval(interval);
+            document.getElementById('success').classList.remove('hidden');
+            document.getElementById('success').classList.add('flex');
+            // Confetti or vibration could go here
+            if (navigator.vibrate) navigator.vibrate(200);
+        }
+
+        btn.addEventListener('mousedown', start);
+        window.addEventListener('mouseup', end);
+        
+        btn.addEventListener('touchstart', start);
+        window.addEventListener('touchend', end);
+    </script>
+</body>
+</html>

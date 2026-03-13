@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Architecture of Us | Final Chapter</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0e17;
+            --accent-pink: #f7d7d6;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a2235 0%, #0a0e17 100%);
+            z-index: -1;
+        }
+
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        .handwritten { font-family: 'Great Vibes', cursive; }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 2.5rem;
+            border-radius: 2rem;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Fixed grid for thoughts to prevent overlapping */
+        .thoughts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            max-width: 400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .thought-bubble {
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thought-bubble:hover {
+            background: var(--accent-pink);
+            color: var(--bg-dark);
+            transform: translateY(-5px);
+        }
+
+        .thought-bubble.active {
+            background: var(--accent-pink);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(247, 215, 214, 0.4);
+        }
+
+        .nav-btn {
+            position: fixed;
+            bottom: 40px;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        .heart-pulse {
+            animation: heart-beat 1.5s infinite;
+        }
+
+        @keyframes heart-beat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+
+        #final-bang {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 200;
+            display: none;
+            opacity: 0;
+        }
+
+        .btn-proposal {
+            padding: 15px 40px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #btn-yes {
+            box-shadow: 0 0 20px rgba(247, 215, 214, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+    <div id="final-bang"></div>
+
+    <!-- Slide 1: Introduction -->
+    <section class="slide active" id="slide-1">
+        <div class="glass-card">
+            <span class="serif italic text-pink-200 text-sm mb-4 block opacity-60">The Final Chapter</span>
+            <h1 class="serif text-4xl mb-6 leading-tight">We’ve traveled through time, memories, and maps...</h1>
+            <p class="text-white/70 font-light leading-relaxed mb-8">
+                Every card before this was a fragment of the beautiful world we've built. But a building needs a foundation, and a story needs a heart.
+            </p>
+            <button onclick="goToSlide(2)" class="nav-btn static mx-auto">Step Inside</button>
+        </div>
+    </section>
+
+    <!-- Slide 2: Interactive Grid -->
+    <section class="slide" id="slide-2">
+        <h2 class="serif text-3xl mb-8 italic opacity-80">The things I keep in my heart...</h2>
+        <div id="thoughts-container" class="thoughts-grid">
+            <!-- Grid generated by JS -->
+        </div>
+        <div class="mt-12 max-w-md px-4">
+            <p id="thought-detail" class="serif text-2xl italic text-pink-200 min-h-[4rem] transition-all duration-500"></p>
+        </div>
+        <button onclick="goToSlide(3)" class="nav-btn">Continue The Journey</button>
+    </section>
+
+    <!-- Slide 3: The Deep Vow -->
+    <section class="slide" id="slide-3">
+        <div class="max-w-xl">
+            <h2 class="handwritten text-6xl text-pink-100 mb-8">My Promise</h2>
+            <div class="serif text-2xl italic leading-relaxed space-y-6 opacity-90">
+                <p>"To be the sunshine in your Atlas when clouds appear..."</p>
+                <p>"To be the curator of our Mosaic, cherishing every small piece..."</p>
+                <p>"And to be the guardian of our Capsule, protecting our history forever."</p>
+            </div>
+            <button onclick="goToSlide(4)" class="nav-btn static mt-12">The Final Question</button>
+        </div>
+    </section>
+
+    <!-- Slide 4: The Proposal -->
+    <section class="slide" id="slide-4">
+        <div class="glass-card">
+            <div class="w-16 h-16 bg-pink-200/20 rounded-full flex items-center justify-center mb-6 mx-auto heart-pulse">
+                <i class="fa-solid fa-heart text-pink-200 text-2xl"></i>
+            </div>
+            <h2 class="serif text-3xl mb-4 leading-snug">The question remains the same...</h2>
+            <h3 class="serif italic text-4xl text-pink-100 mb-10">Will you be my girlfriend?</h3>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button id="btn-yes" class="btn-proposal bg-white text-black w-full sm:w-auto hover:bg-pink-100">
+                    YES, FOREVER
+                </button>
+                <button id="btn-no" class="btn-proposal border border-white/20 text-white/50 w-full sm:w-auto hover:bg-white hover:text-black">
+                    No
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let currentSlide = 1;
+
+        function goToSlide(n) {
+            const current = document.getElementById(`slide-${currentSlide}`);
+            const next = document.getElementById(`slide-${n}`);
+            
+            gsap.to(current, { 
+                opacity: 0, 
+                y: -20, 
+                duration: 0.8, 
+                onComplete: () => {
+                    current.classList.remove('active');
+                    next.classList.add('active');
+                    gsap.fromTo(next, 
+                        { opacity: 0, y: 20 }, 
+                        { opacity: 1, y: 0, duration: 0.8 }
+                    );
+                }
+            });
+            currentSlide = n;
+
+            if(n === 2) initThoughts();
+        }
+
+        function initThoughts() {
+            const container = document.getElementById('thoughts-container');
+            if (container.children.length > 0) return;
+
+            const thoughts = [
+                { text: "Your Morning Smile", detail: "The way you look before the world wakes up." },
+                { text: "Our First Flight", detail: "When I realized home wasn't a place, but a person." },
+                { text: "The Quiet Moments", detail: "Even silence with you feels like a masterpiece." },
+                { text: "Your Ambition", detail: "The way you chase your dreams inspires mine." },
+                { text: "That One Rainy Day", detail: "When we decided 'us' was forever." },
+                { text: "Your Kindness", detail: "The way you see the best in everyone." }
+            ];
+
+            thoughts.forEach((t) => {
+                const el = document.createElement('div');
+                el.className = 'thought-bubble';
+                el.innerText = t.text;
+                container.appendChild(el);
+
+                el.addEventListener('click', () => {
+                    document.querySelectorAll('.thought-bubble').forEach(b => b.classList.remove('active'));
+                    el.classList.add('active');
+                    
+                    document.getElementById('thought-detail').innerText = t.detail;
+                    gsap.fromTo('#thought-detail', { opacity: 0, y: 10 }, { opacity: 1, y: 0 });
+                });
+            });
+        }
+
+        const btnNo = document.getElementById('btn-no');
+        const btnYes = document.getElementById('btn-yes');
+        const bang = document.getElementById('final-bang');
+
+        // No button now works sincerely
+        btnNo.addEventListener('click', () => {
+            gsap.to('body', { opacity: 0, duration: 1.5, onComplete: () => {
+                document.body.innerHTML = `
+                    <div class="flex items-center justify-center h-full bg-[#0a0e17] text-white p-12 text-center">
+                        <p class="serif text-xl italic opacity-60">"I understand. Thank you for letting me share these memories with you. Your happiness is what matters most to me."</p><br>Goodbye.....
+                    </div>
+                `;
+                gsap.to('body', { opacity: 1, duration: 1.5 });
+            }});
+        });
+
+        btnYes.addEventListener('click', () => {
+            bang.style.display = 'block';
+            gsap.to(bang, { 
+                opacity: 1, 
+                duration: 1, 
+                onComplete: () => {
+                    document.body.innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-full bg-white text-black p-8 text-center">
+                            <h1 class="handwritten text-8xl mb-6">Forever.</h1>
+                            <p class="serif text-2xl tracking-[0.3em] uppercase mb-12">I Love You</p>
+                            <div class="w-12 h-px bg-black/20 mb-8"></div>
+                            <p class="serif italic text-lg opacity-40">The Architecture of Us: Completed.</p>
+                        </div>
+                    `;
+                    document.body.style.background = "white";
+                }
+            });
+        });
+
+        function createStars() {
+            for(let i=0; i<40; i++) {
+                const star = document.createElement('div');
+                star.className = 'absolute bg-white rounded-full opacity-20 pointer-events-none';
+                const size = Math.random() * 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                document.body.appendChild(star);
+                
+                gsap.to(star, {
+                    opacity: Math.random() * 0.5,
+                    duration: 1 + Math.random() * 2,
+                    repeat: -1,
+                    yoyo: true
+                });
+            }
+        }
+        createStars();
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catch Me!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            overflow: hidden;
+            touch-action: none; /* Prevent scrolling on mobile */
+        }
+        .btn-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .runaway {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+    </style>
+</head>
+<body class="h-screen w-full flex flex-col items-center justify-start pt-20 relative">
+
+    <div class="text-top z-10 pointer-events-none mb-0 text-center">
+        <h2 id="header-text" class="text-4xl md:text-6xl font-bold text-gray-800 mb-4 tracking-tight">
+            Be mine?
+        </h2>
+        <p class="text-gray-500 text-lg">You have to catch the answer...</p>
+    </div>
+
+    <!-- The Game Area -->
+    <button id="yes-btn" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-rose-500 hover:bg-rose-600 text-white text-2xl font-bold py-4 px-10 rounded-2xl btn-shadow transition-transform hover:scale-110 z-20">
+        YES
+    </button>
+
+    <button id="no-btn" class="runaway absolute bg-gray-300 text-gray-600 font-bold py-2 px-6 rounded-xl btn-shadow z-20">
+        NO
+    </button>
+
+    <script>
+        const noBtn = document.getElementById('no-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const headerText = document.getElementById('header-text');
+        
+        let hoverCount = 0;
+        const messages = ["Too slow!", "Nice try!", "Missed me!", "Oops!", "Almost!", "Give up yet?"];
+
+        // Initial position for No button
+        function setInitialPos() {
+            const rect = yesBtn.getBoundingClientRect();
+            noBtn.style.left = (rect.left + rect.width + 20) + 'px';
+            noBtn.style.top = rect.top + 'px';
+        }
+        window.onload = setInitialPos;
+
+        function moveButton() {
+            hoverCount++;
+            
+            // Get viewport dimensions
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+
+            const randomX = Math.max(20, Math.random() * maxX);
+            const randomY = Math.max(20, Math.random() * maxY);
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+
+            // Change text
+            noBtn.innerText = messages[Math.floor(Math.random() * messages.length)];
+
+            // Make it easier eventually
+            if (hoverCount > 10) {
+                yesBtn.style.transform = `translate(-50%, -50%) scale(${1 + (hoverCount/10)})`;
+                headerText.innerText = "Just click YES already! 😂";
+            }
+        }
+
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton); // For mobile taps
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); }); // Better mobile handling
+
+        yesBtn.addEventListener('click', () => {
+            document.body.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full bg-rose-50 animate-in fade-in duration-700">
+                    <h1 class="text-6xl font-bold text-rose-600 mb-4">GOTCHA! ❤️</h1>
+                    <p class="text-xl text-gray-600">You finally caught me.</p>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

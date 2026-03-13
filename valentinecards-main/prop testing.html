@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Architecture of Us</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Great+Vibes&family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0e17;
+            --accent-pink: #f7d7d6;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-dark);
+            color: var(--accent-pink);
+            font-family: 'Inter', sans-serif;
+            touch-action: none;
+        }
+
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -2;
+            background: linear-gradient(-45deg, #0a0e17, #1a1025, #141b2d, #0a0e17);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        #slider-container {
+            position: relative;
+            width: 100%; height: 100%;
+            z-index: 10;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none; 
+            opacity: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            will-change: transform, opacity;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .blob-mask {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            overflow: hidden;
+            animation: breathe 10s ease-in-out infinite;
+            border: 1px solid rgba(247, 215, 214, 0.2);
+        }
+
+        @keyframes breathe {
+            0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 40% 60% 70% 30% / 50% 60% 30% 60%; }
+        }
+
+        .handwritten { font-family: 'Great Vibes', cursive; }
+        .serif { font-family: 'Cormorant Garamond', serif; }
+
+        .heart-progress {
+            position: fixed;
+            top: 1.5rem; left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+
+        .nav-guide {
+            position: fixed;
+            bottom: 1.5rem; left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            opacity: 0.4;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        #big-bang {
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SONG SETTINGS: Change the src URL below to your song -->
+    <audio id="bg-music" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3?filename=piano-moment-11651.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="ambient-bg"></div>
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="heart-progress" id="heart-container">
+        <i class="fas fa-heart text-2xl text-[#f7d7d6]" id="progress-heart"></i>
+    </div>
+
+    <div class="nav-guide" id="nav-guide">Swipe Up</div>
+
+    <main id="slider-container">
+
+        <!-- Slide 1: Intro -->
+        <div class="slide active">
+            <h1 class="serif text-5xl md:text-7xl text-center mb-4 leading-tight">The<br>Architecture<br><span class="italic text-[#f7d7d6]">of Us</span></h1>
+            <p class="handwritten text-3xl opacity-80">Every single moment...</p>
+        </div>
+
+        <!-- Slide 2: Poetry -->
+        <div class="slide">
+            <div class="glass-card text-center">
+                <i class="fas fa-feather-pointed mb-4 opacity-40"></i>
+                <p class="serif text-2xl italic leading-relaxed">
+                    "I didn't fall in love with you<br>
+                    because I was lonely or lost.<br>
+                    I fell in love with you<br>
+                    because when I saw you,<br>
+                    it was like seeing home."
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 3: First Memory -->
+        <div class="slide">
+            <div class="blob-mask w-64 h-64 md:w-80 md:h-80 mb-8">
+                <img src="https://images.unsplash.com/photo-1516589174184-c6852657d803?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover" alt="Memory">
+            </div>
+            <div class="text-center px-4">
+                <h3 class="serif text-3xl mb-2">October 14th</h3>
+                <p class="opacity-80 max-w-xs mx-auto">The day I realized you weren't just anyone. You were the one.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Screenshot/Painting -->
+        <div class="slide">
+            <div class="relative p-2 border border-white/10 bg-white/5 rounded-xl">
+                <img src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1000&auto=format&fit=crop" class="w-full max-w-xs rounded-lg" alt="Screenshot">
+            </div>
+            <p class="mt-8 serif text-2xl italic text-center">"A small piece of us..."</p>
+        </div>
+
+        <!-- SLIDE 6 (MEMORY LOOP): 
+             COPY THIS BLOCK BELOW TO ADD 20-30 SLIDES. 
+             Just change the Image URL and the text! -->
+        <div class="slide">
+            <div class="blob-mask w-64 h-64 mb-8">
+                <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover">
+            </div>
+            <p class="serif text-2xl text-center px-6">"That rainy afternoon when we laughed until we couldn't breathe."</p>
+        </div>
+
+        <!-- Slide: Final Proposal (KEEP THIS AT THE VERY BOTTOM) -->
+        <div class="slide" id="slide-proposal">
+            <div id="climax-dimmer" class="absolute inset-0 bg-black opacity-0 pointer-events-none transition-opacity duration-[3000ms]"></div>
+            <div class="relative z-50 text-center px-6">
+                <h2 class="handwritten text-6xl md:text-8xl mb-12 opacity-0" id="proposal-text">Will you be my girlfriend?</h2>
+                <div class="flex flex-col items-center gap-6 opacity-0" id="proposal-btns">
+                    <button id="btn-yes" class="w-48 py-4 bg-[#f7d7d6] text-black rounded-full font-bold tracking-widest shadow-[0_0_30px_rgba(247,215,214,0.4)] active:scale-95 transition-transform">
+                        YES, FOREVER
+                    </button>
+                    <button id="btn-no" class="text-white/30 text-[10px] tracking-widest uppercase">I need to think</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="big-bang"></div>
+
+    <script>
+        let currentIdx = 0;
+        let isMoving = false;
+        
+        // Re-calculate slides every time to support any number of added blocks
+        const getSlides = () => document.querySelectorAll('.slide');
+
+        function updateProgress() {
+            const allSlides = getSlides();
+            // Scale heart based on percentage of completion
+            const progress = currentIdx / (allSlides.length - 1);
+            const scaleValue = 1 + (progress * 2.5); 
+            
+            gsap.to('#progress-heart', { 
+                scale: scaleValue, 
+                duration: 0.8, 
+                ease: "elastic.out(1, 0.5)" 
+            });
+            
+            const guide = document.getElementById('nav-guide');
+            if (currentIdx === allSlides.length - 1) guide.style.display = 'none';
+            else guide.innerText = currentIdx === 0 ? "Swipe Up" : "Keep going...";
+        }
+
+        function changeSlide(dir) {
+            const allSlides = getSlides();
+            if (isMoving) return;
+            const nextIdx = currentIdx + dir;
+
+            if (nextIdx >= 0 && nextIdx < allSlides.length) {
+                isMoving = true;
+                const currentSlide = allSlides[currentIdx];
+                const nextSlide = allSlides[nextIdx];
+
+                gsap.to(currentSlide, {
+                    opacity: 0,
+                    y: dir > 0 ? -40 : 40,
+                    duration: 0.6,
+                    ease: "power2.inOut",
+                    onComplete: () => {
+                        currentSlide.style.display = 'none';
+                        currentSlide.classList.remove('active');
+                    }
+                });
+
+                nextSlide.style.display = 'flex';
+                gsap.fromTo(nextSlide, 
+                    { opacity: 0, y: dir > 0 ? 40 : -40 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 0.8, 
+                        ease: "power2.out",
+                        onComplete: () => {
+                            nextSlide.classList.add('active');
+                            isMoving = false;
+                            currentIdx = nextIdx;
+                            updateProgress();
+                            if(currentIdx === allSlides.length - 1) initProposal();
+                        }
+                    }
+                );
+            }
+        }
+
+        // Inputs
+        let touchStartPos = 0;
+        document.addEventListener('touchstart', e => touchStartPos = e.touches[0].clientY, {passive: true});
+        document.addEventListener('touchend', e => {
+            const touchEndPos = e.changedTouches[0].clientY;
+            if (touchStartPos > touchEndPos + 50) changeSlide(1);
+            if (touchStartPos < touchEndPos - 50) changeSlide(-1);
+        }, {passive: true});
+
+        window.addEventListener('wheel', e => {
+            if (e.deltaY > 0) changeSlide(1);
+            else changeSlide(-1);
+        }, {passive: true});
+
+        // Particles
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let canvasW, canvasH, particles = [];
+
+        function resizeCanvas() {
+            canvasW = canvas.width = window.innerWidth;
+            canvasH = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvasW;
+                this.y = Math.random() * canvasH;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speed = Math.random() * 0.3 + 0.1;
+            }
+            draw() {
+                ctx.fillStyle = "rgba(247, 215, 214, 0.4)";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            update() {
+                this.y -= this.speed;
+                if (this.y < 0) this.y = canvasH;
+            }
+        }
+
+        for(let i=0; i<30; i++) particles.push(new Particle());
+
+        function renderParticles() {
+            ctx.clearRect(0, 0, canvasW, canvasH);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(renderParticles);
+        }
+        renderParticles();
+
+        // Audio & Final
+        function initProposal() {
+            const audio = document.getElementById('bg-music');
+            if(audio.paused) {
+                audio.volume = 0;
+                audio.play().catch(() => {});
+                gsap.to(audio, {volume: 0.5, duration: 4});
+            }
+
+            gsap.to('#climax-dimmer', { opacity: 0.8, duration: 3 });
+            gsap.to('#proposal-text', {opacity: 1, y: -10, duration: 2, delay: 1});
+            gsap.to('#proposal-btns', {opacity: 1, duration: 1, delay: 2.5});
+        }
+
+        document.getElementById('btn-yes').addEventListener('click', () => {
+            const bang = document.getElementById('big-bang');
+            bang.style.display = 'block';
+            gsap.to(bang, { 
+                opacity: 1, 
+                duration: 0.5, 
+                onComplete: () => {
+                    document.getElementById('slider-container').innerHTML = `
+                        <div class="flex flex-col items-center justify-center h-full text-white">
+                            <h1 class="handwritten text-7xl mb-4">Forever</h1>
+                            <p class="serif text-xl tracking-widest">STAY WITH ME</p>
+                        </div>
+                    `;
+                    gsap.to(bang, { opacity: 0, duration: 3, delay: 1 });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

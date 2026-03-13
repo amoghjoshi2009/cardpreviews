@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USER_LOVE_QUERY</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+        
+        body {
+            background-color: #0d0d0d;
+            font-family: 'VT323', monospace;
+            color: #33ff33;
+            overflow: hidden;
+        }
+
+        /* CRT Effect Overlay */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        
+        .glow {
+            text-shadow: 0 0 5px #33ff33, 0 0 10px #33ff33;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: #33ff33;
+            animation: blink 1s step-end infinite;
+            vertical-align: bottom;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="crt h-screen w-full flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl border-2 border-green-800 bg-black p-6 rounded shadow-[0_0_20px_rgba(51,255,51,0.2)] relative z-10 h-[80vh] flex flex-col">
+        <div class="border-b border-green-800 pb-2 mb-4 flex justify-between uppercase text-xs tracking-widest opacity-70">
+            <span>Valentine_OS v1.0.4</span>
+            <span>Secure Connection</span>
+        </div>
+
+        <div id="terminal-output" class="flex-1 overflow-y-auto mb-4 text-xl md:text-2xl leading-relaxed space-y-2 scrollbar-hide">
+            <!-- Dynamic Content loads here -->
+        </div>
+
+        <div class="flex items-center text-xl md:text-2xl mt-auto border-t border-green-800 pt-4">
+            <span class="mr-2">root@heart:~#</span>
+            <input type="text" id="command-input" class="bg-transparent border-none outline-none flex-1 text-[#33ff33] font-inherit uppercase caret-transparent" autofocus>
+            <span class="cursor"></span>
+        </div>
+    </div>
+
+    <script>
+        const output = document.getElementById('terminal-output');
+        const input = document.getElementById('command-input');
+        
+        const bootSequence = [
+            "INITIALIZING HEART_PROTOCOL...",
+            "LOADING ASSETS: CUPID_ARROWS [OK]",
+            "CHECKING COMPATIBILITY... 100% MATCH FOUND",
+            " ",
+            "> CRITICAL QUESTION DETECTED.",
+            "> WILL YOU BE MY VALENTINE?",
+            " ",
+            "OPTIONS: [Y] YES / [N] NO"
+        ];
+
+        let lineIndex = 0;
+
+        function typeLine(text, speed = 30) {
+            return new Promise(resolve => {
+                const p = document.createElement('div');
+                output.appendChild(p);
+                let i = 0;
+                
+                function char() {
+                    if (i < text.length) {
+                        p.textContent += text.charAt(i);
+                        i++;
+                        output.scrollTop = output.scrollHeight;
+                        setTimeout(char, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+                char();
+            });
+        }
+
+        async function runBoot() {
+            for (const line of bootSequence) {
+                await typeLine(line, 20);
+                await new Promise(r => setTimeout(r, 100)); // Pause between lines
+            }
+        }
+
+        runBoot();
+
+        input.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const val = this.value.toUpperCase().trim();
+                const pLine = document.createElement('div');
+                pLine.textContent = `root@heart:~# ${val}`;
+                pLine.classList.add('opacity-50');
+                output.appendChild(pLine);
+
+                if (val === 'Y' || val === 'YES') {
+                    success();
+                } else if (val === 'N' || val === 'NO') {
+                    typeLine("> ERROR: OPTION 'NO' IS DISABLED BY ADMINISTRATOR.", 10);
+                } else {
+                    typeLine("> COMMAND NOT RECOGNIZED. PLEASE TYPE 'Y'.", 10);
+                }
+                this.value = '';
+                output.scrollTop = output.scrollHeight;
+            }
+        });
+
+        // Keep focus
+        document.body.addEventListener('click', () => input.focus());
+
+        async function success() {
+            input.disabled = true;
+            await typeLine(" ", 10);
+            await typeLine("ACCESS GRANTED. ❤️", 50);
+            await typeLine("initiating eternal_happiness.exe...", 50);
+            
+            const heartAscii = [
+                "  ****** ******",
+                "********** **********",
+                "************* *************",
+                "***************************",
+                " *************************",
+                "   *********************",
+                "     *****************",
+                "       *************",
+                "         *********",
+                "           *****",
+                "             *"
+            ];
+
+            for (const line of heartAscii) {
+                const div = document.createElement('div');
+                div.textContent = line;
+                div.classList.add('glow', 'text-pink-500', 'whitespace-pre'); // Pink glow for heart
+                div.style.color = '#ff69b4';
+                div.style.textShadow = '0 0 10px #ff69b4';
+                output.appendChild(div);
+                await new Promise(r => setTimeout(r, 50));
+            }
+            output.scrollTop = output.scrollHeight;
+        }
+    </script>
+</body>
+</html>

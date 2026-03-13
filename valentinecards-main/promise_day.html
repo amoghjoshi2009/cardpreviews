@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Promise Day Letter — Fixed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Page */
+        :root { --card-w: 90%; }
+        body {
+            background-color: #f3f4f6;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+            font-family: 'Nunito', sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* 3D container */
+        .envelope-container {
+            perspective: 1000px; /* important for 3D ordering */
+            width: min(460px, 92%);
+            height: 280px;
+            position: relative;
+        }
+
+        .envelope {
+            position: absolute;
+            inset: 0;
+            transform-style: preserve-3d;
+        }
+
+        /* Flap (top triangular piece) */
+        .flap {
+            position: absolute;
+            top: 18px;
+            left: 0;
+            right: 0;
+            height: 96px;
+            background: #b91c1c; /* red-700 */
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: bottom center;
+            transition: transform 0.6s cubic-bezier(.2,.9,.2,1);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+            z-index: 30; /* sits above envelope body initially */
+            pointer-events: auto;
+        }
+
+        /* Envelope body */
+        .envelope-body {
+            position: absolute;
+            top: 64px;
+            left: 0;
+            right: 0;
+            height: 160px;
+            background: #dc2626; /* red-600 */
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            z-index: 20;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            cursor: pointer;
+        }
+
+        .envelope-body .label {
+            color: #fee2e2; /* red-100 */
+            font-weight: 700;
+            letter-spacing: 6px;
+            margin-top: 24px;
+        }
+
+        /* Letter (hidden initially) */
+        .letter {
+            position: absolute;
+            left: 5%;
+            width: 90%;
+            top: 28px; /* sits under flap initially */
+            background: #fffbeb; /* parchment */
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+
+            transform-origin: top center;
+            transform: translateY(0) scaleY(0) translateZ(0);
+            transition: transform 0.6s cubic-bezier(.2,.9,.2,1), opacity 0.3s ease;
+
+            opacity: 0;
+            visibility: hidden; /* do not let it affect rendering or stacking before open */
+
+            z-index: 40; /* will be raised in 3D when opened */
+        }
+
+        /* Handwriting font */
+        .handwriting { font-family: 'Dancing Script', cursive; line-height: 26px; }
+
+        /* Open state: reveal letter and push it forward in Z */
+        .letter.open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(-30%) scaleY(1) translateZ(80px);
+            z-index: 80;
+		}
+
+        /* small polish for the seal button */
+        .seal { box-shadow: 2px 2px 6px rgba(0,0,0,0.18); }
+
+        /* overlay */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.45);
+            z-index: 200;
+        }
+
+        .overlay.show { display:flex; }
+
+        /* Make everything responsive */
+        @media (max-width: 480px) {
+            .envelope-container { height: 260px; }
+            .letter { top: 32px; padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="stage" class="envelope-container">
+
+        <!-- Letter: kept underneath until opened. Note: placed BEFORE flap so z-ordering is clearer. -->
+        <div id="letter" class="letter">
+            <h2 class="text-l font-bold text-red-600 mb-2 handwriting text-center">My Promises to You</h2>
+            <div class="text-lg handwriting space-y-1">
+                <p>The Promise of Presence: I promise to be by your side, not just during the highlights, but through every quiet and difficult moment.</p>
+				<p>The Promise of Growth: I promise to support your dreams and encourage you to become the best version of yourself.</p>
+				<p>The Promise of Honesty: I promise to keep our communication open, transparent, and built on a foundation of trust.</p>
+				<p>The Promise of Respect: I promise to value your opinions, honor your boundaries, and treat your heart with the utmost care.</p>
+				<p>The Promise of Listening: I promise to really hear you—not just your words, but the feelings behind them.</p>
+				<p>The Promise of Forgiveness: I promise to choose "us" over being right and to work through our disagreements with patience.</p>
+				<p>The Promise of Consistency: I promise to keep choosing you, every single day, no matter how much time passes.</p>
+            </div>
+            <div class="mt-6 text-center border-t border-red-200 pt-4">
+                <p class="text-sm font-sans text-gray-500 mb-2">Will you accept these promises?</p>
+                <button onclick="sealDeal()" class="bg-red-700 text-white px-6 py-2 rounded-full font-bold shadow-md active:scale-95 transition-transform flex items-center justify-center gap-2 mx-auto seal">
+                    <span class="text-xl">✍️</span> Seal the Deal
+                </button>
+            </div>
+        </div>
+
+        <!-- Flap sits on top initially -->
+        <div id="flap" class="flap" aria-hidden="true"></div>
+
+        <!-- Envelope body (click to open) -->
+        <div id="envelope" class="envelope-body" role="button" aria-label="Open envelope" onclick="openEnvelope()">
+            <div class="label">TAP TO OPEN</div>
+        </div>
+
+    </div>
+
+    <!-- Success Overlay -->
+    <div id="overlay" class="overlay" aria-hidden="true">
+        <div class="bg-white p-8 rounded-2xl text-center m-4">
+            <div class="text-6xl mb-2">🔐</div>
+            <h2 class="text-2xl font-bold text-gray-800">Promises Locked!</h2>
+            <p class="text-gray-600">Forever and always.</p>
+            <button onclick="closeOverlay()" class="mt-4 text-red-500 text-sm font-bold">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const letter = document.getElementById('letter');
+        const flap = document.getElementById('flap');
+        const envelope = document.getElementById('envelope');
+        const overlay = document.getElementById('overlay');
+        let isOpen = false;
+
+        // Open animation sequence
+        function openEnvelope() {
+            if (isOpen) return;
+            isOpen = true;
+
+            // 1) Flip flap backward in 3D and push it slightly away
+            flap.style.transform = 'rotateX(180deg) translateZ(-40px)';
+
+            // 2) Disable pointer events on the flap so it won't block the letter
+            flap.style.pointerEvents = 'none';
+
+            // 3) After the flap animation, reveal the letter and push it forward in Z-space
+            setTimeout(() => {
+                letter.classList.add('open');
+                // Remove the TAP label from the envelope to avoid visual noise
+                envelope.querySelector('.label')?.remove();
+            }, 300);
+        }
+
+        // Seal (overlay)
+        function sealDeal() {
+            overlay.classList.add('show');
+            overlay.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeOverlay() {
+            overlay.classList.remove('show');
+            overlay.setAttribute('aria-hidden', 'true');
+            // optional: reset the page
+            // location.reload();
+        }
+
+        // Accessibility: allow Enter/Space to open envelope
+        envelope.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') openEnvelope();
+        });
+
+    </script>
+</body>
+</html>

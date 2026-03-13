@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#fff0f5">
+    <title>Our Love Arcade | Valentine's Edition</title>
+    
+    <!-- TAILWIND CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- ICONS -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- CONFETTI -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        /**
+         * ❤️ COUPLE CONFIGURATION ❤️
+         * ---------------------------------------------------------
+         * PASTE YOUR IMAGE LINKS HERE!
+         * Inclusive & Flexible: Works for any couple type.
+         */
+        const MY_VALENTINE = {
+            names: {
+                you: "Me",          // Player 1 Name
+                partner: "My Love"  // Player 2 Name (The one being wooed!)
+            },
+            images: {
+                // Your face (Player 1)
+                you: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop", 
+                
+                // Partner's face (Target / Player 2)
+                partner: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",   
+                
+                // A nice couple photo for the 5x5 Scramble Puzzle
+                couple: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop", 
+            },
+            // Photos for the Memory Game (Need 16 pairs? We auto-repeat if you provide fewer!)
+            memories: [
+                "https://images.unsplash.com/photo-1516589174184-c68d8e5f2041?w=200",
+                "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=200",
+                "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=200",
+                "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200",
+                "https://images.unsplash.com/photo-1522673607200-1648835ede57?w=200",
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200",
+                "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=200",
+                "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=200"
+            ],
+            // The Love Note shown on the main menu
+            loveNote: "Level 1: Met you. Level 2: Liked you. Level 3: Loved you. High Score: Forever. ❤️"
+        };
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        luxury: {
+                            gold: '#d4af37',
+                            goldLight: '#f3e5ab',
+                            pink: '#ffb7c5',
+                            rose: '#e0115f',
+                            deep: '#800e13',
+                            cream: '#fffdf9',
+                            slate: '#2d3436'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        display: ['"Cinzel"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        hand: ['"Dancing Script"', 'cursive'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s ease-out forwards',
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 0%, #fff0f5 0%, #fff5fb 60%, #ffeef2 100%);
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 40px -10px rgba(255, 183, 197, 0.4);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .glass-card:active { transform: scale(0.98); }
+        .game-canvas { touch-action: none; border-radius: 1.5rem; box-shadow: inset 0 0 20px rgba(0,0,0,0.02); }
+        .flip-card { perspective: 1000px; }
+        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden;}
+        .flip-card-back { transform: rotateY(180deg); }
+        .card-grid-scroll { -webkit-overflow-scrolling: touch; }
+    </style>
+</head>
+<body class="h-[100dvh] flex flex-col text-luxury-slate overflow-hidden">
+
+    <!-- HEADER -->
+    <header class="glass-panel z-50 px-6 py-4 flex justify-between items-center flex-shrink-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full border-2 border-luxury-gold p-0.5 shadow-gold overflow-hidden">
+                <img id="header-avatar" src="" class="w-full h-full object-cover rounded-full">
+            </div>
+            <div>
+                <h1 class="font-display text-lg font-bold text-luxury-deep leading-none">Our Arcade</h1>
+                <p class="text-[10px] uppercase tracking-[0.1em] text-luxury-gold font-bold">Forever Player 2</p>
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button id="btn-sound" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-luxury-deep hover:bg-white active:scale-90 transition">
+                <i class="ph-fill ph-speaker-high text-lg"></i>
+            </button>
+            <button id="btn-menu-back" class="hidden w-10 h-10 rounded-full bg-luxury-rose text-white shadow-gold flex items-center justify-center active:scale-90 transition">
+                <i class="ph-bold ph-house text-lg"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main id="app-container" class="flex-1 relative w-full h-full overflow-hidden">
+        
+        <!-- VIEW: MENU -->
+        <div id="view-menu" class="absolute inset-0 p-6 overflow-y-auto hide-scrollbar flex flex-col items-center">
+            
+            <!-- Love Note -->
+            <div class="w-full max-w-md mb-8 mt-2 animate-fade-in relative">
+                <div class="absolute -top-6 -right-4 text-4xl animate-float opacity-50">❤️</div>
+                <div class="glass-panel p-6 rounded-3xl text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-luxury-pink via-luxury-rose to-luxury-gold"></div>
+                    <h2 class="font-hand text-3xl text-luxury-deep mb-2">My Dearest...</h2>
+                    <p class="text-sm text-gray-600 font-sans italic leading-relaxed" id="menu-love-note">Loading...</p>
+                </div>
+            </div>
+
+            <!-- Game Grid -->
+            <div class="grid grid-cols-2 gap-4 w-full max-w-md pb-24 animate-slide-up">
+                
+                <button onclick="App.loadGame('scramble')" class="glass-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 group relative overflow-hidden">
+                    <span class="text-3xl filter drop-shadow-sm">🧩</span>
+                    <div>
+                        <h3 class="font-serif font-bold text-luxury-slate text-sm">Our Scramble</h3>
+                        <p class="text-[10px] text-gray-500">5x5 Swap Puzzle</p>
+                    </div>
+                </button>
+
+                <button onclick="App.loadGame('memory')" class="glass-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 group relative overflow-hidden">
+                    <span class="text-3xl filter drop-shadow-sm">📸</span>
+                    <div>
+                        <h3 class="font-serif font-bold text-luxury-slate text-sm"> Memories</h3>
+                        <p class="text-[10px] text-gray-500">Big Match Challenge</p>
+                    </div>
+                </button>
+
+                <button onclick="App.loadGame('ttt')" class="glass-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 group relative overflow-hidden">
+                    <div class="flex -space-x-2 relative z-10">
+                        <img id="icon-p1" class="w-8 h-8 rounded-full border border-white" src="">
+                        <img id="icon-p2" class="w-8 h-8 rounded-full border border-white" src="">
+                    </div>
+                    <div>
+                        <h3 class="font-serif font-bold text-luxury-slate text-sm">Duo Duel</h3>
+                        <p class="text-[10px] text-gray-500">Tic-Tac-Love</p>
+                    </div>
+                </button>
+
+                <button onclick="App.loadGame('snake')" class="glass-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 group relative overflow-hidden">
+                    <span class="text-3xl filter drop-shadow-sm">🐍</span>
+                    <div>
+                        <h3 class="font-serif font-bold text-luxury-slate text-sm">The Chase</h3>
+                        <p class="text-[10px] text-gray-500">Catch my heart</p>
+                    </div>
+                </button>
+
+                <!-- NEW GAMES -->
+                <button onclick="App.loadGame('kiss')" class="glass-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 group relative overflow-hidden">
+                    <span class="text-3xl filter drop-shadow-sm animate-bounce">💋</span>
+                    <div>
+                        <h3 class="font-serif font-bold text-luxury-slate text-sm">Kiss Catch</h3>
+                        <p class="text-[10px] text-gray-500">Tap to Kiss!</p>
+                    </div>
+                </button>
+
+                <button onclick="App.loadGame('simon')" class="glass-card p-4 rounded-2xl flex flex-col items-center text-center gap-2 group relative overflow-hidden">
+                    <span class="text-3xl filter drop-shadow-sm">💓</span>
+                    <div>
+                        <h3 class="font-serif font-bold text-luxury-slate text-sm">Love Sync</h3>
+                        <p class="text-[10px] text-gray-500">Follow the Rhythm</p>
+                    </div>
+                </button>
+            </div>
+            
+            <p class="text-xs text-luxury-gold/60 mt-4 text-center pb-8">Created with love</p>
+        </div>
+
+        <!-- VIEW: GAME STAGE -->
+        <div id="view-game" class="absolute inset-0 bg-white hidden flex-col">
+            <div id="game-stage" class="flex-1 relative flex items-center justify-center bg-[#fff5f8] overflow-hidden">
+                <!-- Game Canvas/Grid Injected Here -->
+            </div>
+            
+            <!-- Game Footer -->
+            <div class="h-auto min-h-[80px] glass-panel rounded-t-3xl p-6 pb-8 flex justify-between items-center z-20 relative shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+                <div class="flex flex-col">
+                    <span id="game-score-label" class="text-[10px] uppercase tracking-widest text-gray-400 font-bold">Score</span>
+                    <span id="game-score-value" class="font-display text-2xl font-bold text-luxury-deep">0</span>
+                </div>
+                <div class="flex gap-3">
+                    <button id="btn-restart" class="w-12 h-12 rounded-full bg-luxury-goldLight text-luxury-deep flex items-center justify-center active:scale-90 transition shadow-sm">
+                        <i class="ph-bold ph-arrow-counter-clockwise text-xl"></i>
+                    </button>
+                    <button id="btn-settings" class="w-12 h-12 rounded-full bg-luxury-deep text-white flex items-center justify-center active:scale-90 transition shadow-gold shadow-lg">
+                        <i class="ph-bold ph-gear text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- TOAST -->
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md border border-luxury-gold/30 px-6 py-3 rounded-full shadow-gold transform transition-all duration-300 translate-y-[-150%] opacity-0 z-[100] flex items-center gap-3 pointer-events-none">
+        <i class="ph-fill ph-heart text-luxury-rose animate-pulse"></i>
+        <span id="toast-msg" class="text-sm font-semibold text-luxury-deep">Notification</span>
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200] hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-[85%] max-w-sm rounded-3xl p-6 shadow-2xl transform scale-95 transition-transform duration-300 relative overflow-hidden" id="modal-content">
+            <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-luxury-gold to-luxury-rose"></div>
+            <div class="text-center mb-6 mt-2">
+                <h3 id="modal-title" class="font-serif text-2xl font-bold text-luxury-deep mb-2">Game Over</h3>
+                <p id="modal-body" class="text-gray-500 text-sm">Amazing job!</p>
+            </div>
+            
+            <div id="modal-stats" class="bg-gray-50 rounded-xl p-4 mb-6 flex justify-around">
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Score</div>
+                    <div class="font-bold text-xl text-luxury-deep" id="modal-score">0</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs text-gray-400 uppercase">Best</div>
+                    <div class="font-bold text-xl text-luxury-gold" id="modal-best">0</div>
+                </div>
+            </div>
+
+            <button id="modal-action" class="w-full py-3 rounded-xl bg-gradient-to-r from-luxury-rose to-luxury-deep text-white font-bold shadow-lg active:scale-95 transition">
+                Play Again
+            </button>
+            <button onclick="App.closeModal()" class="w-full mt-3 py-2 text-sm text-gray-400 hover:text-gray-600">Close</button>
+        </div>
+    </div>
+
+    <!-- GAME LOGIC -->
+    <script>
+        // --- 0. ASSET PRELOADER & SETUP ---
+        const Assets = {
+            you: new Image(),
+            partner: new Image(),
+            couple: new Image(),
+            memories: []
+        };
+
+        function preloadImages() {
+            document.getElementById('header-avatar').src = MY_VALENTINE.images.partner;
+            document.getElementById('menu-love-note').innerText = `"${MY_VALENTINE.loveNote}"`;
+            document.getElementById('icon-p1').src = MY_VALENTINE.images.you;
+            document.getElementById('icon-p2').src = MY_VALENTINE.images.partner;
+
+            Assets.you.src = MY_VALENTINE.images.you;
+            Assets.partner.src = MY_VALENTINE.images.partner;
+            Assets.couple.src = MY_VALENTINE.images.couple;
+            
+            // Expand memories to ensure we have enough for 16 pairs (32 cards)
+            let srcList = [...MY_VALENTINE.memories];
+            if(srcList.length < 16) {
+                // Fill remaining with repeats if not enough images
+                while(srcList.length < 16) srcList = srcList.concat(MY_VALENTINE.memories);
+            }
+            srcList = srcList.slice(0, 16); // limit to 16 unique bases
+
+            srcList.forEach(url => {
+                const img = new Image();
+                img.src = url;
+                Assets.memories.push(img);
+            });
+        }
+
+        // --- 1. AUDIO ---
+        const Sound = (() => {
+            let ctx = null; let muted = false;
+            const init = () => { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); };
+            const playTone = (freq, type, duration, vol=0.1) => {
+                if (muted || !ctx) return;
+                const o = ctx.createOscillator(); const g = ctx.createGain();
+                o.type = type; o.frequency.setValueAtTime(freq, ctx.currentTime);
+                g.gain.setValueAtTime(vol, ctx.currentTime);
+                g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime+duration);
+                o.connect(g); g.connect(ctx.destination);
+                o.start(); o.stop(ctx.currentTime+duration);
+            };
+            return {
+                init, toggle: ()=>{muted=!muted; return muted;},
+                playClick: ()=>playTone(600, 'sine', 0.1),
+                playWin: ()=>[440,554,659,880].forEach((f,i)=>setTimeout(()=>playTone(f,'triangle',0.3),i*100)),
+                playPop: ()=>playTone(800+Math.random()*200, 'sine', 0.1),
+                playError: ()=>playTone(150, 'sawtooth', 0.3)
+            };
+        })();
+
+        // --- 2. STORAGE ---
+        const Storage = {
+            get: (id) => JSON.parse(localStorage.getItem('love_arcade')||'{}')[id] || 0,
+            set: (id, score) => {
+                const data = JSON.parse(localStorage.getItem('love_arcade')||'{}');
+                if(score > (data[id]||0)) { data[id]=score; localStorage.setItem('love_arcade', JSON.stringify(data)); return true; }
+                return false;
+            }
+        };
+
+        // --- 3. GAMES ---
+        
+        // GAME: SNAKE
+        class SnakeGame {
+            constructor(container, onScore) {
+                this.c = document.createElement('canvas');
+                this.ctx = this.c.getContext('2d');
+                this.container = container; this.onScore = onScore;
+                this.grid = 25;
+            }
+            start() {
+                this.container.innerHTML = ''; 
+                const r = this.container.getBoundingClientRect();
+                const size = Math.floor(Math.min(r.width, r.height)/this.grid)*this.grid;
+                this.c.width = size; this.c.height = size;
+                this.c.className = 'game-canvas bg-white shadow-lg';
+                this.container.appendChild(this.c);
+                this.cols = size/this.grid; this.rows = size/this.grid;
+                this.snake = [{x:5,y:5}, {x:4,y:5}];
+                this.dir = {x:1,y:0}; this.nextDir = {x:1,y:0};
+                this.food = this.getFood();
+                this.score = 0; this.running = true;
+                this.addControls();
+                this.lastT = 0; this.speed = 150;
+                requestAnimationFrame(t => this.loop(t));
+                App.showToast(`Use Arrow Keys or Swipe`);
+            }
+            getFood() {
+                let f; do { f={x:Math.floor(Math.random()*this.cols), y:Math.floor(Math.random()*this.rows)}; } 
+                while(this.snake.some(s=>s.x===f.x && s.y===f.y)); return f;
+            }
+            addControls() {
+                window.onkeydown = e => {
+                    const k = e.key;
+                    if(k==='ArrowUp' && this.dir.y===0) this.nextDir={x:0,y:-1};
+                    if(k==='ArrowDown' && this.dir.y===0) this.nextDir={x:0,y:1};
+                    if(k==='ArrowLeft' && this.dir.x===0) this.nextDir={x:-1,y:0};
+                    if(k==='ArrowRight' && this.dir.x===0) this.nextDir={x:1,y:0};
+                };
+                let sx, sy;
+                this.c.ontouchstart = e => { sx=e.touches[0].clientX; sy=e.touches[0].clientY; };
+                this.c.ontouchend = e => {
+                    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+                    if(Math.abs(dx)>Math.abs(dy)) {
+                        if(dx>30 && this.dir.x===0) this.nextDir={x:1,y:0};
+                        else if(dx<-30 && this.dir.x===0) this.nextDir={x:-1,y:0};
+                    } else {
+                        if(dy>30 && this.dir.y===0) this.nextDir={x:0,y:1};
+                        else if(dy<-30 && this.dir.y===0) this.nextDir={x:0,y:-1};
+                    }
+                };
+            }
+            loop(t) {
+                if(!this.running) return;
+                requestAnimationFrame(t => this.loop(t));
+                if(t - this.lastT < this.speed) return;
+                this.lastT = t;
+                this.dir = this.nextDir;
+                const h = {x:this.snake[0].x+this.dir.x, y:this.snake[0].y+this.dir.y};
+                if(h.x<0||h.x>=this.cols||h.y<0||h.y>=this.rows||this.snake.some(s=>s.x===h.x&&s.y===h.y)) {
+                    this.running=false; App.endGame(this.score); return;
+                }
+                this.snake.unshift(h);
+                if(h.x===this.food.x && h.y===this.food.y) {
+                    this.score+=10; this.onScore(this.score); Sound.playPop();
+                    this.food = this.getFood();
+                    if(this.speed>80) this.speed-=2;
+                } else this.snake.pop();
+                this.draw();
+            }
+            draw() {
+                this.ctx.fillStyle = '#fff5f8'; this.ctx.fillRect(0,0,this.c.width,this.c.height);
+                // Food
+                this.ctx.save(); this.ctx.beginPath();
+                this.ctx.arc(this.food.x*this.grid+this.grid/2, this.food.y*this.grid+this.grid/2, this.grid/2-2, 0, Math.PI*2);
+                this.ctx.clip();
+                this.ctx.drawImage(Assets.partner, this.food.x*this.grid, this.food.y*this.grid, this.grid, this.grid);
+                this.ctx.restore();
+                // Snake
+                this.snake.forEach((s, i) => {
+                    if(i===0) {
+                        this.ctx.save(); this.ctx.beginPath();
+                        this.ctx.arc(s.x*this.grid+this.grid/2, s.y*this.grid+this.grid/2, this.grid/2, 0, Math.PI*2);
+                        this.ctx.clip();
+                        this.ctx.drawImage(Assets.you, s.x*this.grid, s.y*this.grid, this.grid, this.grid);
+                        this.ctx.restore();
+                        this.ctx.strokeStyle = '#d4af37'; this.ctx.lineWidth=2; this.ctx.stroke();
+                    } else {
+                        this.ctx.fillStyle = i%2===0?'#ffb7c5':'#ff85a1';
+                        this.ctx.beginPath(); this.ctx.roundRect(s.x*this.grid+2, s.y*this.grid+2, this.grid-4, this.grid-4, 4); this.ctx.fill();
+                    }
+                });
+            }
+            cleanup() { this.running = false; window.onkeydown = null; }
+        }
+
+        // GAME: SCRAMBLE (5x5 Swap)
+        class ScrambleGame {
+            constructor(container, onScore) { this.container = container; this.onScore = onScore; }
+            start() {
+                // 5x5 = 25 tiles
+                this.size = 5;
+                this.tiles = Array.from({length: this.size*this.size}, (_, i) => i);
+                this.tiles.sort(() => Math.random() - 0.5);
+                
+                this.selected = null;
+                this.render();
+                this.onScore(0);
+                App.showToast("Tap two pieces to swap them!");
+            }
+            render() {
+                const w = Math.min(window.innerWidth - 40, 350);
+                this.container.innerHTML = `
+                    <div class="grid grid-cols-5 gap-0.5 bg-luxury-gold/30 p-1 rounded-lg" style="width:${w}px; height:${w}px;">
+                    ${this.tiles.map((t, i) => {
+                        // Original Coordinates
+                        const ox = (t % 5) * 25; // 0, 25, 50, 75, 100
+                        const oy = Math.floor(t / 5) * 25;
+                        const isSel = this.selected === i;
+                        return `
+                        <div onclick="App.game.click(${i})" 
+                             class="w-full h-full cursor-pointer transition-all duration-200 ${isSel ? 'ring-2 ring-luxury-rose z-10 scale-95 brightness-110' : ''}"
+                             style="
+                                background-image: url('${MY_VALENTINE.images.couple}'); 
+                                background-size: 500%; 
+                                background-position: ${ox}% ${oy}%;
+                                border-radius: 4px;
+                             ">
+                        </div>`;
+                    }).join('')}
+                    </div>
+                `;
+            }
+            click(i) {
+                if (this.selected === null) {
+                    this.selected = i;
+                    this.render();
+                    Sound.playClick();
+                } else {
+                    if (this.selected !== i) {
+                        // Swap
+                        [this.tiles[this.selected], this.tiles[i]] = [this.tiles[i], this.tiles[this.selected]];
+                        Sound.playPop();
+                        this.selected = null;
+                        this.render();
+                        this.checkWin();
+                    } else {
+                        // Deselect
+                        this.selected = null;
+                        this.render();
+                    }
+                }
+            }
+            checkWin() {
+                if (this.tiles.every((t, i) => t === i)) {
+                    App.endGame(1000); // High score for puzzle
+                }
+            }
+            cleanup(){}
+        }
+
+        // GAME: MEMORY (32 Cards / 16 Pairs)
+        class MemoryGame {
+            constructor(container, onScore) { this.container=container; this.onScore=onScore; }
+            start() {
+                // We need 16 pairs. 
+                // We preload Assets.memories. We can use indices 0..15.
+                // If fewer than 16 assets, wrap around using modulo.
+                let indices = [];
+                for(let i=0; i<8; i++) {
+                    indices.push(i % Assets.memories.length); // Pair 1
+                    indices.push(i % Assets.memories.length); // Pair 2
+                }
+                
+                // Shuffle
+                this.deck = indices.sort(() => Math.random() - 0.5);
+
+                this.container.innerHTML = `
+                <div class="overflow-y-auto w-full h-full flex flex-col items-center py-4">
+                    <div class="grid grid-cols-4 gap-2 w-full max-w-sm px-2 pb-20">
+                        ${this.deck.map((imgIdx, i) => `
+                            <div class="aspect-[3/4] flip-card cursor-pointer" onclick="App.game.flip(${i})">
+                                <div class="flip-card-inner shadow-sm rounded-lg bg-white" id="card-${i}">
+                                    <div class="flip-card-front bg-gradient-to-br from-luxury-pink to-luxury-gold">
+                                        <i class="ph-fill ph-heart text-white text-xl"></i>
+                                    </div>
+                                    <div class="flip-card-back bg-white border border-luxury-gold p-0.5">
+                                        <img src="${Assets.memories[imgIdx].src}" class="w-full h-full object-cover rounded">
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+                
+                this.flipped=[]; this.matches=0; this.locked=false; this.score=0;
+            }
+            flip(i) {
+                if(this.locked || document.getElementById(`card-${i}`).parentNode.classList.contains('flipped')) return;
+                const el = document.getElementById(`card-${i}`).parentNode;
+                el.classList.add('flipped');
+                
+                // Store index and image source for comparison
+                const imgSrc = Assets.memories[this.deck[i]].src;
+                this.flipped.push({i, src: imgSrc, el});
+                Sound.playClick();
+                
+                if(this.flipped.length===2) {
+                    this.locked=true;
+                    if(this.flipped[0].src === this.flipped[1].src) {
+                        this.matches++; 
+                        this.score+=50; 
+                        this.onScore(this.score);
+                        this.flipped=[]; this.locked=false; Sound.playPop();
+                        
+                        if(this.matches===16) setTimeout(()=>App.endGame(this.score + 500), 500);
+                    } else {
+                        setTimeout(()=>{
+                            this.flipped.forEach(f=>f.el.classList.remove('flipped'));
+                            this.flipped=[]; this.locked=false;
+                        }, 800);
+                    }
+                }
+            }
+            cleanup(){}
+        }
+
+        // GAME: TIC TAC TOE
+        class TTTGame {
+            constructor(container, onScore) { this.container=container; this.onScore=onScore; }
+            start() {
+                this.board = Array(9).fill(null); this.active=true;
+                this.container.innerHTML = `
+                <div class="grid grid-cols-3 gap-3 p-4 bg-white/60 backdrop-blur rounded-2xl shadow-gold">
+                    ${Array(9).fill(0).map((_,i)=>`<div onclick="App.game.move(${i})" class="ttt-cell w-20 h-20 bg-white rounded-xl shadow-sm flex items-center justify-center overflow-hidden cursor-pointer active:scale-95 transition"></div>`).join('')}
+                </div>
+                <div id="ttt-msg" class="mt-8 font-serif text-luxury-deep font-bold">Your Move, ${MY_VALENTINE.names.you}</div>`;
+            }
+            move(i) {
+                if(!this.active || this.board[i]) return;
+                this.makeMove(i, 'human');
+                if(this.checkEnd()) return;
+                document.getElementById('ttt-msg').innerText = `${MY_VALENTINE.names.partner} is thinking...`;
+                setTimeout(() => {
+                    const avail = this.board.map((v,k)=>v?null:k).filter(k=>k!==null);
+                    if(avail.length>0) this.makeMove(avail[Math.floor(Math.random()*avail.length)], 'ai');
+                    if(!this.checkEnd()) document.getElementById('ttt-msg').innerText = "Your Turn";
+                }, 600);
+            }
+            makeMove(i, p) {
+                this.board[i]=p;
+                const img = p==='human' ? Assets.you.src : Assets.partner.src;
+                const border = p==='human' ? 'border-luxury-rose' : 'border-luxury-gold';
+                document.querySelectorAll('.ttt-cell')[i].innerHTML = `<img src="${img}" class="w-full h-full object-cover border-4 ${border} box-border">`;
+                Sound.playPop();
+            }
+            checkEnd() {
+                const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+                const win = wins.find(w => this.board[w[0]] && this.board[w[0]]===this.board[w[1]] && this.board[w[1]]===this.board[w[2]]);
+                if(win) {
+                    this.active=false;
+                    const winner = this.board[win[0]];
+                    document.getElementById('ttt-msg').innerText = winner==='human' ? "You Won!" : `${MY_VALENTINE.names.partner} Won!`;
+                    App.endGame(winner==='human'?100:50); return true;
+                }
+                if(!this.board.includes(null)) {
+                    this.active=false; document.getElementById('ttt-msg').innerText = "It's a Tie!";
+                    App.endGame(50); return true;
+                }
+                return false;
+            }
+            cleanup(){}
+        }
+
+        // NEW GAME: KISS CATCH (Whack-a-Mole style)
+        class KissGame {
+            constructor(container, onScore) { this.container=container; this.onScore=onScore; }
+            start() {
+                this.gridSize = 9;
+                this.container.innerHTML = `
+                    <div class="grid grid-cols-3 gap-4">
+                        ${Array(9).fill(0).map((_,i) => `
+                            <div id="hole-${i}" class="w-20 h-20 bg-luxury-pink/20 rounded-full relative overflow-hidden flex items-center justify-center shadow-inner">
+                                <div id="mole-${i}" class="absolute w-16 h-16 rounded-full transition-transform duration-200 scale-0 pointer-events-none" 
+                                     style="background-image: url('${MY_VALENTINE.images.partner}'); background-size: cover;"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+                // Add click handlers
+                for(let i=0; i<9; i++) {
+                    document.getElementById(`hole-${i}`).onclick = () => this.hit(i);
+                }
+
+                this.score = 0;
+                this.activeMole = -1;
+                this.running = true;
+                this.speed = 1000;
+                this.gameLoop();
+                App.showToast("Tap when they pop up!");
+            }
+
+            gameLoop() {
+                if(!this.running) return;
+                // Hide prev
+                if(this.activeMole !== -1) {
+                    const el = document.getElementById(`mole-${this.activeMole}`);
+                    if(el) el.classList.remove('scale-100');
+                    el.classList.add('scale-0');
+                }
+                
+                // Show new
+                this.activeMole = Math.floor(Math.random() * 9);
+                const mole = document.getElementById(`mole-${this.activeMole}`);
+                mole.classList.remove('scale-0');
+                mole.classList.add('scale-100');
+
+                this.speed = Math.max(400, this.speed - 20); // Get faster
+                
+                this.timer = setTimeout(() => this.gameLoop(), this.speed);
+                
+                // End game after 20 seconds roughly (or just let them fail?) 
+                // Let's do a simple max score or time limit.
+                if(this.speed < 450 && Math.random() > 0.8) {
+                   // Random chance to end if fast enough? No, let's just run until miss?
+                   // Simplest: Run for 30 rounds.
+                }
+            }
+
+            hit(i) {
+                if(i === this.activeMole) {
+                    this.score += 10;
+                    this.onScore(this.score);
+                    Sound.playPop();
+                    // Instant hide
+                    document.getElementById(`mole-${i}`).classList.remove('scale-100');
+                    document.getElementById(`mole-${i}`).classList.add('scale-0');
+                    this.activeMole = -1;
+                    
+                    // Floating heart effect could go here
+                }
+            }
+            cleanup() { this.running = false; clearTimeout(this.timer); }
+        }
+
+        // NEW GAME: LOVE SYNC (Simon Says)
+        class SimonGame {
+            constructor(container, onScore) { this.container=container; this.onScore=onScore; }
+            start() {
+                this.colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500'];
+                this.container.innerHTML = `
+                    <div class="grid grid-cols-2 gap-4">
+                        ${this.colors.map((c, i) => `
+                            <div id="simon-${i}" onclick="App.game.click(${i})" 
+                                 class="w-32 h-32 rounded-2xl ${c} opacity-50 transition-opacity duration-100 cursor-pointer shadow-lg active:scale-95">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="mt-8 text-center font-bold text-luxury-deep" id="simon-msg">Watch...</div>
+                `;
+                this.sequence = [];
+                this.playerIdx = 0;
+                this.score = 0;
+                this.inputEnabled = false;
+                setTimeout(() => this.nextRound(), 1000);
+            }
+
+            nextRound() {
+                this.sequence.push(Math.floor(Math.random() * 4));
+                this.playerIdx = 0;
+                this.inputEnabled = false;
+                document.getElementById('simon-msg').innerText = "Watch...";
+                this.playSequence(0);
+            }
+
+            playSequence(idx) {
+                if(idx >= this.sequence.length) {
+                    this.inputEnabled = true;
+                    document.getElementById('simon-msg').innerText = "Your Turn!";
+                    return;
+                }
+                const padId = this.sequence[idx];
+                this.flash(padId);
+                setTimeout(() => this.playSequence(idx+1), 600);
+            }
+
+            flash(id) {
+                const el = document.getElementById(`simon-${id}`);
+                el.classList.remove('opacity-50');
+                el.classList.add('opacity-100', 'brightness-125');
+                Sound.playPop(); // Tonal diff would be better but keeping simple
+                setTimeout(() => {
+                    el.classList.remove('opacity-100', 'brightness-125');
+                    el.classList.add('opacity-50');
+                }, 300);
+            }
+
+            click(id) {
+                if(!this.inputEnabled) return;
+                this.flash(id);
+                if(id === this.sequence[this.playerIdx]) {
+                    this.playerIdx++;
+                    if(this.playerIdx >= this.sequence.length) {
+                        this.score += 10 * this.sequence.length;
+                        this.onScore(this.score);
+                        this.inputEnabled = false;
+                        document.getElementById('simon-msg').innerText = "Perfect!";
+                        setTimeout(() => this.nextRound(), 1000);
+                    }
+                } else {
+                    Sound.playError();
+                    App.endGame(this.score);
+                }
+            }
+            cleanup(){}
+        }
+
+        // --- 4. APP CONTROLLER ---
+        const App = {
+            game: null, currentId: null,
+            init: () => {
+                preloadImages();
+                Sound.init();
+                App.showMenu();
+                
+                document.getElementById('btn-sound').onclick = () => {
+                    const m = Sound.toggle();
+                    document.getElementById('btn-sound').innerHTML = m ? '<i class="ph-fill ph-speaker-slash text-gray-400"></i>' : '<i class="ph-fill ph-speaker-high"></i>';
+                };
+                document.getElementById('btn-menu-back').onclick = App.showMenu;
+                document.getElementById('btn-restart').onclick = () => App.loadGame(App.currentId);
+                document.getElementById('btn-settings').onclick = App.showMenu;
+            },
+            showMenu: () => {
+                if(App.game) App.game.cleanup();
+                document.getElementById('view-menu').classList.remove('hidden');
+                document.getElementById('view-game').classList.add('hidden');
+                document.getElementById('view-game').classList.remove('flex');
+                document.getElementById('btn-menu-back').classList.add('hidden');
+            },
+            loadGame: (id) => {
+                App.currentId = id;
+                document.getElementById('view-menu').classList.add('hidden');
+                document.getElementById('view-game').classList.remove('hidden');
+                document.getElementById('view-game').classList.add('flex');
+                document.getElementById('btn-menu-back').classList.remove('hidden');
+                
+                const stage = document.getElementById('game-stage');
+                const updateScore = (s) => document.getElementById('game-score-value').innerText = s;
+                
+                // Clear stage
+                stage.innerHTML = '';
+
+                if(id==='snake') App.game = new SnakeGame(stage, updateScore);
+                else if(id==='ttt') App.game = new TTTGame(stage, updateScore);
+                else if(id==='scramble') App.game = new ScrambleGame(stage, updateScore);
+                else if(id==='memory') App.game = new MemoryGame(stage, updateScore);
+                else if(id==='kiss') App.game = new KissGame(stage, updateScore);
+                else if(id==='simon') App.game = new SimonGame(stage, updateScore);
+                
+                if(App.game) App.game.start();
+            },
+            endGame: (score) => {
+                const isBest = Storage.set(App.currentId, score);
+                document.getElementById('modal-score').innerText = score;
+                document.getElementById('modal-best').innerText = Storage.get(App.currentId);
+                document.getElementById('modal-title').innerText = isBest ? "New Record!" : "Game Over";
+                
+                const m = document.getElementById('modal-overlay');
+                m.classList.remove('hidden');
+                requestAnimationFrame(() => { m.classList.remove('opacity-0'); document.getElementById('modal-content').classList.remove('scale-95'); });
+                
+                document.getElementById('modal-action').onclick = () => { App.closeModal(); App.loadGame(App.currentId); };
+                if(isBest || score>50) { Sound.playWin(); confetti({particleCount:100, spread:70, origin:{y:0.6}}); }
+            },
+            closeModal: () => {
+                const m = document.getElementById('modal-overlay');
+                m.classList.add('opacity-0'); document.getElementById('modal-content').classList.add('scale-95');
+                setTimeout(()=>m.classList.add('hidden'),300);
+            },
+            showToast: (msg) => {
+                const t = document.getElementById('toast');
+                document.getElementById('toast-msg').innerText = msg;
+                t.classList.remove('translate-y-[-150%]', 'opacity-0');
+                setTimeout(()=>t.classList.add('translate-y-[-150%]', 'opacity-0'), 2500);
+            }
+        };
+
+        window.onload = App.init;
+
+    </script>
+</body>
+</html>

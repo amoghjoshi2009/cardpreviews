@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            perspective: 1000px;
+        }
+
+        /* Envelope Container */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .envelope-wrapper:hover {
+            transform: scale(1.02);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: #f7fafc;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* The Flaps */
+        .envelope::before { /* Left/Right/Bottom flaps combined visual */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 150px 100px 150px; /* Triangle math */
+            border-color: transparent transparent #e2e8f0 transparent; /* Bottom gray */
+            z-index: 10;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 110px 150px 0 150px;
+            border-color: #cbd5e0 transparent transparent transparent; /* Top flap color */
+            z-index: 20;
+            transform-origin: top;
+            transition: transform 0.6s ease 0.5s, z-index 0.2s 0.5s;
+        }
+
+        .pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 150px 120px 150px;
+            border-color: transparent transparent #ffffff transparent; /* Front pocket */
+            z-index: 15;
+        }
+
+        /* The Letter */
+        .letter {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            height: 180px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            z-index: 5;
+            transition: bottom 0.6s ease 1s, z-index 0.1s 1.6s, transform 0.6s ease 1.6s, width 0.6s ease 1.6s, height 0.6s ease 1.6s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Open State */
+        .open .flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .open .letter {
+            bottom: 120px;
+            z-index: 30;
+            /* Expand letter after it comes out */
+            width: 350px;
+            height: 450px;
+            transform: translateX(-50%) translateY(50px);
+        }
+
+        /* Wax Seal */
+        .seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #e53e3e;
+            border-radius: 50%;
+            z-index: 30;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: opacity 0.5s ease;
+        }
+        .open .seal {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-wrapper" onclick="toggleOpen()">
+        <div class="envelope" id="envelope">
+            <div class="flap"></div>
+            <div class="pocket"></div>
+            <div class="seal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.28 3.6-1.28 5.14 0 .34.66-.41 1.05-1.14 1.28-.9.28-1.93.35-2.28 1.13-.35.79.52 1.49 1.14 1.93 1.28 1.28 1.28 3.6 0 5.14-.3.66-1.12.59-1.93.57-1-.02-2.05.3-2.57 1.14-.66 1.14-2.12 1.14-2.79 0-.52-.84-1.57-1.16-2.57-1.14-.81.02-1.63.09-1.93-.57-1.28-1.54-1.28-3.86 0-5.14.62-.44 1.49-1.14 1.14-1.93-.35-.78-1.38-.85-2.28-1.13-.73-.23-1.48-.62-1.14-1.28 1.54-1.28 3.86-1.28 5.14 0 .3.66.57 1.63.57 2.44 0 1.22 1.22 1.22 1.22 0 .02-.81.28-1.78.57-2.44z"></path></svg>
+            </div>
+            
+            <div class="letter">
+                <div class="border-2 border-double border-red-200 p-4 w-full h-full flex flex-col justify-between">
+                    <div>
+                        <h2 class="font-['Playfair_Display'] text-2xl text-red-800 mb-4">Dearest Valentine,</h2>
+                        <p class="font-['Dancing_Script'] text-2xl text-gray-700 leading-relaxed">
+                            Every moment with you is like a beautiful dream. I don't want to spend this day with anyone else.
+                        </p>
+                        <br/>
+                        <p class="font-['Playfair_Display'] text-lg font-bold text-red-600">
+                            Will you make me the happiest person and say Yes?
+                        </p>
+                    </div>
+                    
+                    <div class="flex justify-center gap-4 mt-4" id="buttons">
+                        <button onclick="accept(event)" class="bg-red-800 text-white px-6 py-2 rounded font-serif hover:bg-red-900 transition">Absolutely</button>
+                        <button onclick="decline(event)" class="border border-gray-400 text-gray-500 px-6 py-2 rounded font-serif hover:bg-gray-100 transition">Thinking...</button>
+                    </div>
+                    
+                    <div id="success-msg" class="hidden text-center">
+                        <p class="text-3xl text-red-600 font-bold font-['Dancing_Script']">I knew it! ❤️</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="text-center mt-8 text-gray-400 font-serif italic text-sm absolute -bottom-12 w-full">Tap seal to open</p>
+    </div>
+
+    <script>
+        function toggleOpen() {
+            document.getElementById('envelope').classList.toggle('open');
+        }
+
+        function accept(e) {
+            e.stopPropagation(); // Prevent toggling envelope
+            document.getElementById('buttons').style.display = 'none';
+            document.getElementById('success-msg').classList.remove('hidden');
+            
+            // Celebration Background
+            document.body.style.background = '#fee2e2';
+            document.body.style.transition = 'background 1s ease';
+        }
+
+        function decline(e) {
+            e.stopPropagation();
+            alert("This button is purely decorative. Try the other one 😉");
+        }
+    </script>
+</body>
+</html>

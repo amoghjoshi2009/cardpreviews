@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Memory Mosaic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --accent: #f472b6;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            overscroll-behavior-y: none;
+        }
+
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            padding: 12px;
+            transition: opacity 0.3s ease;
+        }
+
+        .memory-card {
+            aspect-ratio: 3/4;
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            background: #1a1a1a;
+            transform-origin: center;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .memory-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .memory-card:active img {
+            transform: scale(0.95);
+        }
+
+        .full-slide {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .slide-content {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .slide-content h2, .slide-content p {
+            pointer-events: auto;
+        }
+
+        .particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .pull-indicator {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .heart-pop {
+            position: absolute;
+            pointer-events: none;
+            animation: heartFloat 0.8s ease-out forwards;
+            color: #ff4d4d;
+            z-index: 1000;
+        }
+
+        @keyframes heartFloat {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            50% { transform: scale(1.5) translateY(-20px); opacity: 1; }
+            100% { transform: scale(1) translateY(-100px); opacity: 0; }
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: white;
+            color: black;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 200;
+        }
+
+        .notification.show { transform: translateX(-50%) translateY(0); }
+
+        .close-btn {
+            position: absolute;
+            top: env(safe-area-inset-top, 20px);
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 110;
+            backdrop-filter: blur(10px);
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="p-6">
+        <h1 class="text-3xl font-bold tracking-tight">Memory Mosaic</h1>
+        <p class="text-gray-400">Taps of light and fragments of time.</p>
+    </header>
+
+    <div class="mosaic-grid" id="grid"></div>
+
+    <div id="full-slide" class="full-slide">
+        <div class="pull-indicator">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <button class="close-btn" id="close-slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+        <canvas class="particle-canvas" id="canvas"></canvas>
+        <img id="slide-img" class="absolute inset-0 w-full h-full object-cover" alt="">
+        <div class="slide-content">
+            <h2 id="slide-title" class="text-4xl font-bold mb-2"></h2>
+            <p id="slide-desc" class="text-lg text-gray-200 leading-relaxed mb-8"></p>
+        </div>
+    </div>
+
+    <div id="notif" class="notification">Heart sent to the universe! ❤️</div>
+
+    <script>
+        const memories = [
+            { id: 1, title: "Pure Sparkle", desc: "Your energy lights up every dark corner. Never stop shining.", color: "#FFD700", type: "glitter", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800" },
+            { id: 2, title: "Deep Calm", desc: "The way you hold peace even in the storm is a superpower.", color: "#60a5fa", type: "bubbles", img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800" },
+            { id: 3, title: "Wild Spirit", desc: "Unbound, free, and completely original. A force of nature.", color: "#f472b6", type: "petals", img: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&q=80&w=800" },
+            { id: 4, title: "Sharp Wit", desc: "The smartest person in the room, always three steps ahead.", color: "#a78bfa", type: "sparks", img: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800" },
+            { id: 5, title: "Warm Soul", desc: "Home isn't a place, it's the feeling of your presence.", color: "#fb923c", type: "ember", img: "https://images.unsplash.com/photo-1517147177326-b37599372b73?auto=format&fit=crop&q=80&w=800" },
+            { id: 6, title: "Infinite Grace", desc: "Moving through life with an elegance that cannot be taught.", color: "#ffffff", type: "snow", img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800" },
+            { id: 7, title: "Neon Dreams", desc: "Chasing horizons and building worlds from pure imagination.", color: "#00f2ff", type: "sparks", img: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&q=80&w=800" },
+            { id: 8, title: "Golden Hour", desc: "Every moment with you feels like the perfect sunset.", color: "#f59e0b", type: "glitter", img: "https://images.unsplash.com/photo-1470252649358-969623d691d9?auto=format&fit=crop&q=80&w=800" },
+            { id: 9, title: "Midnight Echo", desc: "Deep thoughts and late-night conversations that change everything.", color: "#818cf8", type: "snow", img: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&q=80&w=800" },
+            { id: 10, title: "Rose Quartz", desc: "A heart that sees the beauty in everyone it encounters.", color: "#fda4af", type: "petals", img: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&q=80&w=800" },
+            { id: 11, title: "Electric Pulse", desc: "Unstoppable momentum and a rhythm that moves mountains.", color: "#22c55e", type: "sparks", img: "https://images.unsplash.com/photo-1511376764822-11d72f7160ad?auto=format&fit=crop&q=80&w=800" },
+            { id: 12, title: "Ocean Mist", desc: "Refreshing, vast, and full of hidden treasures.", color: "#2dd4bf", type: "bubbles", img: "https://images.unsplash.com/photo-1439405326854-014607f694d7?auto=format&fit=crop&q=80&w=800" },
+            { id: 13, title: "Velvet Fire", desc: "A passion that burns steady and warms the entire room.", color: "#ef4444", type: "ember", img: "https://images.unsplash.com/photo-1520113475119-3a36ccdf5674?auto=format&fit=crop&q=80&w=800" },
+            { id: 14, title: "Silver Lining", desc: "Finding the hope in every challenge you face.", color: "#94a3b8", type: "glitter", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800" },
+            { id: 15, title: "Crystal Vision", desc: "Seeing the world with a clarity that others miss.", color: "#e2e8f0", type: "snow", img: "https://images.unsplash.com/photo-1516339901600-2e1a62d0ed71?auto=format&fit=crop&q=80&w=800" },
+            { id: 16, title: "Forest Hush", desc: "The quiet strength of ancient trees and deep roots.", color: "#166534", type: "petals", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=800" },
+            { id: 17, title: "Starlight Path", desc: "Guiding the way even when the moon is hidden.", color: "#fef08a", type: "sparks", img: "https://images.unsplash.com/photo-1436891620584-47fd0e565afb?auto=format&fit=crop&q=80&w=800" },
+            { id: 18, title: "Lavender Sky", desc: "The peaceful transition from day to extraordinary dreams.", color: "#c084fc", type: "snow", img: "https://images.unsplash.com/photo-1532767153582-b1a0e5145009?auto=format&fit=crop&q=80&w=800" },
+            { id: 19, title: "Earth Core", desc: "Grounded, reliable, and fundamentally essential.", color: "#78350f", type: "ember", img: "https://images.unsplash.com/photo-1500382017468-9049fee74a62?auto=format&fit=crop&q=80&w=800" },
+            { id: 20, title: "Prism Burst", desc: "Containing every color and feeling at once.", color: "#ec4899", type: "glitter", img: "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80&w=800" }
+        ];
+
+        const grid = document.getElementById('grid');
+        const fullSlide = document.getElementById('full-slide');
+        const slideImg = document.getElementById('slide-img');
+        const slideTitle = document.getElementById('slide-title');
+        const slideDesc = document.getElementById('slide-desc');
+        const closeBtn = document.getElementById('close-slide');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const notif = document.getElementById('notif');
+
+        let particles = [];
+        let animationFrame;
+        let isDragging = false;
+        let startY = 0;
+        let lastTap = 0;
+
+        // Initialize Grid
+        memories.forEach(mem => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.innerHTML = `<img src="${mem.img}" alt="${mem.title}" loading="lazy">`;
+            card.onclick = () => expandCard(mem, card);
+            grid.appendChild(card);
+        });
+
+        function expandCard(memory, cardElement) {
+            const cardRect = cardElement.getBoundingClientRect();
+            slideImg.src = memory.img;
+            slideTitle.innerText = memory.title;
+            slideDesc.innerText = memory.desc;
+            
+            const first = { top: cardRect.top, left: cardRect.left, width: cardRect.width, height: cardRect.height };
+            fullSlide.style.display = 'flex';
+            fullSlide.style.opacity = '0';
+            
+            const deltaX = first.left;
+            const deltaY = first.top;
+            const deltaW = first.width / window.innerWidth;
+            const deltaH = first.height / window.innerHeight;
+
+            fullSlide.style.transformOrigin = 'top left';
+            fullSlide.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(${deltaW}, ${deltaH})`;
+            fullSlide.style.opacity = '1';
+            fullSlide.style.borderRadius = '16px';
+
+            requestAnimationFrame(() => {
+                fullSlide.style.transition = 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), border-radius 0.5s ease';
+                fullSlide.style.transform = 'none';
+                fullSlide.style.borderRadius = '0px';
+                setTimeout(() => initParticles(memory.type, memory.color), 400);
+            });
+
+            setupGestures();
+        }
+
+        function closeSlide(e) {
+            if (e) e.stopPropagation();
+            fullSlide.style.transition = 'transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.4s ease';
+            fullSlide.style.transform = 'translateY(100%)';
+            fullSlide.style.opacity = '0';
+            cancelAnimationFrame(animationFrame);
+            particles = [];
+            setTimeout(() => {
+                fullSlide.style.display = 'none';
+                fullSlide.style.transform = 'none';
+            }, 400);
+        }
+
+        closeBtn.onclick = closeSlide;
+
+        function setupGestures() {
+            fullSlide.onmousedown = fullSlide.ontouchstart = (e) => {
+                if (e.target.closest('#close-slide')) return;
+                isDragging = true;
+                startY = e.touches ? e.touches[0].clientY : e.clientY;
+                const now = Date.now();
+                if (now - lastTap < 300) {
+                    showHeart(e.touches ? e.touches[0].clientX : e.clientX, e.touches ? e.touches[0].clientY : e.clientY);
+                }
+                lastTap = now;
+            };
+
+            window.onmousemove = window.ontouchmove = (e) => {
+                if (!isDragging) return;
+                const currentY = e.touches ? e.touches[0].clientY : e.clientY;
+                const diff = currentY - startY;
+                if (diff > 0) {
+                    fullSlide.style.transition = 'none';
+                    fullSlide.style.transform = `translateY(${diff}px) scale(${1 - diff/3000})`;
+                    fullSlide.style.borderRadius = `${Math.min(diff/10, 30)}px`;
+                }
+            };
+
+            window.onmouseup = window.ontouchend = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                const currentY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+                const diff = currentY - startY;
+                if (diff > 150) {
+                    closeSlide();
+                } else {
+                    fullSlide.style.transition = 'transform 0.3s ease, border-radius 0.3s ease';
+                    fullSlide.style.transform = 'translateY(0) scale(1)';
+                    fullSlide.style.borderRadius = '0px';
+                }
+            };
+        }
+
+        function showHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-pop';
+            heart.style.left = `${x - 20}px`;
+            heart.style.top = `${y - 20}px`;
+            heart.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`;
+            document.body.appendChild(heart);
+            notif.classList.add('show');
+            setTimeout(() => { heart.remove(); notif.classList.remove('show'); }, 2000);
+        }
+
+        class Particle {
+            constructor(type, color) {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+                this.size = Math.random() * 4 + 1;
+                this.color = color;
+                this.alpha = 1;
+                this.type = type;
+                this.gravity = (type === 'ember' || type === 'bubbles') ? -0.05 : 0.05;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy + (this.gravity * 5);
+                this.alpha -= 0.005;
+            }
+            draw() {
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                if (this.type === 'glitter' || this.type === 'sparks') ctx.rect(this.x, this.y, this.size, this.size);
+                else ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles(type, color) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for(let i = 0; i < 60; i++) particles.push(new Particle(type, color));
+            animate();
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) particles.splice(i, 1);
+            });
+            if (particles.length > 0) animationFrame = requestAnimationFrame(animate);
+        }
+
+        window.onresize = () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Now Playing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #1a1a1a; color: white; font-family: sans-serif; overflow: hidden; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        .album-art {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: breathe 4s ease-in-out infinite;
+            transition: all 0.5s ease;
+        }
+        .album-art.celebrate {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px #ef4444; /* Red glow */
+        }
+        @keyframes breathe {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #fff; margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; background: #4b5563; border-radius: 2px;
+        }
+        /* Toast Notification */
+        #toast {
+            transform: translateY(-150%); transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #toast.show { transform: translateY(0); }
+    </style>
+</head>
+<body class="h-screen flex flex-col p-8 justify-between max-w-md mx-auto relative">
+    
+    <!-- Background Blur -->
+    <div class="absolute inset-0 bg-gradient-to-b from-purple-900/50 to-black pointer-events-none z-0"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="absolute top-8 left-4 right-4 bg-green-500 text-white p-4 rounded-xl shadow-2xl z-50 flex items-center justify-center gap-2 font-bold">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span>She said Yes! Added to Favorites.</span>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="flex justify-between items-center z-10 text-xs tracking-widest uppercase text-gray-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <span>Playing from Playlist</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    </div>
+
+    <!-- Album Art -->
+    <div id="album-cover" class="z-10 w-full aspect-square bg-gradient-to-br from-pink-500 to-purple-600 rounded-lg album-art flex items-center justify-center relative overflow-hidden">
+        <div id="art-content" class="text-center transition-all duration-500">
+            <span class="text-6xl">🎵</span>
+        </div>
+    </div>
+
+    <!-- Track Info -->
+    <div class="z-10 mt-8">
+        <div class="flex justify-between items-end">
+            <div>
+                <h1 class="text-2xl font-bold text-white mb-1">Be My Valentine?</h1>
+                <p class="text-gray-400">Me & You • Forever.mp3</p>
+            </div>
+            <button id="like-btn" onclick="sayYes()" class="text-gray-400 hover:text-green-500 transition-colors transform active:scale-125 duration-200">
+                <svg id="heart-icon" class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="z-10 mt-6">
+        <input type="range" class="w-full" value="30">
+        <div class="flex justify-between text-xs text-gray-400 mt-2">
+            <span>0:14</span>
+            <span>-3:42</span>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="z-10 flex justify-between items-center mt-6 px-4">
+        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M14.5 12l-9-6v12l9-6zm2-6h2v12h-2z"/></svg> 
+        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg> 
+        
+        <!-- Play Button -->
+        <button id="play-btn" onclick="sayYes()" class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-black hover:scale-105 active:scale-95 transition-transform">
+            <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        
+        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg> 
+        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7z"/></svg> 
+    </div>
+
+    <script>
+        let accepted = false;
+        
+        function sayYes() {
+            if(accepted) return;
+            accepted = true;
+
+            // Update Heart
+            const likeBtn = document.getElementById('like-btn');
+            likeBtn.classList.remove('text-gray-400');
+            likeBtn.classList.add('text-green-500', 'scale-125');
+
+            // Update Art
+            const artContent = document.getElementById('art-content');
+            document.getElementById('album-cover').classList.add('celebrate');
+            artContent.innerHTML = '<span class="text-6xl animate-bounce">❤️</span>';
+            
+            // Show Toast
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            
+            // Change Play button to Pause
+            document.getElementById('play-btn').innerHTML = '<svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+        }
+    </script>
+</body>
+</html>

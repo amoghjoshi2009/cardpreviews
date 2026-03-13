@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Enter Passcode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #111; color: white; touch-action: manipulation; -webkit-tap-highlight-color: transparent; user-select: none; }
+        .pin-dot {
+            width: 16px; height: 16px; border-radius: 50%;
+            border: 2px solid white; transition: background 0.2s;
+        }
+        .pin-dot.active { background: white; }
+        .key {
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; border-radius: 50%; background: rgba(255,255,255,0.1);
+            transition: background 0.2s; cursor: pointer;
+        }
+        .key:active { background: rgba(255,255,255,0.3); }
+    </style>
+</head>
+<body class="h-screen flex flex-col items-center justify-between p-8 overflow-hidden">
+
+    <!-- Header -->
+    <div class="mt-8 text-center" id="lock-screen">
+        <div class="mb-4 text-red-500 font-bold tracking-widest">🔒 LOCKED</div>
+        <div class="flex gap-4 justify-center mb-8">
+            <div class="pin-dot" id="d1"></div>
+            <div class="pin-dot" id="d2"></div>
+            <div class="pin-dot" id="d3"></div>
+        </div>
+        <p class="text-gray-500 text-sm mt-8">Hint: Number of letters in "I Love You"</p>
+    </div>
+
+    <!-- Keypad -->
+    <div class="grid grid-cols-3 gap-6 w-full max-w-xs mb-8" id="keypad">
+        <div class="key" onclick="press(1)">1</div>
+        <div class="key" onclick="press(2)">2</div>
+        <div class="key" onclick="press(3)">3</div>
+        <div class="key" onclick="press(4)">4</div>
+        <div class="key" onclick="press(5)">5</div>
+        <div class="key" onclick="press(6)">6</div>
+        <div class="key" onclick="press(7)">7</div>
+        <div class="key" onclick="press(8)">8</div>
+        <div class="key" onclick="press(9)">9</div>
+        <div class="key opacity-0 pointer-events-none"></div>
+        <div class="key" onclick="press(0)">0</div>
+        <div class="key text-sm font-bold" onclick="clearPin()">DEL</div>
+    </div>
+
+    <!-- Question Modal (Hidden) -->
+    <div id="modal" class="fixed inset-0 bg-white text-black flex flex-col items-center justify-center transform translate-y-full transition-transform duration-500 z-40">
+        <div class="text-6xl mb-4">🔓</div>
+        <h1 class="text-3xl font-bold mb-4">Access Granted</h1>
+        <p class="text-xl mb-8">Will you be my Valentine?</p>
+        <button onclick="confirmYes()" class="bg-black text-white px-10 py-4 rounded-full font-bold text-xl active:scale-95 transition-transform">YES</button>
+    </div>
+
+    <!-- Final Success Screen (Hidden) -->
+    <div id="final-success" class="fixed inset-0 bg-pink-600 text-white hidden flex-col items-center justify-center z-50 animate-in fade-in duration-500">
+        <h1 class="text-5xl font-black mb-4">ACCEPTED ❤️</h1>
+        <p class="text-lg opacity-80">Device Unlocked Forever</p>
+    </div>
+
+    <script>
+        let pin = "";
+        const dots = [document.getElementById('d1'), document.getElementById('d2'), document.getElementById('d3')];
+
+        function press(num) {
+            if (pin.length < 3) {
+                pin += num;
+                updateDots();
+                if (pin.length === 3) checkPin();
+            }
+        }
+
+        function clearPin() {
+            pin = pin.slice(0, -1);
+            updateDots();
+        }
+
+        function updateDots() {
+            dots.forEach((dot, i) => {
+                if (i < pin.length) dot.classList.add('active');
+                else dot.classList.remove('active');
+            });
+        }
+
+        function checkPin() {
+            if (pin === "143") {
+                // Success
+                document.getElementById('lock-screen').style.opacity = '0';
+                document.getElementById('keypad').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('modal').classList.remove('translate-y-full');
+                }, 300);
+            } else {
+                // Error Shake
+                const container = document.querySelector('.flex.gap-4');
+                container.style.transform = "translateX(10px)";
+                setTimeout(() => container.style.transform = "translateX(-10px)", 50);
+                setTimeout(() => container.style.transform = "translateX(10px)", 100);
+                setTimeout(() => container.style.transform = "translateX(0)", 150);
+                
+                setTimeout(() => { pin = ""; updateDots(); }, 400);
+            }
+        }
+
+        function confirmYes() {
+            const successScreen = document.getElementById('final-success');
+            successScreen.classList.remove('hidden');
+            successScreen.classList.add('flex');
+        }
+    </script>
+</body>
+</html>
