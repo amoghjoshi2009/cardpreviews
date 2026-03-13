@@ -880,7 +880,7 @@ body{font-family:'Lora',serif;color:var(--text);}
 <script>
 // ─── NAVIGATION ───
 const cards=[...document.querySelectorAll('.card')];
-const dots=[...document.querySelectorAll('#nav button')];
+
 const counter=document.getElementById('counter');
 const tierLabel=document.getElementById('tier-label');
 const tiers=['tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 1 — a gentle note','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 2 — i mean it','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 3 — this matters deeply','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 4 — raw honesty','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay','tier 5 — please stay'];
@@ -889,15 +889,14 @@ const inited=new Set([0]);
 
 function goTo(n){
   if(n<0||n>=cards.length)return;
-  cards[cur].classList.remove('active');cards[cur].classList.add('exit');dots[cur].classList.remove('active');
+  cards[cur].classList.remove('active');cards[cur].classList.add('exit');
   setTimeout(()=>cards[cur].classList.remove('exit'),640);
   cur=n;
-  cards[cur].classList.add('active');dots[cur].classList.add('active');
+  cards[cur].classList.add('active');
   counter.textContent=`${cur+1} / 50`;
   tierLabel.textContent=tiers[cur]||'';
   if(!inited.has(cur)){inited.add(cur);if(IF[cur])IF[cur]();}
 }
-dots.forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.i)));
 document.getElementById('prev-btn').addEventListener('click',()=>goTo(cur-1));
 document.getElementById('next-btn').addEventListener('click',()=>goTo(cur+1));
 let tx=0,ty=0;
