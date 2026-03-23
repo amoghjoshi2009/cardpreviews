@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d0d14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Birthday Card Creator PRO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Dancing+Script:wght@700&family=Playfair+Display:wght@600&family=Indie+Flower&family=Press+Start+2P&family=Orbitron:wght@700&family=Cinzel:wght@600&family=Fira+Code:wght@500&family=Passion+One&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0d14;--surface:#16161f;--surface2:#1e1e2a;--surface3:#252535;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --accent:#7c6ef7;--accent2:#e96cf7;--glow:rgba(124,110,247,0.22);
+  --text:#e8e8f0;--text2:#b0b0cc;--muted:#6868a0;
+  --success:#4ade80;--danger:#f87171;--warn:#fbbf24;
+  --r:16px;--r-sm:10px;
+  --tab-h:64px;--safe-b:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overscroll-behavior:none;}
+/* BUG-8: CSS touch-action instead of JS touchmove listener */
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased;}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
+
+/* TOPBAR */
+#topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:54px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);z-index:50;gap:6px;}
+.logo{font-size:1.05rem;font-weight:800;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.02em;white-space:nowrap;}
+.logo-sub{font-size:10px;color:var(--muted);-webkit-text-fill-color:var(--muted);display:block;margin-top:-2px;}
+/* DESIGN-2: slide count pill */
+#slide-count-pill{background:var(--surface3);border:1px solid var(--border2);color:var(--text2);font-size:10px;font-weight:700;padding:2px 9px;border-radius:50px;white-space:nowrap;flex-shrink:0;}
+.topbar-btns{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+
+/* BODY */
+#body{display:flex;flex:1;overflow:hidden;}
+
+/* SIDEBAR */
+#sidebar{width:210px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:10px 0;}
+.nav-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:16px 18px 6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:11px 18px;cursor:pointer;color:var(--muted);font-weight:500;font-size:13px;transition:all .15s;border-right:2px solid transparent;user-select:none;-webkit-tap-highlight-color:transparent;}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03);}
+.nav-item.active{color:var(--accent);background:rgba(124,110,247,.1);border-right-color:var(--accent);}
+.nav-icon{font-size:15px;width:18px;text-align:center;flex-shrink:0;}
+#sidebar-gen{margin-top:auto;padding:14px;border-top:1px solid var(--border);}
+
+/* CONTENT */
+/* BUG-8: touch-action pan-y on content */
+#content{flex:1;overflow-y:auto;overflow-x:hidden;padding:22px;-webkit-overflow-scrolling:touch;touch-action:pan-y;}
+@media(max-width:640px){#content{padding:14px 14px calc(80px + var(--safe-b));}}
+
+/* TAB PANELS */
+.panel{display:none;animation:fadeIn .18s ease;}
+.panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px;margin-bottom:14px;}
+.card-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+
+/* FIELDS */
+.field{margin-bottom:13px;}
+.field:last-child{margin-bottom:0;}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.field input,.field textarea,.field select{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-sm);padding:11px 14px;color:var(--text);font-family:'Outfit',sans-serif;font-size:15px;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;}
+.field input:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--glow);}
+.field textarea{resize:vertical;min-height:88px;line-height:1.5;touch-action:pan-y;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:640px){.row2{grid-template-columns:1fr;}}
+.pw-row{display:flex;gap:7px;align-items:flex-end;}
+.pw-row .field{flex:1;margin-bottom:0;}
+
+/* FILE FIELDS */
+.file-field{display:flex;align-items:center;gap:10px;background:var(--bg);border:1.5px dashed var(--border2);border-radius:var(--r-sm);padding:13px 14px;cursor:pointer;transition:border-color .15s,background .15s;position:relative;-webkit-tap-highlight-color:transparent;}
+.file-field:hover,.file-field:focus-within{border-color:var(--accent);background:rgba(124,110,247,.04);}
+.file-field input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.ff-icon{font-size:22px;flex-shrink:0;}
+.ff-text{flex:1;min-width:0;}
+.ff-label{font-size:13px;font-weight:600;color:var(--text2);}
+.ff-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ff-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;display:none;flex-shrink:0;border:1px solid var(--border);}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:var(--r-sm);font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .15s;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;white-space:nowrap;}
+.btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 20px rgba(124,110,247,.35);}
+.btn-p:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 24px rgba(124,110,247,.45);}
+.btn-p:active{transform:scale(.97);}
+.btn-s{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-s:hover{background:var(--surface3);}
+.btn-s:active{transform:scale(.97);}
+.btn-d{background:rgba(248,113,113,.1);color:var(--danger);border:1px solid rgba(248,113,113,.2);}
+.btn-d:hover{background:rgba(248,113,113,.2);}
+.btn-d.confirm{background:var(--danger);color:#fff;}
+.btn-full{width:100%;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-ico{padding:8px;border-radius:8px;}
+.btn-xs{padding:5px 9px;font-size:11px;border-radius:6px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
+
+/* BOTTOM TABS (mobile) */
+#btabs{display:none;flex-direction:row;background:var(--surface);border-top:1px solid var(--border);height:calc(var(--tab-h) + var(--safe-b));padding-bottom:var(--safe-b);flex-shrink:0;z-index:50;}
+.tbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:9px;font-weight:600;letter-spacing:.03em;transition:color .15s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;padding-bottom:2px;}
+.tbtn.active{color:var(--accent);}
+.tbtn-icon{font-size:19px;line-height:1;}
+
+/* THEME GRID */
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:9px;}
+.theme-chip{background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:11px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.theme-chip:active{transform:scale(.97);}
+.theme-chip.sel{border-color:var(--accent);background:rgba(124,110,247,.1);box-shadow:0 0 0 1px var(--accent);}
+.t-preview{height:34px;border-radius:7px;margin-bottom:7px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.t-swatches{display:flex;gap:4px;margin-bottom:7px;}
+.t-sw{width:20px;height:20px;border-radius:4px;border:1px solid rgba(255,255,255,.1);flex-shrink:0;}
+.t-name{font-size:11px;font-weight:600;color:var(--text);}
+
+/* FONT GRID */
+.font-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:9px;}
+.font-chip{background:var(--surface2);border:2px solid var(--border);border-radius:12px;padding:13px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;text-align:center;}
+.font-chip:active{transform:scale(.97);}
+.font-chip.sel{border-color:var(--accent);background:rgba(124,110,247,.1);}
+.f-preview{font-size:20px;line-height:1.2;margin-bottom:6px;color:var(--text);}
+.f-name{font-size:11px;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:600;}
+
+/* OPTION CHIPS */
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px;}
+.opt-chip{background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:11px 8px;cursor:pointer;text-align:center;font-size:12px;font-weight:600;color:var(--muted);transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.opt-chip:active{transform:scale(.96);}
+.opt-chip.sel{border-color:var(--accent);color:var(--accent);background:rgba(124,110,247,.1);}
+.opt-icon{font-size:22px;display:block;margin-bottom:5px;}
+
+/* OCCASION CHIPS */
+.occ-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+@media(max-width:380px){.occ-grid{grid-template-columns:repeat(2,1fr);}}
+.occ-chip{background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:9px 6px;cursor:pointer;text-align:center;font-size:11px;font-weight:600;color:var(--muted);transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.occ-chip:active{transform:scale(.96);}
+.occ-chip.sel{border-color:var(--accent);color:var(--accent);background:rgba(124,110,247,.1);}
+.occ-emoji{font-size:20px;display:block;margin-bottom:3px;}
+
+/* SLIDES */
+#slides-wrap{display:flex;flex-direction:column;gap:12px;padding-bottom:80px;}/* UX-11 */
+.slide-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .15s;}
+.slide-card.drag-over{border-color:var(--accent);}
+/* DESIGN-5: slide entrance animation */
+.slide-enter{opacity:0;transform:translateY(12px);transition:opacity .2s ease,transform .2s ease;}
+.slide-enter.visible{opacity:1;transform:translateY(0);}
+.slide-head{display:flex;align-items:center;gap:9px;padding:12px 14px;background:var(--surface2);border-bottom:1px solid var(--border);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;}
+.drag-h{color:var(--muted);font-size:18px;cursor:grab;flex-shrink:0;touch-action:none;}
+.slide-badge{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:2px 10px;border-radius:50px;font-size:11px;font-weight:700;flex-shrink:0;}
+.slide-lbl{flex:1;font-size:13px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.slide-acts{display:flex;gap:4px;flex-shrink:0;}
+.chevron{color:var(--muted);font-size:11px;transition:transform .2s;flex-shrink:0;}
+.slide-card.collapsed .chevron{transform:rotate(-90deg);}
+/* BUG-8: touch-action pan-y on slide-body */
+.slide-body{padding:15px;touch-action:pan-y;}
+.slide-card.collapsed .slide-body{display:none;}
+/* UX-4: char count colors */
+.char-cnt{font-size:10px;color:var(--muted);text-align:right;margin-top:3px;transition:color .2s;}
+.char-cnt.warn{color:var(--warn);}
+.char-cnt.danger{color:var(--danger);}
+
+/* ALERTS */
+.alert{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;border-radius:10px;font-size:13px;line-height:1.5;margin-bottom:13px;}
+.alert-i{background:rgba(124,110,247,.1);border:1px solid rgba(124,110,247,.2);color:#a89eff;}
+.alert-s{background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.2);color:#4ade80;}
+.alert-w{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2);color:#fbbf24;}
+
+/* STATUS BAR */
+#statusbar{display:flex;align-items:center;gap:10px;padding:9px 20px;background:var(--surface);border-top:1px solid var(--border);font-size:12px;color:var(--muted);flex-shrink:0;}
+.prog-track{flex:1;height:3px;background:var(--border);border-radius:99px;overflow:hidden;display:none;}
+.prog-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:99px;transition:width .35s ease;}
+/* DESIGN-3: file size in status bar */
+#sz-est{margin-left:auto;font-size:11px;color:var(--muted);}
+
+/* MODAL BOTTOM SHEET */
+.backdrop{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);z-index:999;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
+.backdrop.open{opacity:1;pointer-events:all;}
+.sheet{width:100%;max-width:520px;background:var(--surface);border-radius:24px 24px 0 0;border:1px solid var(--border);padding:22px 22px calc(22px + var(--safe-b));transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto;}
+.backdrop.open .sheet{transform:translateY(0);}
+.handle{width:38px;height:4px;background:var(--border2);border-radius:99px;margin:0 auto 18px;flex-shrink:0;}
+.sheet-icon{font-size:2.4rem;text-align:center;margin-bottom:10px;}
+.sheet-title{font-size:1.2rem;font-weight:700;margin-bottom:5px;text-align:center;}
+.sheet-sub{color:var(--muted);font-size:13px;margin-bottom:18px;line-height:1.5;text-align:center;}
+.pw-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:11px 15px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.pw-val{font-weight:700;font-size:20px;letter-spacing:.1em;color:var(--accent);}
+.share-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:14px;}
+.sh-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 6px;border-radius:12px;border:1.5px solid var(--border);background:var(--surface2);cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;color:var(--text2);-webkit-tap-highlight-color:transparent;}
+.sh-btn:hover{border-color:var(--accent);color:var(--text);}
+.sh-btn:active{transform:scale(.95);}
+.sh-icon{font-size:24px;}
+
+/* TEMPLATE CHIPS */
+.tmpl-grid{display:flex;flex-direction:column;gap:9px;}
+.tmpl-chip{display:flex;align-items:center;gap:14px;padding:14px;background:var(--surface2);border:2px solid var(--border);border-radius:14px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.tmpl-chip:hover{border-color:var(--accent);}
+.tmpl-chip:active{transform:scale(.98);}
+.tmpl-dot{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.tmpl-info{flex:1;min-width:0;}
+.tmpl-name{font-size:14px;font-weight:700;color:var(--text);}
+.tmpl-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* HISTORY ROWS */
+.hist-row{display:flex;align-items:center;gap:12px;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;margin-bottom:8px;}
+.hist-row:hover{border-color:var(--accent);}
+.hist-row:active{transform:scale(.98);}
+.hist-info{flex:1;min-width:0;}
+.hist-title{font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hist-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+
+/* TOAST */
+#toast-wrap{position:fixed;bottom:calc(var(--tab-h) + 12px + var(--safe-b));left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;align-items:center;gap:7px;pointer-events:none;width:90%;max-width:340px;}
+@media(min-width:641px){#toast-wrap{bottom:60px;}}
+.toast{background:var(--surface3);border:1px solid var(--border2);border-radius:50px;padding:9px 18px;font-size:13px;font-weight:500;color:var(--text);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tIn .22s ease,tOut .22s ease 2.5s forwards;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+@keyframes tIn{from{opacity:0;transform:translateY(10px) scale(.95);}to{opacity:1;transform:none;}}
+@keyframes tOut{to{opacity:0;transform:translateY(-8px) scale(.95);}}
+
+/* FAB */
+#fab{display:none;position:fixed;bottom:calc(var(--tab-h) + 14px + var(--safe-b));right:16px;z-index:60;}
+@media(max-width:640px){#fab{display:block;}}
+#fab-btn{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 24px rgba(124,110,247,.5);-webkit-tap-highlight-color:transparent;transition:transform .15s,box-shadow .15s;}
+#fab-btn:active{transform:scale(.92);}
+
+/* AUTOSAVE DOT */
+#asdot{width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;transition:background .3s;flex-shrink:0;}
+#asdot.saved{background:var(--success);}
+
+/* PREVIEW */
+#preview-wrap{border-radius:12px;overflow:hidden;border:1px solid var(--border);aspect-ratio:9/16;max-height:480px;position:relative;background:#000;}
+#preview-inner{position:absolute;top:0;left:0;transform-origin:top left;}
+
+/* EMPTY STATE */
+#empty-slides{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;text-align:center;gap:12px;}
+#empty-slides .es-icon{font-size:52px;opacity:.5;}
+#empty-slides .es-h{font-size:16px;font-weight:700;color:var(--text2);}
+#empty-slides .es-sub{font-size:13px;color:var(--muted);line-height:1.5;max-width:260px;}
+
+/* INLINE MODAL (open card password) */
+#open-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);z-index:1100;display:none;align-items:center;justify-content:center;padding:20px;}
+#open-modal.open{display:flex;}
+.open-box{background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:28px;width:100%;max-width:340px;}
+.open-box h3{font-size:1rem;font-weight:700;margin-bottom:14px;text-align:center;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:99px;}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  #sidebar,#statusbar,#topGenBtn,#topbar-desktop-btns{display:none!important;}
+  #btabs{display:flex;}
+  .logo-sub{display:none;}
+  #topbar{height:50px;}
+}
+@media(min-width:641px){#btabs,#fab{display:none!important;}}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- TOPBAR -->
+<div id="topbar">
+  <div style="flex-shrink:0">
+    <div class="logo">🎂 Card Creator PRO</div>
+    <span class="logo-sub">100% in your browser · no server</span>
+  </div>
+  <span id="slide-count-pill">0 slides</span>
+  <!-- DESIGN-2: slide count pill above -->
+
+  <!-- Desktop-only topbar buttons -->
+  <div id="topbar-desktop-btns" class="topbar-btns">
+    <button class="btn btn-s btn-sm" onclick="openTemplatesSheet()" title="Templates">🗂️ Templates</button>
+    <button class="btn btn-s btn-sm" onclick="openCardFile()" title="Open existing card">📂 Open</button>
+    <button class="btn btn-s btn-sm" id="histBtn" onclick="openHistorySheet()" title="Card history">🕐</button>
+    <button class="btn btn-s btn-sm" id="shareLastBtn" onclick="reshowShare()" title="Share last card" style="display:none">📤</button>
+  </div>
+
+  <div class="topbar-btns">
+    <span id="asdot" title="Draft auto-saved"></span>
+    <!-- DESIGN-3: file size estimate shown on desktop in status bar; here for mobile -->
+    <button class="btn btn-s btn-sm" id="topGenBtn" onclick="startGeneration()">🚀 Generate</button>
+  </div>
+</div>
+
+<!-- BODY -->
+<div id="body">
+
+  <!-- SIDEBAR (desktop) -->
+  <nav id="sidebar">
+    <div class="nav-lbl">Build</div>
+    <div class="nav-item active" data-tab="general" onclick="switchTab('general')"><span class="nav-icon">⚙️</span>General</div>
+    <div class="nav-item" data-tab="style" onclick="switchTab('style')"><span class="nav-icon">🎨</span>Style &amp; FX</div>
+    <div class="nav-item" data-tab="slides" onclick="switchTab('slides')"><span class="nav-icon">📸</span>Slides</div>
+    <div class="nav-item" data-tab="preview" onclick="switchTab('preview')"><span class="nav-icon">👁️</span>Preview</div>
+    <div class="nav-item" data-tab="templates" onclick="switchTab('templates')"><span class="nav-icon">🗂️</span>Templates</div>
+    <div id="sidebar-gen">
+      <button class="btn btn-p btn-full" onclick="startGeneration()">🚀 Generate Card</button>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5">Outputs a single .html<br>file you can share anywhere</p>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main id="content">
+
+    <!-- ── GENERAL ── -->
+    <div class="panel active" id="panel-general">
+      <div class="card">
+        <div class="card-title">🎉 Occasion</div>
+        <div class="occ-grid" id="occ-grid"></div>
+        <div class="row2">
+          <div class="field">
+            <label>Card Title</label>
+            <input type="text" id="f-title" value="Happy Birthday!" oninput="autosave();schedulePreview()">
+          </div>
+          <div class="field">
+            <label>Password <span style="color:var(--accent)">*</span></label>
+            <div style="display:flex;gap:6px;align-items:center">
+              <input type="text" id="f-pw" placeholder="e.g. sunny-cake-42" oninput="autosave()" autocomplete="off" spellcheck="false" style="flex:1">
+              <button class="btn btn-s btn-ico" onclick="regenPw()" title="Generate new password" style="flex-shrink:0;padding:10px 11px;font-size:16px">🎲</button>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-i"><span>🔐</span><span>AES-256 encrypted in your browser. Share the password separately from the file.</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🎵 Background Music</div>
+        <div class="field">
+          <label>MP3 / WAV (keep under 5 MB)</label>
+          <div class="file-field">
+            <input type="file" id="f-music" accept=".mp3,.wav,.ogg" onchange="fileChanged('f-music','fn-music',null,false)">
+            <span class="ff-icon">🎵</span>
+            <div class="ff-text">
+              <div class="ff-label">Tap to select audio file</div>
+              <div class="ff-sub" id="fn-music">No file selected</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🖼️ Global Images</div>
+        <div class="field">
+          <label>Welcome Slide Image (optional)</label>
+          <div class="file-field">
+            <input type="file" id="f-wi" accept="image/*" onchange="fileChanged('f-wi','fn-wi','ft-wi',true)">
+            <span class="ff-icon">📸</span>
+            <div class="ff-text">
+              <div class="ff-label">Select or take photo</div>
+              <div class="ff-sub" id="fn-wi">Default birthday image</div>
+            </div>
+            <img class="ff-thumb" id="ft-wi" alt="Welcome image preview">
+          </div>
+        </div>
+        <div class="field">
+          <label>Final "We Love You" Image (optional)</label>
+          <div class="file-field">
+            <input type="file" id="f-fi" accept="image/*" onchange="fileChanged('f-fi','fn-fi','ft-fi',true)">
+            <span class="ff-icon">❤️</span>
+            <div class="ff-text">
+              <div class="ff-label">Select or take photo</div>
+              <div class="ff-sub" id="fn-fi">Default friends image</div>
+            </div>
+            <img class="ff-thumb" id="ft-fi" alt="Final image preview">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STYLE ── -->
+    <div class="panel" id="panel-style">
+      <div class="card">
+        <div class="card-title">🎨 Color Theme</div>
+        <div class="theme-grid" id="theme-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">✍️ Heading Font — previewed in actual font</div>
+        <div class="font-grid" id="font-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">✨ Slide Transition</div>
+        <div class="opt-grid" id="trans-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">🎉 Particle Effect</div>
+        <div class="opt-grid" id="effect-grid"></div>
+      </div>
+    </div>
+
+    <!-- ── SLIDES ── -->
+    <div class="panel" id="panel-slides">
+      <div class="alert alert-i"><span>💡</span><span>Each slide = one person's wish. Drag ⠿ to reorder. Tap header to collapse.</span></div>
+      <!-- DESIGN-4: Empty state -->
+      <div id="empty-slides" style="display:none">
+        <span class="es-icon">🎈</span>
+        <div class="es-h">No slides yet</div>
+        <div class="es-sub">Add a slide for each person who wants to wish the birthday person</div>
+      </div>
+      <div id="slides-wrap"></div>
+      <button class="btn btn-s btn-full" onclick="addSlide()" style="margin-top:10px">＋ Add New Slide</button>
+    </div>
+
+    <!-- ── PREVIEW ── -->
+    <div class="panel" id="panel-preview">
+      <div class="card">
+        <!-- DESIGN-1: updated label -->
+        <div class="card-title">👁️ Live Preview — swipe to see slides</div>
+        <div id="preview-wrap">
+          <div id="preview-inner"></div>
+        </div>
+        <button class="btn btn-s btn-full" style="margin-top:12px" onclick="renderPreview()">🔄 Refresh Preview</button>
+      </div>
+    </div>
+
+    <!-- ── TEMPLATES ── -->
+    <div class="panel" id="panel-templates">
+      <div class="card">
+        <div class="card-title">🗂️ Card Templates</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5">Pick a template to get started quickly. You can customize everything afterwards.</p>
+        <div class="tmpl-grid" id="tmpl-grid-main"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- STATUS BAR (desktop) -->
+<div id="statusbar">
+  <span id="asdot-sb" style="width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;transition:background .3s;flex-shrink:0;"></span>
+  <span id="status-txt">Ready to create magic ✨</span>
+  <div class="prog-track" id="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <!-- UX-6: Share Last Card in status bar -->
+  <button class="btn btn-s btn-xs" id="shareLastBtnSb" onclick="reshowShare()" style="display:none;margin-left:4px">📤 Share Last</button>
+  <!-- DESIGN-3: file size estimate -->
+  <span id="sz-est"></span>
+</div>
+
+<!-- BOTTOM TABS (mobile) — 5 tabs with Templates -->
+<div id="btabs">
+  <button class="tbtn active" data-tab="general" onclick="switchTab('general')">
+    <span class="tbtn-icon">⚙️</span><span>General</span>
+  </button>
+  <button class="tbtn" data-tab="style" onclick="switchTab('style')">
+    <span class="tbtn-icon">🎨</span><span>Style</span>
+  </button>
+  <button class="tbtn" data-tab="slides" onclick="switchTab('slides')">
+    <span class="tbtn-icon">📸</span><span>Slides</span>
+  </button>
+  <button class="tbtn" data-tab="preview" onclick="switchTab('preview')">
+    <span class="tbtn-icon">👁️</span><span>Preview</span>
+  </button>
+  <button class="tbtn" data-tab="templates" onclick="switchTab('templates')">
+    <span class="tbtn-icon">🗂️</span><span>Tmpl</span>
+  </button>
+</div>
+
+<!-- FAB (mobile generate) -->
+<div id="fab"><button id="fab-btn" onclick="startGeneration()" title="Generate Card" aria-label="Generate Card">🚀</button></div>
+
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div id="toast-wrap"></div>
+
+<!-- SHARE MODAL -->
+<div class="backdrop" id="modal">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-icon">🎉</div>
+    <div class="sheet-title">Card Generated!</div>
+    <div class="sheet-sub">Share the file + this password with the recipient</div>
+    <div class="pw-box">
+      <span style="color:var(--muted);font-size:13px">Password</span>
+      <span class="pw-val" id="modal-pw">–</span>
+      <button class="btn btn-s btn-sm" onclick="copyPw()">Copy</button>
+    </div>
+    <div class="share-grid" id="share-grid"></div>
+    <button class="btn btn-s btn-full" onclick="closeModal()">Done</button>
+  </div>
+</div>
+
+<!-- TEMPLATES SHEET -->
+<div class="backdrop" id="tmpl-modal">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">🗂️ Templates</div>
+    <div class="sheet-sub">Start fast with a preset, then customize</div>
+    <div class="tmpl-grid" id="tmpl-grid-sheet"></div>
+    <button class="btn btn-s btn-full" style="margin-top:10px" onclick="document.getElementById('tmpl-modal').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<!-- HISTORY SHEET -->
+<div class="backdrop" id="hist-modal">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div class="sheet-title">🕐 Card History</div>
+    <div class="sheet-sub">Tap a past card to restore it as a draft</div>
+    <div id="hist-list"></div>
+    <button class="btn btn-d btn-full" style="margin-top:10px" onclick="clearHistory()">🗑️ Clear All History</button>
+    <button class="btn btn-s btn-full" style="margin-top:8px" onclick="document.getElementById('hist-modal').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<!-- OPEN CARD MODAL (password prompt for existing card) -->
+<div id="open-modal">
+  <div class="open-box">
+    <h3>🔓 Enter Card Password</h3>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:14px;text-align:center">Enter the password used to lock this card</p>
+    <div class="field">
+      <input type="text" id="open-pw-input" placeholder="Password…" autocomplete="off" spellcheck="false" onkeyup="if(event.key==='Enter')doOpenCard()">
+    </div>
+    <p id="open-err" style="color:var(--danger);font-size:12px;min-height:18px;margin-bottom:10px;text-align:center"></p>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-s" style="flex:1" onclick="document.getElementById('open-modal').classList.remove('open');_openFileContent=null">Cancel</button>
+      <button class="btn btn-p" style="flex:1" onclick="doOpenCard()">Decrypt &amp; Load</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ═══ DATA ══════════════════════════════════════════════════ */
+const THEMES={
+  "Rose":{primary:"#fff0f5",accent:"#e11d48",glass:"rgba(255,255,255,0.85)",bg:"linear-gradient(135deg,#fdfbfb,#ebedee)",anim:"linear-gradient(45deg,#ff9a9e,#fad0c4)",text:"#4a4a4a",btn:"white",frame:"white"},
+  "Cyberpunk":{primary:"#000",accent:"#00ffcc",glass:"rgba(0,0,0,0.8)",bg:"linear-gradient(135deg,#0f0c29,#302b63,#24243e)",anim:"linear-gradient(45deg,#ff00ff,#00ffff)",text:"#00ffcc",btn:"black",frame:"#1a1a1a"},
+  "Midnight Neon":{primary:"#1a1a2e",accent:"#e94560",glass:"rgba(22,22,37,0.9)",bg:"linear-gradient(135deg,#1a1a2e,#16213e)",anim:"linear-gradient(45deg,#0f3460,#e94560)",text:"#fff",btn:"white",frame:"#16213e"},
+  "Forest Mist":{primary:"#f1f8e9",accent:"#2e7d32",glass:"rgba(255,255,255,0.9)",bg:"linear-gradient(135deg,#d4fc79,#96e6a1)",anim:"linear-gradient(45deg,#134e5e,#71b280)",text:"#1b5e20",btn:"white",frame:"white"},
+  "Sunset Glow":{primary:"#fff3e0",accent:"#ef6c00",glass:"rgba(255,255,255,0.8)",bg:"linear-gradient(135deg,#ff9a9e,#fecfef)",anim:"linear-gradient(45deg,#ee0979,#ff6a00)",text:"#4e342e",btn:"white",frame:"#fff8e1"},
+  "Royal Purple":{primary:"#f3e5f5",accent:"#7b1fa2",glass:"rgba(255,255,255,0.85)",bg:"linear-gradient(135deg,#667eea,#764ba2)",anim:"linear-gradient(45deg,#8e2de2,#4a00e0)",text:"#4a148c",btn:"white",frame:"white"},
+  "Retro VHS":{primary:"#2b2b2b",accent:"#ff00ff",glass:"rgba(43,43,43,0.9)",bg:"repeating-linear-gradient(0deg,#111,#111 2px,#222 2px,#222 4px)",anim:"none",text:"#00ffff",btn:"black",frame:"#333"},
+  "Lavender Dream":{primary:"#f3e5f5",accent:"#9575cd",glass:"rgba(255,255,255,0.9)",bg:"linear-gradient(135deg,#e0c3fc,#8ec5fc)",anim:"linear-gradient(45deg,#6a11cb,#2575fc)",text:"#311b92",btn:"white",frame:"white"},
+  "Coffee Cream":{primary:"#efebe9",accent:"#5d4037",glass:"rgba(245,245,245,0.9)",bg:"linear-gradient(135deg,#c79081,#dfa579)",anim:"none",text:"#3e2723",btn:"white",frame:"#d7ccc8"},
+  "Oceanic":{primary:"#e1f5fe",accent:"#0277bd",glass:"rgba(255,255,255,0.9)",bg:"linear-gradient(135deg,#4facfe,#00f2fe)",anim:"linear-gradient(45deg,#1e3c72,#2a5298)",text:"#01579b",btn:"white",frame:"white"},
+  "Vampire":{primary:"#1a0000",accent:"#ff0000",glass:"rgba(26,0,0,0.8)",bg:"linear-gradient(135deg,#434343,#000)",anim:"linear-gradient(45deg,#93291E,#ED213A)",text:"#ff0000",btn:"white",frame:"#2a0000"},
+  "Hacker":{primary:"#000",accent:"#39ff14",glass:"rgba(0,0,0,0.9)",bg:"#000",anim:"none",text:"#39ff14",btn:"black",frame:"#0a0a0a"},
+  "Gold Luxury":{primary:"#fafafa",accent:"#d4af37",glass:"rgba(255,255,255,0.9)",bg:"linear-gradient(135deg,#e6e9f0,#eef1f5)",anim:"linear-gradient(45deg,#BF953F,#FCF6BA,#B38728)",text:"#222",btn:"white",frame:"#fff"},
+  "Deep Sea":{primary:"#e0f7fa",accent:"#006064",glass:"rgba(255,255,255,0.8)",bg:"linear-gradient(135deg,#09203f,#537895)",anim:"linear-gradient(45deg,#1d3557,#457b9d)",text:"#006064",btn:"white",frame:"white"},
+  "Tropicana":{primary:"#fff9c4",accent:"#fbc02d",glass:"rgba(255,255,255,0.8)",bg:"linear-gradient(135deg,#fceabb,#f8b500)",anim:"linear-gradient(45deg,#F2994A,#F2C94C)",text:"#f57f17",btn:"white",frame:"white"},
+  "Vaporwave":{primary:"#2b2146",accent:"#d69aff",glass:"rgba(255,255,255,0.1)",bg:"linear-gradient(180deg,#ff9a9e,#fecfef 50%,#a18cd1)",anim:"linear-gradient(to right,#cc2b5e,#753a88)",text:"#330033",btn:"white",frame:"rgba(255,255,255,0.4)"},
+  "Matrix":{primary:"#000",accent:"#00ff00",glass:"rgba(0,20,0,0.9)",bg:"#000",anim:"none",text:"#00ff00",btn:"black",frame:"#0a0a0a"},
+  "Steampunk":{primary:"#2b1e16",accent:"#d4af37",glass:"rgba(43,30,22,0.9)",bg:"linear-gradient(135deg,#603813,#b29f94)",anim:"repeating-linear-gradient(45deg,#8B4513 0,#8B4513 10px,#A0522D 10px,#A0522D 20px)",text:"#e6ccb2",btn:"#2b1e16",frame:"#3e2723"},
+  "Pastel Goth":{primary:"#2d2d2d",accent:"#ffb7b2",glass:"rgba(40,40,40,0.9)",bg:"linear-gradient(to bottom right,#2d2d2d,#434343)",anim:"linear-gradient(45deg,#ff9a9e,#fad0c4)",text:"#ffb7b2",btn:"#2d2d2d",frame:"#1a1a1a"},
+  "Candy Land":{primary:"#fff",accent:"#ff6b6b",glass:"rgba(255,255,255,0.7)",bg:"linear-gradient(135deg,#ffe6e6,#fff9f9)",anim:"linear-gradient(45deg,#ff9ff3,#feca57,#ff6b6b,#48dbfb)",text:"#ff4757",btn:"white",frame:"white"},
+  "Dracula":{primary:"#282a36",accent:"#ff79c6",glass:"rgba(40,42,54,0.9)",bg:"#282a36",anim:"linear-gradient(to right,#bd93f9,#ff79c6)",text:"#f8f8f2",btn:"#282a36",frame:"#44475a"},
+  "Cherry Blossom":{primary:"#fff0f5",accent:"#ff69b4",glass:"rgba(255,240,245,0.9)",bg:"linear-gradient(180deg,#ffb7c5,#ffd1dc)",anim:"none",text:"#8b0000",btn:"white",frame:"#fff"},
+  "Gothic Rose":{primary:"#000",accent:"#e91e63",glass:"rgba(20,0,5,0.9)",bg:"linear-gradient(45deg,#000,#2c000e)",anim:"none",text:"#f8bbd0",btn:"white",frame:"#4a0018"},
+  "Minimalist":{primary:"#fff",accent:"#000",glass:"rgba(255,255,255,0.95)",bg:"#fff",anim:"none",text:"#000",btn:"white",frame:"#eee"},
+  "Lemonade":{primary:"#fffde7",accent:"#fdd835",glass:"rgba(255,255,255,0.85)",bg:"linear-gradient(120deg,#fff9c4,#fff176)",anim:"none",text:"#f57f17",btn:"black",frame:"white"},
+  "Twilight":{primary:"#311b92",accent:"#b39ddb",glass:"rgba(49,27,146,0.8)",bg:"linear-gradient(to bottom,#4527a0,#311b92)",anim:"none",text:"#ede7f6",btn:"#311b92",frame:"#512da8"},
+  "Nordic":{primary:"#eceff1",accent:"#455a64",glass:"rgba(255,255,255,0.95)",bg:"#eceff1",anim:"none",text:"#263238",btn:"white",frame:"#cfd8dc"},
+  "Bubblegum":{primary:"#fce4ec",accent:"#f06292",glass:"rgba(255,255,255,0.9)",bg:"linear-gradient(135deg,#ff9a9e,#fecfef)",anim:"linear-gradient(45deg,#fb85b9,#f9c5d1)",text:"#880e4f",btn:"white",frame:"white"},
+  "Space":{primary:"#050505",accent:"#fff",glass:"rgba(255,255,255,0.1)",bg:"radial-gradient(circle,#202060,#050505)",anim:"none",text:"#fff",btn:"black",frame:"#111"},
+  "Matcha":{primary:"#f1f8e9",accent:"#558b2f",glass:"rgba(255,255,255,0.9)",bg:"linear-gradient(135deg,#d4fc79,#96e6a1)",anim:"none",text:"#33691e",btn:"white",frame:"#f9fbe7"}
+};
+
+const FONTS={
+  "Playful Script":{css:"'Dancing Script',cursive",    sample:"Happy Birthday!"},
+  "Elegant Serif":  {css:"'Playfair Display',serif",   sample:"Happy Birthday!"},
+  "Modern Sans":    {css:"'Outfit',sans-serif",         sample:"Happy Birthday!"},
+  "Handwriting":    {css:"'Indie Flower',cursive",      sample:"Happy Birthday!"},
+  "Retro Pixel":    {css:"'Press Start 2P',cursive",    sample:"HBD!"},
+  "Sci-Fi":         {css:"'Orbitron',sans-serif",       sample:"BIRTHDAY"},
+  "Cinematic":      {css:"'Cinzel',serif",              sample:"Happy Birthday"},
+  "Monospace":      {css:"'Fira Code',monospace",       sample:"HappyBday()"},
+  "Chunky":         {css:"'Passion One',cursive",       sample:"BIRTHDAY!"},
+  "Minimal":        {css:"'Montserrat',sans-serif",     sample:"Happy Birthday"}
+};
+
+const TRANSITIONS={
+  "Classic Fade":  {icon:"🌅",css:".page{opacity:0;transform:scale(0.95);transition:all 0.6s ease;}.page.active{opacity:1;transform:scale(1);}"},
+  "Slide In":      {icon:"➡️",css:".page{opacity:0;transform:translateX(100%);transition:all 0.5s ease-in-out;}.page.active{opacity:1;transform:translateX(0);}"},
+  "3D Rotate":     {icon:"🔄",css:".page{opacity:0;transform:rotateY(-90deg);transition:all 0.8s ease;transform-origin:left;}.page.active{opacity:1;transform:rotateY(0deg);}"},
+  "Drop Down":     {icon:"⬇️",css:".page{opacity:0;transform:translateY(-100%);transition:all 0.6s cubic-bezier(0.175,0.885,0.32,1.275);}.page.active{opacity:1;transform:translateY(0);}"},
+  "Zoom Out":      {icon:"🔍",css:".page{opacity:0;transform:scale(1.5);transition:all 0.7s cubic-bezier(0.2,0.8,0.2,1);}.page.active{opacity:1;transform:scale(1);}"},
+  "Bounce":        {icon:"🏀",css:".page{opacity:0;transform:translateY(-100vh);transition:all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);}.page.active{opacity:1;transform:translateY(0);}"},
+  "Elastic":       {icon:"🪢",css:".page{opacity:0;transform:translateX(-100%);transition:all 1s cubic-bezier(0.175,0.885,0.32,1.275);}.page.active{opacity:1;transform:translateX(0);}"}
+};
+
+const EFFECTS=[
+  {id:"None",    icon:"🚫",label:"None"},
+  {id:"confetti",icon:"🎊",label:"Confetti"},
+  {id:"hearts",  icon:"❤️", label:"Hearts"},
+  {id:"snow",    icon:"❄️", label:"Snow"},
+  {id:"balloons",icon:"🎈",label:"Balloons"},
+  {id:"stars",   icon:"⭐",label:"Stars"},
+  {id:"fire",    icon:"🔥",label:"Fire"}
+];
+
+/* FEAT-5: Occasions */
+const OCCASIONS=[
+  {id:"birthday",  emoji:"🎂",label:"Birthday",   effect:"confetti", finalText:"We Love You! ❤️"},
+  {id:"anniversary",emoji:"💍",label:"Anniversary",effect:"hearts",  finalText:"Happy Anniversary! 💕"},
+  {id:"graduation", emoji:"🎓",label:"Graduation", effect:"stars",   finalText:"Congratulations! 🎓"},
+  {id:"party",      emoji:"🎉",label:"Party",      effect:"confetti", finalText:"Let's Party! 🎉"},
+  {id:"justbecause",emoji:"💝",label:"Just Because",effect:"hearts", finalText:"Just Because We Love You! 💝"},
+  {id:"thankyou",   emoji:"🙏",label:"Thank You",  effect:"stars",   finalText:"Thank You So Much! 🙏"}
+];
+
+/* FEAT-3: Templates */
+const TEMPLATES=[
+  {id:"blank",    emoji:"✨",name:"Start Blank",   desc:"Empty canvas", gradient:"linear-gradient(135deg,#555,#333)"},
+  {id:"classic",  emoji:"🎂",name:"Classic Birthday",desc:"Rose · Confetti · 3 slides",gradient:"linear-gradient(135deg,#fdfbfb,#ebedee)",
+    theme:"Rose",font:"Playful Script",effect:"confetti",transition:"Classic Fade",occasion:"birthday",title:"Happy Birthday!",slides:[
+      {name:"",heading:"Happy Birthday!",    message:"Wishing you all the happiness in the world today and always! 🎂"},
+      {name:"",heading:"Many Happy Returns!",message:"May this special day bring you endless joy and cherished memories!"},
+      {name:"",heading:"You're Amazing! 🎉",message:"Thank you for being such a wonderful person in our lives. We love you so much!"}
+    ]},
+  {id:"galaxy",   emoji:"💫",name:"Galaxy Wish",   desc:"Space · Stars · 3D Rotate",  gradient:"radial-gradient(circle,#202060,#050505)",
+    theme:"Space",font:"Sci-Fi",effect:"stars",transition:"3D Rotate",occasion:"birthday",title:"Cosmic Birthday Wishes",slides:[
+      {name:"",heading:"GREETINGS FROM THE COSMOS",message:"Your birthday signals are travelling at the speed of light across the universe!"},
+      {name:"",heading:"YOU'RE A STAR ⭐",         message:"Literally. You're made of stardust and you're absolutely brilliant!"}
+    ]},
+  {id:"blossom",  emoji:"🌸",name:"Cherry Blossom",desc:"Cherry · Hearts · Classic Fade",gradient:"linear-gradient(180deg,#ffb7c5,#ffd1dc)",
+    theme:"Cherry Blossom",font:"Elegant Serif",effect:"hearts",transition:"Classic Fade",occasion:"birthday",title:"With Love & Blossoms",slides:[
+      {name:"",heading:"Happy Birthday, Beautiful",message:"Like cherry blossoms in spring, your presence makes the world more beautiful."},
+      {name:"",heading:"You Bloom Every Day",       message:"Your kindness, smile, and warmth light up every room you enter."},
+      {name:"",heading:"Here's to You 🌸",          message:"May your birthday be as lovely and fragrant as cherry blossoms in full bloom!"}
+    ]},
+  {id:"roast",    emoji:"🤣",name:"Roast Card",    desc:"Hacker · Fire · Slide In",    gradient:"linear-gradient(135deg,#0f0c29,#302b63)",
+    theme:"Hacker",font:"Monospace",effect:"fire",transition:"Slide In",occasion:"birthday",title:"Happy (Old) Birthday",slides:[
+      {name:"",heading:"You're Not Old...",      message:"You're just retro. Like a floppy disk. Rare, confusing, and nobody really knows what to do with you."},
+      {name:"",heading:"Scientists Are Baffled",message:"They discovered that for every birthday you have, you get older. Doctors HATE this trick!"},
+      {name:"",heading:"Just Kidding... 🔥",    message:"In all seriousness, you're one of the most awesome people we know. Happy birthday, legend!"}
+    ]},
+  {id:"royal",    emoji:"👑",name:"Royal Treatment",desc:"Gold · Stars · 4 slides",  gradient:"linear-gradient(135deg,#BF953F,#FCF6BA,#B38728)",
+    theme:"Gold Luxury",font:"Cinematic",effect:"stars",transition:"3D Rotate",occasion:"birthday",title:"A Royal Birthday",slides:[
+      {name:"",heading:"Your Highness",                  message:"Today we bow before the one true royalty of this occasion. May your reign be glorious!"},
+      {name:"",heading:"Long Live The Birthday Monarch", message:"By royal decree, this day shall be celebrated with the utmost grandeur and revelry!"},
+      {name:"",heading:"The Crown Jewel",                message:"Among all the treasures in our lives, you shine the brightest. Happy birthday, royalty."},
+      {name:"",heading:"All Hail! 👑",                   message:"A toast to the most magnificent, extraordinary, and beloved person we are blessed to know!"}
+    ]},
+  {id:"chill",    emoji:"🌊",name:"Chill Vibes",   desc:"Oceanic · Snow · Bounce",    gradient:"linear-gradient(135deg,#4facfe,#00f2fe)",
+    theme:"Oceanic",font:"Minimal",effect:"snow",transition:"Bounce",occasion:"birthday",title:"Happy Birthday, Cool One",slides:[
+      {name:"",heading:"Hey, Happy Birthday!",message:"No big fuss — just wanted you to know we're really glad you were born. 🌊"},
+      {name:"",heading:"You're the Vibe ✨",  message:"Chill, cool, and absolutely irreplaceable. Thanks for being exactly who you are!"}
+    ]}
+];
+
+/* BUG-5: Password wordlist */
+const WORDLIST=["sunny","cake","happy","bright","sweet","party","dance","magic","star","wish","dream","love","bloom","smile","joy","lucky","spark","shine","cozy","warm","crisp","brave","kind","cool","bold","wild","soft","gentle","merry","festive","cheer","glow","bounce","fizz","whirl","cosmic","lunar","solar","radiant","vivid"];
+
+/* ═══ STATE ════════════════════════════════════════════════ */
+let S={theme:"Rose",font:"Playful Script",transition:"Classic Fade",effect:"confetti",occasion:"birthday",slides:[],ctr:0};
+let generatedHTML=null,asTimer=null,_lastPw=null,_pvTimer=null;
+let _openFileContent=null; // for FEAT-4
+
+/* ═══ INLINE SVG DEFAULTS (UX-8: offline-safe) ══════════════ */
+const _cakeSVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#ffb7c5" rx="12"/><rect x="100" y="130" width="200" height="55" fill="#fce4ec" rx="10"/><path d="M100 138 Q120 128 140 138 Q160 128 180 138 Q200 128 220 138 Q240 128 260 138 Q280 128 300 138" stroke="white" stroke-width="3" fill="none"/><rect x="80" y="183" width="240" height="65" fill="#fff9c4" rx="10"/><path d="M80 191 Q104 179 128 191 Q152 179 176 191 Q200 179 224 191 Q248 179 272 191 Q296 179 320 191" stroke="white" stroke-width="3" fill="none"/><rect x="165" y="98" width="11" height="35" fill="#ff6b6b" rx="3"/><rect x="195" y="92" width="11" height="41" fill="#48dbfb" rx="3"/><rect x="225" y="98" width="11" height="35" fill="#feca57" rx="3"/><ellipse cx="170" cy="95" rx="5" ry="7" fill="#FF9800"/><ellipse cx="170" cy="95" rx="2" ry="4" fill="#FFF176"/><ellipse cx="200" cy="88" rx="5" ry="7" fill="#FF9800"/><ellipse cx="200" cy="88" rx="2" ry="4" fill="#FFF176"/><ellipse cx="230" cy="95" rx="5" ry="7" fill="#FF9800"/><ellipse cx="230" cy="95" rx="2" ry="4" fill="#FFF176"/><text x="200" y="232" text-anchor="middle" font-size="15" font-weight="bold" fill="#e91e63" font-family="Arial,sans-serif">Happy Birthday!</text><polygon points="32,38 38,55 55,55 41,65 47,82 32,72 17,82 23,65 9,55 26,55" fill="#feca57" opacity="0.85"/><polygon points="368,38 374,55 391,55 377,65 383,82 368,72 353,82 359,65 345,55 362,55" fill="#feca57" opacity="0.85"/><circle cx="52" cy="258" r="14" fill="#ff9ff3" opacity="0.7"/><circle cx="348" cy="258" r="14" fill="#a29bfe" opacity="0.7"/></svg>`;
+const _heartSVG=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#f3e5f5" rx="12"/><path d="M200 232 C188 220 116 186 96 148 C78 116 92 92 120 90 C148 87 168 108 185 128 L200 145 L215 128 C232 108 252 87 280 90 C308 92 322 116 304 148 C284 186 212 220 200 232Z" fill="#e91e63"/><path d="M133 107 C144 102 158 108 168 121" stroke="rgba(255,255,255,0.5)" stroke-width="4" fill="none" stroke-linecap="round"/><polygon points="50,48 56,65 73,65 60,75 65,92 50,82 35,92 40,75 27,65 44,65" fill="#feca57"/><polygon points="350,48 356,65 373,65 360,75 365,92 350,82 335,92 340,75 327,65 344,65" fill="#feca57"/><line x1="95" y1="46" x2="95" y2="64" stroke="#ff69b4" stroke-width="2.5" stroke-linecap="round"/><line x1="86" y1="55" x2="104" y2="55" stroke="#ff69b4" stroke-width="2.5" stroke-linecap="round"/><line x1="305" y1="46" x2="305" y2="64" stroke="#ff69b4" stroke-width="2.5" stroke-linecap="round"/><line x1="296" y1="55" x2="314" y2="55" stroke="#ff69b4" stroke-width="2.5" stroke-linecap="round"/><polygon points="30,178 33,190 43,190 35,196 38,207 30,200 22,207 25,196 17,190 27,190" fill="#feca57" opacity="0.8"/><polygon points="370,178 373,190 383,190 375,196 378,207 370,200 362,207 365,196 357,190 367,190" fill="#feca57" opacity="0.8"/><text x="200" y="272" text-anchor="middle" font-size="16" font-weight="bold" fill="#7b1fa2" font-family="Arial,sans-serif">We Love You!</text></svg>`;
+const D_WELCOME='data:image/svg+xml;base64,'+btoa(_cakeSVG);
+const D_FINAL='data:image/svg+xml;base64,'+btoa(_heartSVG);
+
+/* ═══ PASSWORD GENERATOR (BUG-5) ════════════════════════════ */
+function genPw(){
+  const pick=()=>WORDLIST[Math.floor(Math.random()*WORDLIST.length)];
+  return pick()+'-'+pick()+'-'+(Math.floor(Math.random()*90)+10);
+}
+function regenPw(){
+  document.getElementById('f-pw').value=genPw();
+  autosave();
+  navigator.vibrate?.(12);
+}
+
+/* ═══ TAB ════════════════════════════════════════════════════ */
+function switchTab(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===id));
+  document.getElementById('content').scrollTop=0;
+  if(id==='preview') setTimeout(renderPreview,60);
+}
+
+/* ═══ FILE CHANGE (BUG-4: revoke old object URLs) ════════════ */
+function fileChanged(inputId,nameId,thumbId,isImg){
+  const f=document.getElementById(inputId)?.files?.[0];
+  if(!f)return;
+  document.getElementById(nameId).textContent=f.name;
+  if(isImg&&thumbId){
+    const t=document.getElementById(thumbId);
+    // BUG-4: revoke previous object URL before creating new one
+    const prev=t.dataset.objurl;
+    if(prev)URL.revokeObjectURL(prev);
+    const url=URL.createObjectURL(f);
+    t.dataset.objurl=url;
+    t.src=url;
+    t.style.display='block';
+  }
+  autosave();
+}
+
+/* ═══ GRIDS ══════════════════════════════════════════════════ */
+function buildThemeGrid(){
+  const g=document.getElementById('theme-grid');g.innerHTML='';
+  Object.entries(THEMES).forEach(([name,t])=>{
+    const c=document.createElement('div');c.className='theme-chip'+(name===S.theme?' sel':'');
+    c.setAttribute('role','radio');c.setAttribute('aria-checked',name===S.theme?'true':'false');c.tabIndex=0;
+    c.innerHTML=`<div class="t-preview" style="background:${t.bg}"><span style="font-weight:700;font-size:12px;color:${t.accent};text-shadow:0 1px 3px rgba(0,0,0,.4)">Aa</span></div><div class="t-swatches"><div class="t-sw" style="background:${t.primary}"></div><div class="t-sw" style="background:${t.accent}"></div><div class="t-sw" style="background:${t.frame}"></div></div><div class="t-name">${name}</div>`;
+    c.onclick=()=>{S.theme=name;g.querySelectorAll('.theme-chip').forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});c.classList.add('sel');c.setAttribute('aria-checked','true');autosave();schedulePreview();};
+    c.onkeydown=e=>{if(e.key===' '||e.key==='Enter')c.onclick();};
+    g.appendChild(c);
+  });
+}
+
+function buildFontGrid(){
+  const g=document.getElementById('font-grid');g.innerHTML='';
+  Object.entries(FONTS).forEach(([name,f])=>{
+    const c=document.createElement('div');c.className='font-chip'+(name===S.font?' sel':'');
+    c.setAttribute('role','radio');c.setAttribute('aria-checked',name===S.font?'true':'false');c.tabIndex=0;
+    c.innerHTML=`<div class="f-preview" style="font-family:${f.css}">${f.sample}</div><div class="f-name">${name}</div>`;
+    c.onclick=()=>{S.font=name;g.querySelectorAll('.font-chip').forEach(x=>{x.classList.remove('sel');x.setAttribute('aria-checked','false');});c.classList.add('sel');c.setAttribute('aria-checked','true');autosave();schedulePreview();};
+    c.onkeydown=e=>{if(e.key===' '||e.key==='Enter')c.onclick();};
+    g.appendChild(c);
+  });
+}
+
+function buildTransGrid(){
+  const g=document.getElementById('trans-grid');g.innerHTML='';
+  Object.entries(TRANSITIONS).forEach(([name,t])=>{
+    const c=document.createElement('div');c.className='opt-chip'+(name===S.transition?' sel':'');
+    c.setAttribute('role','radio');c.tabIndex=0;
+    c.innerHTML=`<span class="opt-icon">${t.icon}</span>${name}`;
+    c.onclick=()=>{S.transition=name;g.querySelectorAll('.opt-chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');autosave();schedulePreview();};
+    c.onkeydown=e=>{if(e.key===' '||e.key==='Enter')c.onclick();};
+    g.appendChild(c);
+  });
+}
+
+function buildEffectGrid(){
+  const g=document.getElementById('effect-grid');g.innerHTML='';
+  EFFECTS.forEach(e=>{
+    const c=document.createElement('div');c.className='opt-chip'+(e.id===S.effect?' sel':'');
+    c.setAttribute('role','radio');c.tabIndex=0;
+    c.innerHTML=`<span class="opt-icon">${e.icon}</span>${e.label}`;
+    c.onclick=()=>{S.effect=e.id;g.querySelectorAll('.opt-chip').forEach(x=>x.classList.remove('sel'));c.classList.add('sel');autosave();};
+    c.onkeydown=e2=>{if(e2.key===' '||e2.key==='Enter')c.onclick();};
+    g.appendChild(c);
+  });
+}
+
+/* FEAT-5: Occasion grid */
+function buildOccGrid(){
+  const g=document.getElementById('occ-grid');g.innerHTML='';
+  OCCASIONS.forEach(o=>{
+    const c=document.createElement('div');c.className='occ-chip'+(o.id===S.occasion?' sel':'');
+    c.setAttribute('role','radio');c.tabIndex=0;
+    c.innerHTML=`<span class="occ-emoji">${o.emoji}</span>${o.label}`;
+    c.onclick=()=>{
+      S.occasion=o.id;
+      // Auto-set effect to match occasion default
+      S.effect=o.effect;
+      g.querySelectorAll('.occ-chip').forEach(x=>x.classList.remove('sel'));
+      c.classList.add('sel');
+      // Update title suggestion
+      const titleEl=document.getElementById('f-title');
+      if(titleEl&&(titleEl.value===''||OCCASIONS.find(x=>titleEl.value===getTitleForOccasion(x.id)))){
+        titleEl.value=getTitleForOccasion(o.id);
+      }
+      buildEffectGrid();
+      autosave();
+    };
+    c.onkeydown=e=>{if(e.key===' '||e.key==='Enter')c.onclick();};
+    g.appendChild(c);
+  });
+}
+
+function getTitleForOccasion(id){
+  const map={birthday:"Happy Birthday!",anniversary:"Happy Anniversary!",graduation:"Congratulations!",party:"Let's Party! 🎉",justbecause:"Just Because ❤️",thankyou:"Thank You! 🙏"};
+  return map[id]||"Happy Birthday!";
+}
+
+function getFinalTextForOccasion(){
+  return OCCASIONS.find(o=>o.id===S.occasion)?.finalText||"We Love You! ❤️";
+}
+
+/* ═══ SLIDES ═════════════════════════════════════════════════ */
+function updateSlideCountPill(){
+  const n=S.slides.length;
+  document.getElementById('slide-count-pill').textContent=n===1?'1 slide':n+' slides';
+}
+
+function updateEmptyState(){
+  const empty=document.getElementById('empty-slides');
+  if(empty)empty.style.display=S.slides.length===0?'flex':'none';
+}
+
+function addSlide(d={}){
+  const id=++S.ctr;
+  const obj={id,name:d.name||'',heading:d.heading||'Happy Birthday!',message:d.message||'',imageData:d.imageData||null,_fileName:null};
+  S.slides.push(obj);
+  renderSlide(obj);
+  updateSlideCountPill();
+  updateEmptyState();
+  navigator.vibrate?.(12);
+  setTimeout(()=>{
+    const card=document.querySelector(`.slide-card[data-id="${id}"]`);
+    if(card){card.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  },120);
+  autosave();
+}
+
+function renderSlide(obj){
+  const wrap=document.getElementById('slides-wrap');
+  const idx=S.slides.indexOf(obj)+1;
+  const card=document.createElement('div');
+  card.className='slide-card slide-enter';
+  card.dataset.id=obj.id;
+
+  card.innerHTML=`
+<div class="slide-head" onclick="toggleSlide(${obj.id})">
+  <span class="drag-h" title="Hold to reorder" id="dh-${obj.id}" role="button" aria-label="Drag to reorder" tabindex="0">⠿</span>
+  <span class="slide-badge" id="sb-${obj.id}">#${idx}</span>
+  <span class="slide-lbl" id="sl-${obj.id}">${esc(obj.name)||'Slide '+idx}</span>
+  <div class="slide-acts" onclick="event.stopPropagation()">
+    <button class="btn btn-ico btn-sm btn-s" onclick="moveSlide(${obj.id},-1)" title="Move up" aria-label="Move slide up">↑</button>
+    <button class="btn btn-ico btn-sm btn-s" onclick="moveSlide(${obj.id},1)" title="Move down" aria-label="Move slide down">↓</button>
+    <button class="btn btn-ico btn-sm btn-s" onclick="dupSlide(${obj.id})" title="Duplicate slide" aria-label="Duplicate slide">⧉</button>
+    <button class="btn btn-ico btn-sm btn-d" id="del-${obj.id}" onclick="removeSlide(${obj.id})" aria-label="Remove slide">✕</button>
+  </div>
+  <span class="chevron">▼</span>
+</div>
+<div class="slide-body">
+  <div class="row2">
+    <div class="field"><label>Sender Name</label><input type="text" placeholder="e.g. Sarah" value="${esc(obj.name)}" oninput="updSlide(${obj.id},'name',this.value)"></div>
+    <div class="field"><label>Heading</label><input type="text" value="${esc(obj.heading)}" oninput="updSlide(${obj.id},'heading',this.value)"></div>
+  </div>
+  <div class="field">
+    <label>Message <span style="color:var(--muted);font-size:10px;text-transform:none;letter-spacing:0">(newlines supported)</span></label>
+    <textarea placeholder="Write a heartfelt message…" oninput="updSlide(${obj.id},'message',this.value);updateCharCnt(${obj.id},this.value.length)" title="Long messages may overflow on small screens.">${esc(obj.message)}</textarea>
+    <div class="char-cnt" id="cc-${obj.id}">${(obj.message||'').length} chars</div>
+  </div>
+  <div class="field">
+    <label>Photo</label>
+    <div class="file-field">
+      <input type="file" id="si-${obj.id}" accept="image/*" onchange="handleSlideImg(${obj.id},this)">
+      <span class="ff-icon">📸</span>
+      <div class="ff-text"><div class="ff-label">Select or take photo</div><div class="ff-sub" id="sn-${obj.id}">Default image</div></div>
+      <img class="ff-thumb" id="st-${obj.id}" alt="Slide photo preview">
+    </div>
+  </div>
+</div>`;
+
+  wrap.appendChild(card);
+
+  // DESIGN-5: entrance animation
+  requestAnimationFrame(()=>requestAnimationFrame(()=>card.classList.add('visible')));
+
+  // UX-4: init char count color
+  updateCharCnt(obj.id,(obj.message||'').length);
+
+  // Pointer drag (same as v1.1)
+  const handle=card.querySelector(`#dh-${obj.id}`);
+  let dragging=false,ghostEl=null,startY=0,lastOver=null;
+  handle.addEventListener('pointerdown',e=>{
+    e.stopPropagation();e.preventDefault();
+    handle.setPointerCapture(e.pointerId);
+    dragging=true;startY=e.clientY;
+    const rect=card.getBoundingClientRect();
+    ghostEl=card.cloneNode(true);
+    ghostEl.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.55;pointer-events:none;z-index:9000;border-radius:var(--r);background:var(--surface3);box-shadow:0 12px 32px rgba(0,0,0,.4);transform:scale(1.02);transition:none;`;
+    document.body.appendChild(ghostEl);card.style.opacity='.3';
+  },{passive:false});
+  handle.addEventListener('pointermove',e=>{
+    if(!dragging||!ghostEl)return;
+    const dy=e.clientY-startY;
+    ghostEl.style.transform=`translateY(${dy}px) scale(1.02)`;
+    const midY=e.clientY,midX=ghostEl.getBoundingClientRect().left+ghostEl.offsetWidth/2;
+    ghostEl.style.pointerEvents='none';
+    const target=document.elementFromPoint(midX,midY)?.closest('.slide-card');
+    ghostEl.style.pointerEvents='';
+    if(target&&target!==card){
+      if(lastOver&&lastOver!==target)lastOver.classList.remove('drag-over');
+      target.classList.add('drag-over');lastOver=target;
+    }else if(lastOver&&target!==lastOver){lastOver.classList.remove('drag-over');lastOver=null;}
+  },{passive:true});
+  function endDrag(){
+    if(!dragging)return;dragging=false;
+    if(ghostEl){ghostEl.remove();ghostEl=null;}
+    card.style.opacity='';
+    if(lastOver){
+      lastOver.classList.remove('drag-over');
+      const fromId=obj.id,toId=parseInt(lastOver.dataset.id);lastOver=null;
+      if(fromId!==toId){
+        const fi=S.slides.findIndex(s=>s.id===fromId),ti=S.slides.findIndex(s=>s.id===toId);
+        const[m]=S.slides.splice(fi,1);S.slides.splice(ti,0,m);
+        rerender();autosave();
+      }
+    }
+  }
+  handle.addEventListener('pointerup',endDrag);
+  handle.addEventListener('pointercancel',endDrag);
+}
+
+/* UX-4: char count colors */
+function updateCharCnt(id,len){
+  const el=document.getElementById(`cc-${id}`);
+  if(!el)return;
+  el.textContent=len+' chars';
+  el.classList.toggle('warn',len>=400&&len<600);
+  el.classList.toggle('danger',len>=600);
+}
+
+/* UX-2: delete with confirmation */
+const _delTimers={};
+function removeSlide(id){
+  const btn=document.getElementById(`del-${id}`);if(!btn)return;
+  if(_delTimers[id]){
+    // Second click: confirm delete
+    clearTimeout(_delTimers[id]);
+    delete _delTimers[id];
+    S.slides=S.slides.filter(s=>s.id!==id);
+    rerender();autosave();
+    updateSlideCountPill();
+    updateEmptyState();
+    navigator.vibrate?.(20);
+    toast('Slide removed');
+  }else{
+    // First click: arm confirmation
+    btn.textContent='Sure?';btn.classList.add('confirm');
+    _delTimers[id]=setTimeout(()=>{
+      delete _delTimers[id];
+      if(btn.isConnected){btn.textContent='✕';btn.classList.remove('confirm');}
+    },2000);
+  }
+}
+
+/* FEAT-2: Slide duplication */
+function dupSlide(id){
+  const src=S.slides.find(s=>s.id===id);if(!src)return;
+  const newId=++S.ctr;
+  const clone={id:newId,name:src.name,heading:src.heading,message:src.message,imageData:null,_fileName:null};
+  const idx=S.slides.indexOf(src);
+  S.slides.splice(idx+1,0,clone);
+  rerender();autosave();
+  updateSlideCountPill();
+  toast('Slide duplicated — re-add photo if needed');
+  navigator.vibrate?.(12);
+}
+
+function handleSlideImg(id,input){
+  const obj=S.slides.find(s=>s.id===id);if(!obj||!input.files?.[0])return;
+  const f=input.files[0];
+  if(f.type==='image/png'||f.type==='image/gif')toast('⚠️ Transparent images get a white background');
+  obj._fileName=f.name;
+  document.getElementById(`sn-${id}`).textContent=f.name;
+  // BUG-4: revoke old thumb URL
+  const t=document.getElementById(`st-${id}`);
+  const prev=t?.dataset?.objurl;if(prev)URL.revokeObjectURL(prev);
+  const url=URL.createObjectURL(f);
+  if(t){t.dataset.objurl=url;t.src=url;t.style.display='block';}
+  compressImg(f).then(d=>{obj.imageData=d;autosave();schedulePreview();});
+}
+
+function updSlide(id,field,val){
+  const obj=S.slides.find(s=>s.id===id);if(!obj)return;
+  obj[field]=val;
+  if(field==='name'){const l=document.getElementById(`sl-${id}`);if(l)l.textContent=val.trim()||('Slide '+(S.slides.indexOf(obj)+1));}
+  autosave();schedulePreview();
+}
+
+function toggleSlide(id){document.querySelector(`.slide-card[data-id="${id}"]`)?.classList.toggle('collapsed');}
+function moveSlide(id,dir){
+  const i=S.slides.findIndex(s=>s.id===id),n=i+dir;
+  if(n<0||n>=S.slides.length)return;
+  [S.slides[i],S.slides[n]]=[S.slides[n],S.slides[i]];
+  rerender();autosave();
+}
+
+function rerender(){
+  document.getElementById('slides-wrap').innerHTML='';
+  S.slides.forEach(obj=>{
+    renderSlide(obj);
+    if(obj.imageData){
+      const thumb=document.getElementById(`st-${obj.id}`);
+      const nameEl=document.getElementById(`sn-${obj.id}`);
+      if(thumb){thumb.src=obj.imageData;thumb.style.display='block';}
+      if(nameEl&&obj._fileName)nameEl.textContent=obj._fileName;
+    }
+  });
+  // UX-1: update badge numbers after reorder
+  document.querySelectorAll('.slide-badge').forEach((badge,i)=>{
+    badge.textContent='#'+(i+1);
+  });
+  updateEmptyState();
+}
+
+/* ═══ IMAGE PROCESSING ═══════════════════════════════════════ */
+const MAX_W=1200,MAX_B=500*1024,MAX_AUDIO_BYTES=5*1024*1024;
+
+function compressImg(file){
+  return new Promise(resolve=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        let{width:w,height:h}=img;
+        if(w>MAX_W){h=Math.round(h*MAX_W/w);w=MAX_W;}
+        const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+        cv.getContext('2d').drawImage(img,0,0,w,h);
+        let q=.82,url=cv.toDataURL('image/jpeg',q);
+        while(url.length*.75>MAX_B&&q>.3){q-=.1;url=cv.toDataURL('image/jpeg',q);}
+        resolve(url);
+      };img.src=e.target.result;
+    };r.readAsDataURL(file);
+  });
+}
+
+async function getImg(id){const f=document.getElementById(id)?.files?.[0];return f?compressImg(f):null;}
+async function getAudio(){
+  const f=document.getElementById('f-music')?.files?.[0];if(!f)return'';
+  if(f.size>MAX_AUDIO_BYTES){toast(`⚠️ Audio ${(f.size/1024/1024).toFixed(1)} MB — max 5 MB. Skipped.`,true);document.getElementById('f-music').value='';document.getElementById('fn-music').textContent='No file selected';return'';}
+  return new Promise(resolve=>{const r=new FileReader();r.onload=e=>resolve(e.target.result);r.readAsDataURL(f);});
+}
+
+/* ═══ ENCRYPTION ══════════════════════════════════════════════ */
+function uint8ToBase64(bytes){
+  let bin='';const CHUNK=0x8000;
+  for(let i=0;i<bytes.length;i+=CHUNK)bin+=String.fromCharCode(...bytes.subarray(i,i+CHUNK));
+  return btoa(bin);
+}
+function base64ToUint8(s){const b=atob(s);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+
+async function aesEncrypt(text,pw){
+  const enc=new TextEncoder();
+  const salt=crypto.getRandomValues(new Uint8Array(16));
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['encrypt']);
+  const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(text));
+  const out=new Uint8Array(28+ct.byteLength);out.set(salt);out.set(iv,16);out.set(new Uint8Array(ct),28);
+  return uint8ToBase64(out);
+}
+
+/* FEAT-4: aesDecrypt (inverse of aesEncrypt) */
+async function aesDecrypt(b64,pw){
+  const bytes=base64ToUint8(b64);
+  const salt=bytes.slice(0,16),iv=bytes.slice(16,28),ct=bytes.slice(28);
+  const enc=new TextEncoder();
+  const km=await crypto.subtle.importKey('raw',enc.encode(pw),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:100000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const dec=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct);
+  return new TextDecoder().decode(dec);
+}
+
+/* ═══ CSS BUILDER ═══════════════════════════════════════════ */
+function buildCSS(tn,fn,trn){
+  const t=THEMES[tn]||THEMES.Rose;
+  const ff=FONTS[fn]?.css||FONTS['Playful Script'].css;
+  const tr=TRANSITIONS[trn]?.css||TRANSITIONS['Classic Fade'].css;
+
+  // DESIGN-6: subtle pulse for static (anim:none) themes
+  const staticPulse=t.anim==='none'?`@keyframes bgPulse{0%,100%{filter:brightness(1);}50%{filter:brightness(1.04);}}body{animation:bgPulse 5s ease-in-out infinite;}`:'';
+
+  return`<style>
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@400;600&family=Playfair+Display:wght@600&family=Indie+Flower&family=Press+Start+2P&family=Orbitron:wght@700&family=Cinzel:wght@600&family=Fira+Code:wght@500&family=Passion+One&family=Montserrat:wght@600&display=swap');
+:root{--primary:${t.primary};--accent:${t.accent};--glass:${t.glass};--text-main:${t.text};--btn-text:${t.btn};--frame-bg:${t.frame};}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Outfit',sans-serif;background:${t.bg};color:var(--text-main);margin:0;position:fixed;width:100%;height:100vh;height:100dvh;overflow:hidden;overscroll-behavior:none;}
+${staticPulse}
+.bg-animation{position:absolute;top:0;left:0;width:100%;height:100%;z-index:-1;background:${t.anim};opacity:.25;}
+#ec{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;}
+#ac{width:100%;height:100%;position:relative;}
+.page{position:absolute;inset:0;width:100%;height:100%;overflow-y:auto;padding:20px 20px 100px;display:flex;flex-direction:column;align-items:center;pointer-events:none;scrollbar-width:none;z-index:1;touch-action:pan-y;}
+.page::-webkit-scrollbar{display:none;}
+.page.active{pointer-events:auto;z-index:10;}
+${tr}
+.pcw{width:100%;max-width:600px;margin:auto;background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.3);border-radius:24px;padding:2rem;box-shadow:0 8px 32px rgba(0,0,0,.1);text-align:center;}
+.tf{font-family:${ff};color:var(--accent);}
+.pf{padding:10px;background:var(--frame-bg);box-shadow:0 4px 15px rgba(0,0,0,.15);border-radius:12px;margin:1.5rem auto;transform:rotate(-2deg);transition:transform .3s;}
+.pf:hover{transform:rotate(0) scale(1.02);}
+img{display:block;width:100%;height:auto;max-height:400px;object-fit:cover;border-radius:8px;}
+.nc{position:fixed;bottom:20px;left:0;width:100%;display:flex;justify-content:space-between;padding:0 20px;z-index:50;pointer-events:none;}
+.nb{pointer-events:auto;background:var(--accent);color:var(--btn-text);border:none;padding:12px 24px;border-radius:50px;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.2);cursor:pointer;display:flex;align-items:center;gap:8px;font-size:1rem;font-family:'Outfit',sans-serif;transition:opacity .15s;}
+.nb.hidden{opacity:0;pointer-events:none;}
+#ls{position:fixed;inset:0;z-index:9999;background:${t.bg};display:flex;align-items:center;justify-content:center;padding:20px;transition:opacity .5s;}
+.lb{background:var(--glass);padding:2.5rem;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,.1);text-align:center;width:100%;max-width:340px;backdrop-filter:blur(10px);}
+input[type="password"]{width:100%;padding:12px;margin:15px 0;border:2px solid rgba(0,0,0,.1);border-radius:10px;font-size:1rem;outline:none;background:rgba(255,255,255,.9);}
+input[type="password"]:focus{border-color:var(--accent);}
+.wf{font-size:.9rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-main);opacity:.7;margin-bottom:.5rem;display:block;font-weight:600;}
+.pt{position:fixed;top:0;left:0;width:100%;height:4px;background:rgba(0,0,0,.1);z-index:100;}
+.pf2{height:100%;width:0%;background:var(--accent);transition:width .4s ease;}
+/* UX-9: slide counter */
+#sc{position:fixed;top:8px;left:14px;background:rgba(0,0,0,.35);color:var(--accent);font-size:11px;padding:3px 10px;border-radius:50px;z-index:60;font-family:'Outfit',sans-serif;font-weight:600;}
+/* UX-10: music button as proper button */
+#mc{position:fixed;top:20px;right:20px;z-index:60;background:var(--glass);border:none;padding:8px;border-radius:50%;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;width:40px;height:40px;font-size:18px;color:inherit;font-family:inherit;}
+#mc:focus-visible{outline:2px solid var(--accent);}
+</style>`;
+}
+
+/* ═══ JS FOR GENERATED CARD ══════════════════════════════════ */
+function buildJS(eb,tp,as,eff){
+  // BUG-2: createParticles called only after lock screen removed
+  // BUG-3: swipe tracks X and Y to avoid triggering on vertical scroll
+  // BUG-7: replay navigates to page 1 instead of reloading
+  // UX-9: slide counter element updated in _ui()
+  // UX-10: music button is a <button> with aria-label
+  const ec=eff!=='None'?`createParticles('${eff}');`:'';
+  return`<script>
+const _e="${eb}",_t=${tp},_a="${as}";
+let _c=1,_p=null,_i=false;
+function _b64ToU8(s){const b=atob(s);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u;}
+async function unlock(){
+  const pw=document.getElementById('pi').value,ed=document.getElementById('er'),ub=document.getElementById('ub');
+  if(!pw){ed.innerText="Password required!";return;}
+  ub.innerHTML='⏳';ub.disabled=true;
+  try{
+    const b=_b64ToU8(_e);
+    const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveKey"]);
+    const k=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b.slice(0,16),iterations:100000,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["decrypt"]);
+    const dec=await crypto.subtle.decrypt({name:"AES-GCM",iv:b.slice(16,28)},k,b.slice(28));
+    document.getElementById('ac').innerHTML=new TextDecoder().decode(dec);
+    const ls=document.getElementById('ls');ls.style.opacity='0';
+    // BUG-2: particles AFTER lock screen removed
+    setTimeout(()=>{ls.remove();${ec}},500);
+    _sw();_ui();_au();
+  }catch(e){ed.innerText="Wrong password!";ub.innerHTML='Unlock 🔓';ub.disabled=false;}
+}
+// UX-10: _au() creates a <button> instead of a <div>
+function _au(){if(!_a)return;_p=new Audio(_a);_p.loop=true;const b=document.createElement('button');b.id='mc';b.innerHTML='🎵';b.setAttribute('aria-label','Toggle music');b.setAttribute('title','Toggle music');b.onclick=_ta;document.body.appendChild(b);_p.play().then(()=>_i=true).catch(()=>b.innerHTML='🔇');}
+function _ta(){if(!_p)return;const b=document.getElementById('mc');_i?(_p.pause(),b.innerHTML='🔇'):(_p.play(),b.innerHTML='🎵');_i=!_i;}
+function changePage(d){const n=_c+d;if(n<1||n>_t)return;document.getElementById('page'+_c)?.classList.remove('active');document.getElementById('page'+n)?.classList.add('active');_c=n;_ui();}
+function _ui(){
+  const p=document.getElementById('prog');if(p)p.style.width=(_t>1?((_c-1)/(_t-1)*100):100)+'%';
+  const pv=document.getElementById('pb'),nx=document.getElementById('nb');
+  if(pv)pv.classList.toggle('hidden',_c===1);if(nx)nx.classList.toggle('hidden',_c===_t);
+  // UX-9: update slide counter
+  const sc=document.getElementById('sc');if(sc)sc.textContent=_c+' / '+_t;
+}
+// BUG-7: replayCard navigates back to page 1 without reload
+function replayCard(){document.getElementById('page'+_c)?.classList.remove('active');_c=1;document.getElementById('page1')?.classList.add('active');_ui();}
+// BUG-3: track both X and Y, only trigger swipe if clearly horizontal
+function _sw(){let sx=0,sy=0;const a=document.getElementById('ac');a.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY;},{passive:true});a.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-sx;const dy=e.changedTouches[0].screenY-sy;if(Math.abs(dx)>Math.abs(dy)*1.5&&Math.abs(dx)>50){dx<0?changePage(1):changePage(-1);}},{passive:true});}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')changePage(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')changePage(-1);});
+function createParticles(type){
+  const cv=document.createElement('canvas');cv.id='ec';
+  // BUG-2: z-index:5 stays below lock screen z-index:9999
+  cv.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;';
+  document.body.appendChild(cv);
+  const ctx=cv.getContext('2d');let w=innerWidth,h=innerHeight;cv.width=w;cv.height=h;
+  const sym={confetti:['🟥','🟦','🟨','🟩','🟧'],hearts:['❤️','💖','💕','💗'],snow:['❄️','❅','❆'],balloons:['🎈','🟠','🔵'],stars:['⭐','🌟','✨','💫'],fire:['🔥','💥','✨']};
+  const s=sym[type]||sym.confetti;
+  const ps=Array.from({length:50},()=>({x:Math.random()*w,y:Math.random()*h-h,sp:Math.random()*3+1,t:s[Math.floor(Math.random()*s.length)],sz:Math.random()*15+10}));
+  (function a(){ctx.clearRect(0,0,w,h);ps.forEach(p=>{p.y+=p.sp;if(p.y>h)p.y=-50;ctx.font=p.sz+'px Arial';ctx.fillText(p.t,p.x,p.y);});requestAnimationFrame(a);})();
+  window.addEventListener('resize',()=>{w=innerWidth;h=innerHeight;cv.width=w;cv.height=h;});
+}
+<\/script>`;
+}
+
+/* ═══ PREVIEW (BUG-1 / FEAT-1: shows real slides) ═══════════ */
+function schedulePreview(){
+  clearTimeout(_pvTimer);
+  _pvTimer=setTimeout(()=>{
+    if(document.getElementById('panel-preview').classList.contains('active'))renderPreview();
+  },500);
+}
+
+function renderPreview(){
+  const wrap=document.getElementById('preview-wrap');
+  const inner=document.getElementById('preview-inner');
+  const t=THEMES[S.theme]||THEMES.Rose;
+  const ff=FONTS[S.font]?.css||'';
+  const tr=TRANSITIONS[S.transition]?.css||TRANSITIONS['Classic Fade'].css;
+  const title=document.getElementById('f-title')?.value||'Happy Birthday!';
+  const W=390,H=844;
+  const scale=Math.min(wrap.clientWidth/W,(wrap.clientHeight||480)/H);
+  inner.style.width=W+'px';inner.style.height=H+'px';inner.style.transform=`scale(${scale})`;
+  inner.innerHTML='';
+  const iframe=document.createElement('iframe');
+  iframe.style.cssText=`width:${W}px;height:${H}px;border:none;`;
+  inner.appendChild(iframe);
+
+  // Build preview slides (welcome + up to 2 personal slides)
+  const showCount=Math.min(S.slides.length,2);
+  let slides=`<div class="page active" id="pp1">
+    <div class="pcw">
+      <h1 class="tf" style="font-size:1.9rem;margin-bottom:.5rem">${esc(title)}</h1>
+      <div class="pf"><img src="${D_WELCOME}" alt="Welcome" style="max-height:110px;object-fit:cover;"></div>
+      <p style="font-size:.82rem;margin-top:.5rem;opacity:.7">Swipe to see more 🎈</p>
+    </div>
+  </div>`;
+  for(let i=0;i<showCount;i++){
+    const s=S.slides[i];
+    slides+=`<div class="page" id="pp${i+2}">
+      <div class="pcw">
+        <span class="wf">From ${esc((s.name||'Friend').trim())}</span>
+        <h2 class="tf" style="font-size:1.3rem;margin-bottom:.5rem">${esc(s.heading||'Happy Birthday!')}</h2>
+        <div class="pf"><img src="${s.imageData||D_WELCOME}" alt="" style="max-height:90px;object-fit:cover;"></div>
+        <p style="font-size:.78rem;line-height:1.6;margin-top:.5rem">${esc(s.message||'').replace(/\n/g,'<br>')}</p>
+      </div>
+    </div>`;
+  }
+  const total=1+showCount;
+
+  iframe.srcdoc=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@600&family=Indie+Flower&family=Press+Start+2P&family=Orbitron:wght@700&family=Cinzel:wght@600&family=Fira+Code:wght@500&family=Passion+One&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Outfit',sans-serif;background:${t.bg};color:${t.text};position:fixed;width:100%;height:100vh;overflow:hidden;}
+:root{--accent:${t.accent};--glass:${t.glass};--frame-bg:${t.frame};}
+#ac{width:100%;height:100%;position:relative;}
+.page{position:absolute;inset:0;overflow-y:auto;padding:12px 12px 70px;display:flex;flex-direction:column;align-items:center;pointer-events:none;scrollbar-width:none;z-index:1;touch-action:pan-y;}
+.page.active{pointer-events:auto;z-index:10;}
+${tr}
+.pcw{width:100%;max-width:320px;margin:auto;background:var(--glass);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:1.1rem;box-shadow:0 6px 20px rgba(0,0,0,.1);text-align:center;}
+.tf{font-family:${ff};color:var(--accent);}
+.pf{padding:6px;background:var(--frame-bg);border-radius:8px;margin:.7rem auto;transform:rotate(-1.5deg);}
+img{display:block;width:100%;height:auto;border-radius:6px;}
+.wf{font-size:.7rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.7;display:block;font-weight:600;margin-bottom:.2rem;}
+.nc{position:fixed;bottom:10px;left:0;width:100%;display:flex;justify-content:space-between;padding:0 12px;z-index:50;pointer-events:none;}
+.nb{pointer-events:auto;background:var(--accent);color:${t.btn};border:none;padding:8px 14px;border-radius:50px;font-weight:600;cursor:pointer;font-size:.75rem;font-family:'Outfit',sans-serif;}
+.nb.hidden{opacity:0;pointer-events:none;}
+.ctr{position:fixed;top:7px;left:10px;background:rgba(0,0,0,.35);color:var(--accent);font-size:10px;padding:2px 8px;border-radius:50px;z-index:60;font-family:'Outfit',sans-serif;font-weight:600;}
+.pt{position:fixed;top:0;left:0;width:100%;height:3px;background:rgba(0,0,0,.1);z-index:100;}
+.pf2{height:100%;background:var(--accent);transition:width .4s ease;}
+</style></head><body>
+<div id="ac">
+<div class="pt"><div class="pf2" id="prg" style="width:0%"></div></div>
+<div class="ctr" id="ctr">1 / ${total}</div>
+${slides}
+<div class="nc">
+  <button class="nb hidden" id="pb" onclick="cp(-1)">← Back</button>
+  <button class="nb" id="nb" onclick="cp(1)">Next →</button>
+</div>
+</div>
+<script>
+let _c=1,_t=${total};
+function cp(d){const n=_c+d;if(n<1||n>_t)return;document.getElementById('pp'+_c)?.classList.remove('active');document.getElementById('pp'+n)?.classList.add('active');_c=n;const p=document.getElementById('prg');if(p)p.style.width=(_t>1?((_c-1)/(_t-1)*100):100)+'%';const ct=document.getElementById('ctr');if(ct)ct.textContent=_c+' / '+_t;document.getElementById('pb').classList.toggle('hidden',_c===1);document.getElementById('nb').classList.toggle('hidden',_c===_t);}
+let sx=0,sy=0;
+document.addEventListener('touchstart',e=>{sx=e.changedTouches[0].screenX;sy=e.changedTouches[0].screenY;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-sx;const dy=e.changedTouches[0].screenY-sy;if(Math.abs(dx)>Math.abs(dy)*1.5&&Math.abs(dx)>40){dx<0?cp(1):cp(-1);}},{passive:true});
+<\/script></body></html>`;
+}
+
+/* ═══ GENERATION ══════════════════════════════════════════════ */
+function setStatus(msg,pct){
+  const st=document.getElementById('status-txt');
+  const tr=document.getElementById('prog-track');
+  const fi=document.getElementById('prog-fill');
+  if(st)st.textContent=msg;
+  if(tr&&fi){if(pct!==undefined){tr.style.display='block';fi.style.width=pct+'%';}else tr.style.display='none';}
+}
+
+async function startGeneration(){
+  if(S.slides.length===0){toast('⚠️ Add at least one slide before generating',true);switchTab('slides');return;}
+  const allBtns=[...document.querySelectorAll('.btn-p')];
+  allBtns.forEach(b=>b.disabled=true);
+  document.getElementById('fab-btn').textContent='⏳';
+  navigator.vibrate?.(15);
+  try{
+    const pw=document.getElementById('f-pw').value.trim()||genPw();
+    const title=document.getElementById('f-title').value.trim()||'Happy Birthday!';
+    setStatus('Processing images…',10);
+    const[wi,fi2,audio]=await Promise.all([getImg('f-wi'),getImg('f-fi'),getAudio()]);
+    const welcomeSrc=wi||D_WELCOME,finalSrc=fi2||D_FINAL;
+    setStatus('Building slides…',35);
+    for(const s of S.slides){
+      if(!s.imageData){const inp=document.getElementById(`si-${s.id}`);if(inp?.files?.[0])s.imageData=await compressImg(inp.files[0]);}
+    }
+    const tp=S.slides.length+2;
+    let html=`
+<div class="bg-animation"></div>
+<div class="pt"><div class="pf2" id="prog"></div></div>
+<div id="sc">1 / ${tp}</div>
+<div class="page active" id="page1">
+  <div class="pcw">
+    <h1 class="tf" style="font-size:clamp(2rem,6vw,3.5rem);margin-bottom:1rem">${esc(title)}</h1>
+    <div class="pf"><img src="${welcomeSrc}" alt="Welcome" loading="lazy"></div>
+    <p style="font-size:1.05rem;margin-top:1.5rem;opacity:.8">Swipe or tap next to open your card 🎈</p>
+  </div>
+</div>`;
+    S.slides.forEach((s,i)=>{
+      // UX-3: convert newlines to <br>
+      const msgHtml=esc(s.message||'').replace(/\n/g,'<br>');
+      html+=`
+<div class="page" id="page${i+2}">
+  <div class="pcw">
+    <span class="wf">From ${esc((s.name||'Friend').trim())}</span>
+    <h2 class="tf" style="font-size:clamp(1.5rem,5vw,2.5rem);margin-bottom:1rem">${esc(s.heading||'Happy Birthday!')}</h2>
+    <div class="pf"><img src="${s.imageData||D_WELCOME}" alt="${esc(s.name||'')}" loading="lazy"></div>
+    <p style="font-size:1.05rem;line-height:1.75;margin-top:1.5rem">${msgHtml}</p>
+  </div>
+</div>`;
+    });
+    const finalTxt=getFinalTextForOccasion();
+    html+=`
+<div class="page" id="page${tp}">
+  <div class="pcw">
+    <h2 class="tf" style="font-size:clamp(2rem,6vw,3rem);margin-bottom:1.5rem">${esc(finalTxt)}</h2>
+    <div class="pf"><img src="${finalSrc}" alt="Final slide" loading="lazy"></div>
+    <button onclick="replayCard()" style="margin-top:2rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-main);border:none;background:none;cursor:pointer;opacity:.6;font-family:inherit" aria-label="Replay card from start">↺ Replay</button>
+  </div>
+</div>
+<div class="nc">
+  <button class="nb hidden" id="pb" onclick="changePage(-1)">← Back</button>
+  <button class="nb" id="nb" onclick="changePage(1)">Next →</button>
+</div>`;
+    setStatus('Encrypting…',65);
+    const enc=await aesEncrypt(html,pw);
+    setStatus('Assembling…',85);
+    const css=buildCSS(S.theme,S.font,S.transition);
+    const js=buildJS(enc,tp,audio,S.effect);
+
+    // UX-7: filename with timestamp
+    const now=new Date();
+    const ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'-'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
+    const fname=title.replace(/[^a-z0-9]/gi,'-').toLowerCase().replace(/-+/g,'-').replace(/^-|-$/g,'')+'-'+ts+'.html';
+
+    generatedHTML=`<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>${esc(title)}</title>
+${css}
+</head>
+<body>
+<div id="ls"><div class="lb">
+  <h2 class="tf" style="font-size:1.8rem;margin-bottom:1.5rem">Secret Message 🔒</h2>
+  <p style="font-size:.9rem;opacity:.6;margin-bottom:.5rem">Ask the sender for the magic word 🔑</p>
+  <input type="password" id="pi" placeholder="Password…" onkeyup="if(event.key==='Enter')unlock()">
+  <button class="nb" style="width:100%;justify-content:center" id="ub" onclick="unlock()">Unlock 🔓</button>
+  <p id="er" style="color:#ef4444;font-size:.85rem;margin-top:.75rem;min-height:20px"></p>
+</div></div>
+<div id="ac"></div>
+${js}
+</body>
+</html>`;
+    _lastPw=pw;
+    _fname=fname;
+    setStatus('Done! 🎉',100);
+    navigator.vibrate?.([20,50,20]);
+    // Show re-share buttons
+    document.getElementById('shareLastBtn').style.display='';
+    document.getElementById('shareLastBtnSb').style.display='';
+    showShareModal(pw,fname);
+    saveHistory(title,pw);
+    setTimeout(()=>setStatus('Ready to create magic ✨'),4000);
+  }catch(err){
+    console.error(err);
+    setStatus('❌ '+err.message);
+    toast('❌ Error: '+err.message,true);
+  }finally{
+    document.querySelectorAll('.btn-p').forEach(b=>b.disabled=false);
+    document.getElementById('fab-btn').textContent='🚀';
+  }
+}
+
+let _fname='card.html';
+
+/* ═══ SHARE MODAL ═══════════════════════════════════════════ */
+function showShareModal(pw,fname){
+  fname=fname||_fname;
+  document.getElementById('modal-pw').textContent=pw;
+  buildShareGrid(pw,fname);
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+// UX-6: re-show share
+function reshowShare(){if(_lastPw&&generatedHTML)showShareModal(_lastPw,_fname);else toast('Generate a card first');}
+
+function buildShareGrid(pw,fname){
+  const grid=document.getElementById('share-grid');
+  fname=fname||_fname;
+  const opts=[];
+
+  opts.push({icon:'⬇️',label:'Download',fn:()=>{download(fname);toast('Downloaded ✅');}});
+  if(navigator.share){
+    opts.push({icon:'📤',label:'Share…',fn:()=>nativeShare(fname,fname.replace(/-\d{8}-\d{4}/,'').replace(/-/g,' '))});
+  }
+
+  // UX-5: 2000ms delay with toast for WhatsApp/Telegram
+  opts.push({icon:'💬',label:'WhatsApp',fn:()=>{
+    download(fname);
+    toast('File downloading… share link opens in 2s');
+    setTimeout(()=>window.open(`https://wa.me/?text=${encodeURIComponent('🎂 I made you a card!\n\n📎 Attach the downloaded file\n🔑 Password: '+pw)}`,'_blank'),2000);
+  }});
+
+  opts.push({icon:'✈️',label:'Telegram',fn:()=>{
+    download(fname);
+    toast('File downloading… share link opens in 2s');
+    setTimeout(()=>window.open(`https://t.me/share/url?text=${encodeURIComponent('🎂 Birthday card!\n🔑 Password: '+pw)}`,'_blank'),2000);
+  }});
+
+  opts.push({icon:'📧',label:'Email',fn:()=>{
+    download(fname);
+    window.location.href=`mailto:?subject=${encodeURIComponent('Your special card')}&body=${encodeURIComponent('Hi!\n\nI made you a card 🎂\n\nAttach the downloaded file and use this password: '+pw+'\n\nEnjoy! 🎉')}`;
+  }});
+
+  opts.push({icon:'🌐',label:'Open Card',fn:()=>{
+    const u=URL.createObjectURL(new Blob([generatedHTML],{type:'text/html'}));
+    window.open(u,'_blank');
+  }});
+
+  grid.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='sh-btn';
+    b.innerHTML=`<span class="sh-icon">${o.icon}</span><span>${o.label}</span>`;
+    b.onclick=o.fn;
+    grid.appendChild(b);
+  });
+}
+
+function download(fname){
+  if(!generatedHTML)return;
+  const url=URL.createObjectURL(new Blob([generatedHTML],{type:'text/html;charset=utf-8'}));
+  const a=Object.assign(document.createElement('a'),{href:url,download:fname});
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+
+async function nativeShare(fname,title){
+  try{
+    const blob=new Blob([generatedHTML],{type:'text/html'});
+    const file=new File([blob],fname,{type:'text/html'});
+    const sd={title,text:'Your card is ready! 🎂',files:[file]};
+    if(navigator.canShare&&navigator.canShare(sd)){await navigator.share(sd);}
+    else{await navigator.share({title,text:'Card ready! 🎂 Check the file I sent.'});}
+  }catch(e){if(e.name!=='AbortError')toast('Share failed — use Download instead');}
+}
+
+function copyPw(){
+  const pw=document.getElementById('modal-pw').textContent;
+  navigator.clipboard?.writeText(pw).then(()=>toast('Password copied ✅')).catch(()=>{});
+}
+
+/* ═══ TOAST ══════════════════════════════════════════════════ */
+function toast(msg,err=false){
+  const c=document.getElementById('toast-wrap');
+  const el=document.createElement('div');
+  el.className='toast';el.textContent=msg;
+  if(err)el.style.borderColor='rgba(248,113,113,.35)';
+  c.appendChild(el);setTimeout(()=>el.remove(),2900);
+}
+
+/* ═══ AUTOSAVE (BUG-6: key 'bccv1') ════════════════════════ */
+function autosave(){
+  clearTimeout(asTimer);
+  asTimer=setTimeout(()=>{
+    try{
+      const data={
+        theme:S.theme,font:S.font,transition:S.transition,effect:S.effect,occasion:S.occasion,
+        pw:document.getElementById('f-pw')?.value,
+        title:document.getElementById('f-title')?.value,
+        slides:S.slides.map(s=>({id:s.id,name:s.name,heading:s.heading,message:s.message}))
+      };
+      localStorage.setItem('bccv1',JSON.stringify(data));
+      const d=document.getElementById('asdot');d.classList.add('saved');setTimeout(()=>d.classList.remove('saved'),1400);
+      const dsb=document.getElementById('asdot-sb');if(dsb){dsb.style.background='var(--success)';setTimeout(()=>dsb.style.background='',1400);}
+      // DESIGN-3: file size estimate
+      const szEl=document.getElementById('sz-est');
+      if(szEl){
+        const kb=Math.round((JSON.stringify(data).length*1.3+5000)/1024);
+        szEl.textContent='~'+kb+' KB';
+      }
+    }catch(_){}
+  },900);
+}
+
+function loadSave(){
+  try{
+    // BUG-6: migrate from old key 'bcc_v2'
+    let raw=localStorage.getItem('bccv1');
+    if(!raw){
+      const old=localStorage.getItem('bcc_v2');
+      if(old){raw=old;try{localStorage.setItem('bccv1',old);}catch(_){}}
+    }
+    if(!raw)return false;
+    const d=JSON.parse(raw);
+    if(d.theme&&THEMES[d.theme])S.theme=d.theme;
+    if(d.font&&FONTS[d.font])S.font=d.font;
+    if(d.transition&&TRANSITIONS[d.transition])S.transition=d.transition;
+    if(d.effect&&EFFECTS.some(e=>e.id===d.effect))S.effect=d.effect;
+    if(d.occasion&&OCCASIONS.some(o=>o.id===d.occasion))S.occasion=d.occasion;
+    if(d.pw)document.getElementById('f-pw').value=d.pw;
+    if(d.title)document.getElementById('f-title').value=d.title;
+    if(d.slides?.length){
+      d.slides.forEach(s=>{
+        S.ctr=Math.max(S.ctr,s.id);
+        S.slides.push({id:s.id,name:s.name||'',heading:s.heading||'Happy Birthday!',message:s.message||'',imageData:null,_fileName:null});
+      });
+      return true;
+    }
+  }catch(_){}
+  return false;
+}
+
+/* ═══ FEAT-6: Card History ═══════════════════════════════════ */
+function saveHistory(title,pw){
+  try{
+    const raw=localStorage.getItem('bccv1_history');
+    const arr=raw?JSON.parse(raw):[];
+    arr.unshift({title,theme:S.theme,font:S.font,occasion:S.occasion,slideCnt:S.slides.length,pw_hint:pw,date:Date.now(),
+      state:JSON.stringify({theme:S.theme,font:S.font,transition:S.transition,effect:S.effect,occasion:S.occasion,
+        title,slides:S.slides.map(s=>({id:s.id,name:s.name,heading:s.heading,message:s.message}))})});
+    if(arr.length>10)arr.length=10;
+    localStorage.setItem('bccv1_history',JSON.stringify(arr));
+  }catch(_){}
+}
+
+function openHistorySheet(){
+  const list=document.getElementById('hist-list');
+  list.innerHTML='';
+  try{
+    const raw=localStorage.getItem('bccv1_history');
+    const arr=raw?JSON.parse(raw):[];
+    if(!arr.length){list.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0">No history yet. Generate a card first!</p>';
+    }else{
+      arr.forEach((h,i)=>{
+        const ago=timeSince(h.date);
+        const row=document.createElement('div');row.className='hist-row';
+        const occ=OCCASIONS.find(o=>o.id===h.occasion)||OCCASIONS[0];
+        row.innerHTML=`<span style="font-size:22px">${occ.emoji}</span><div class="hist-info"><div class="hist-title">${esc(h.title)}</div><div class="hist-meta">${h.slideCnt} slides · ${h.theme} · ${ago}</div></div><span style="color:var(--muted);font-size:12px">▶</span>`;
+        row.onclick=()=>{if(confirm('Restore this card as your current draft?'))restoreFromHistory(h);};
+        list.appendChild(row);
+      });
+    }
+  }catch(_){list.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px 0">Could not load history.</p>';}
+  document.getElementById('hist-modal').classList.add('open');
+}
+
+function restoreFromHistory(h){
+  try{
+    const d=JSON.parse(h.state);
+    S.slides=[];S.ctr=0;
+    if(d.theme&&THEMES[d.theme])S.theme=d.theme;
+    if(d.font&&FONTS[d.font])S.font=d.font;
+    if(d.transition&&TRANSITIONS[d.transition])S.transition=d.transition;
+    if(d.effect&&EFFECTS.some(e=>e.id===d.effect))S.effect=d.effect;
+    if(d.occasion&&OCCASIONS.some(o=>o.id===d.occasion))S.occasion=d.occasion;
+    document.getElementById('f-title').value=d.title||'Happy Birthday!';
+    if(d.slides?.length)d.slides.forEach(s=>{S.ctr=Math.max(S.ctr,s.id);S.slides.push({id:s.id,name:s.name||'',heading:s.heading||'Happy Birthday!',message:s.message||'',imageData:null,_fileName:null});});
+    rerender();buildThemeGrid();buildFontGrid();buildTransGrid();buildEffectGrid();buildOccGrid();updateSlideCountPill();
+    document.getElementById('hist-modal').classList.remove('open');
+    switchTab('slides');
+    toast('✅ Draft restored — re-add photos if needed');
+  }catch(e){toast('❌ Could not restore',true);}
+}
+
+function clearHistory(){
+  if(!confirm('Clear all card history?'))return;
+  try{localStorage.removeItem('bccv1_history');}catch(_){}
+  document.getElementById('hist-modal').classList.remove('open');
+  toast('History cleared');
+}
+
+function timeSince(ts){
+  const d=Date.now()-ts,m=Math.floor(d/60000),h=Math.floor(m/60),days=Math.floor(h/24);
+  if(days>0)return days===1?'1 day ago':days+' days ago';
+  if(h>0)return h===1?'1 hour ago':h+' hours ago';
+  if(m>0)return m===1?'1 min ago':m+' mins ago';
+  return 'just now';
+}
+
+/* ═══ FEAT-3: Templates ══════════════════════════════════════ */
+function buildTemplateGrids(){
+  ['tmpl-grid-main','tmpl-grid-sheet'].forEach(gid=>{
+    const g=document.getElementById(gid);if(!g)return;g.innerHTML='';
+    TEMPLATES.forEach(tmpl=>{
+      const c=document.createElement('div');c.className='tmpl-chip';
+      c.innerHTML=`<div class="tmpl-dot" style="background:${tmpl.gradient}">${tmpl.emoji}</div><div class="tmpl-info"><div class="tmpl-name">${tmpl.name}</div><div class="tmpl-desc">${tmpl.desc}</div></div>`;
+      c.onclick=()=>applyTemplate(tmpl);
+      c.setAttribute('role','button');c.tabIndex=0;
+      c.onkeydown=e=>{if(e.key===' '||e.key==='Enter')applyTemplate(tmpl);};
+      g.appendChild(c);
+    });
+  });
+}
+
+function applyTemplate(tmpl){
+  if(tmpl.id==='blank'){
+    S.slides=[];S.ctr=0;rerender();updateSlideCountPill();updateEmptyState();
+    document.getElementById('tmpl-modal').classList.remove('open');
+    switchTab('slides');toast('✨ Blank canvas ready — add your first slide!');return;
+  }
+  S.slides=[];S.ctr=0;
+  if(tmpl.theme&&THEMES[tmpl.theme])S.theme=tmpl.theme;
+  if(tmpl.font&&FONTS[tmpl.font])S.font=tmpl.font;
+  if(tmpl.effect&&EFFECTS.some(e=>e.id===tmpl.effect))S.effect=tmpl.effect;
+  if(tmpl.transition&&TRANSITIONS[tmpl.transition])S.transition=tmpl.transition;
+  if(tmpl.occasion&&OCCASIONS.some(o=>o.id===tmpl.occasion))S.occasion=tmpl.occasion;
+  if(tmpl.title)document.getElementById('f-title').value=tmpl.title;
+  if(tmpl.slides)tmpl.slides.forEach(s=>addSlide(s));
+  buildThemeGrid();buildFontGrid();buildTransGrid();buildEffectGrid();buildOccGrid();
+  updateSlideCountPill();updateEmptyState();
+  document.getElementById('tmpl-modal').classList.remove('open');
+  // close panel-templates sheet too
+  switchTab('slides');
+  autosave();
+  toast(`${tmpl.emoji} ${tmpl.name} template applied!`);
+}
+
+function openTemplatesSheet(){document.getElementById('tmpl-modal').classList.add('open');}
+
+/* ═══ FEAT-4: Open Existing Card ════════════════════════════ */
+function openCardFile(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='.html';
+  input.onchange=e=>{
+    const f=e.target.files?.[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      _openFileContent=ev.target.result;
+      // Extract encrypted payload
+      const m=_openFileContent.match(/const _e="([^"]+)"/);
+      if(!m){toast('❌ This file doesn\'t look like a Card Creator card',true);_openFileContent=null;return;}
+      // Show password prompt
+      document.getElementById('open-pw-input').value='';
+      document.getElementById('open-err').textContent='';
+      document.getElementById('open-modal').classList.add('open');
+    };r.readAsText(f);
+  };
+  input.click();
+}
+
+async function doOpenCard(){
+  const pw=document.getElementById('open-pw-input').value.trim();
+  if(!pw){document.getElementById('open-err').textContent='Enter the card password.';return;}
+  const m=_openFileContent.match(/const _e="([^"]+)"/);
+  if(!m)return;
+  try{
+    document.getElementById('open-err').textContent='Decrypting…';
+    const decrypted=await aesDecrypt(m[1],pw);
+    // Parse decrypted HTML
+    const parser=new DOMParser();
+    const doc=parser.parseFromString(decrypted,'text/html');
+    const pages=Array.from(doc.querySelectorAll('.page'));
+    // Skip first (welcome) and last (final) pages
+    const personalPages=pages.slice(1,pages.length-1);
+    // Extract title from original file
+    const titleM=_openFileContent.match(/<title>([^<]+)<\/title>/);
+    if(titleM)document.getElementById('f-title').value=titleM[1];
+    // Clear existing slides
+    S.slides=[];S.ctr=0;
+    let photosRestored=0;
+    personalPages.forEach(page=>{
+      const wf=page.querySelector('.wf')?.textContent?.replace(/^From\s*/i,'').trim()||'';
+      const heading=page.querySelector('.tf')?.textContent?.trim()||'Happy Birthday!';
+      const msgEl=page.querySelector('p');
+      const msg=msgEl?msgEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').trim():'';
+      const imgSrc=page.querySelector('img')?.getAttribute('src')||null;
+      const imageData=(imgSrc&&imgSrc.startsWith('data:image')&&!imgSrc.startsWith(D_WELCOME.slice(0,40)))?imgSrc:null;
+      if(imageData)photosRestored++;
+      addSlide({name:wf,heading,message:msg,imageData});
+    });
+    buildThemeGrid();buildFontGrid();buildTransGrid();buildEffectGrid();buildOccGrid();updateSlideCountPill();
+    document.getElementById('open-modal').classList.remove('open');
+    _openFileContent=null;
+    switchTab('slides');
+    toast(photosRestored>0?`Card loaded — ${photosRestored} photo(s) restored ✅`:'Card loaded — please re-add photos manually');
+  }catch(e){document.getElementById('open-err').textContent='Wrong password or corrupted file.';}
+}
+
+/* ═══ UTIL ═══════════════════════════════════════════════════ */
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+
+/* ═══ INIT ═══════════════════════════════════════════════════ */
+(function(){
+  // BUG-5: auto-generate password
+  document.getElementById('f-pw').value=genPw();
+
+  const restored=loadSave();
+  buildThemeGrid();buildFontGrid();buildTransGrid();buildEffectGrid();buildOccGrid();buildTemplateGrids();
+
+  if(restored&&S.slides.length){
+    S.slides.forEach(renderSlide);
+    // Restore thumbnails for slides with imageData
+    S.slides.forEach(obj=>{
+      if(obj.imageData){
+        const thumb=document.getElementById(`st-${obj.id}`);
+        const nameEl=document.getElementById(`sn-${obj.id}`);
+        if(thumb){thumb.src=obj.imageData;thumb.style.display='block';}
+        if(nameEl&&obj._fileName)nameEl.textContent=obj._fileName;
+      }
+    });
+    toast('✅ Draft restored — re-add any photos');
+  }else{
+    addSlide();
+  }
+
+  updateSlideCountPill();
+  updateEmptyState();
+
+  // BUG-8: No JS touchmove listener — using CSS overscroll-behavior + touch-action instead
+})();
+</script>
+</body>
+</html>
