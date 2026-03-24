@@ -22,6 +22,28 @@
   --radius: 14px;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body: 'DM Sans', system-ui, sans-serif;
+  --card-bg: #fff;
+  --modal-bg: #fff;
+  --input-bg: var(--surface);
+  --input-focus-bg: #fff;
+}
+
+[data-theme="dark"] {
+  --ink: #e8e6f0;
+  --ink2: #b0abcc;
+  --surface: #13111f;
+  --surface2: #1e1b2e;
+  --accent: #a07ee0;
+  --accent2: #c9a0ff;
+  --gold: #f0cc80;
+  --danger: #f07070;
+  --success: #5dd48e;
+  --border: rgba(160,126,224,0.22);
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  --card-bg: #1e1b2e;
+  --modal-bg: #1e1b2e;
+  --input-bg: #2a2640;
+  --input-focus-bg: #322e4a;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -33,34 +55,90 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  transition: background 0.3s, color 0.3s;
 }
 
 /* ── Header ── */
 .app-header {
   background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 60%, #1a1a2e 100%);
-  padding: 22px 40px;
+  padding: 16px 40px;
   display: flex;
   align-items: center;
   gap: 18px;
   box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 .app-header h1 {
   font-family: var(--font-display);
   color: #fff;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   letter-spacing: 0.01em;
 }
 .app-header .subtitle {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   color: rgba(255,255,255,0.55);
   margin-top: 2px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .header-icon {
-  font-size: 2rem;
+  font-size: 1.8rem;
   filter: drop-shadow(0 2px 8px rgba(176,132,245,0.5));
 }
+.header-spacer { flex: 1; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Theme toggle */
+.theme-toggle-btn {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 30px;
+  padding: 7px 14px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  font-family: var(--font-body);
+}
+.theme-toggle-btn:hover { background: rgba(255,255,255,0.2); }
+
+/* Step progress in header */
+.header-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.header-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.header-step.active { color: #fff; background: rgba(176,132,245,0.25); }
+.header-step.done { color: rgba(255,255,255,0.7); }
+.header-step-num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.68rem;
+}
+.header-step.active .header-step-num { background: var(--accent2); }
+.header-step.done .header-step-num { background: var(--success); }
+.header-step-divider { width: 20px; height: 1px; background: rgba(255,255,255,0.15); }
 
 /* ── Main Layout ── */
 .app-body {
@@ -71,26 +149,30 @@ body {
 
 /* ── Tabs Sidebar ── */
 .tab-bar {
-  width: 230px;
+  width: 220px;
   flex-shrink: 0;
   background: linear-gradient(180deg, #1e1b3a 0%, #2d1b69 100%);
   display: flex;
   flex-direction: column;
-  padding: 28px 16px;
-  gap: 6px;
+  padding: 22px 14px;
+  gap: 4px;
+  position: sticky;
+  top: 57px;
+  height: calc(100vh - 57px);
+  overflow-y: auto;
 }
 .tab-btn {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 13px 16px;
+  padding: 12px 14px;
   border-radius: 10px;
   border: none;
   background: transparent;
   color: rgba(255,255,255,0.55);
   cursor: pointer;
   font-family: var(--font-body);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 500;
   text-align: left;
   transition: all 0.18s ease;
@@ -113,22 +195,52 @@ body {
   flex-shrink: 0;
 }
 .tab-btn.active .tab-num { background: var(--accent2); color: #fff; }
+.tab-btn.done .tab-num { background: var(--success); color: #fff; }
+
+.sidebar-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin: 8px 0;
+}
+
+/* Preview button in sidebar */
+.preview-btn-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(176,132,245,0.3);
+  background: rgba(176,132,245,0.1);
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-align: left;
+  transition: all 0.18s ease;
+  width: 100%;
+  margin-top: 4px;
+}
+.preview-btn-sidebar:hover { background: rgba(176,132,245,0.2); color: #fff; }
 
 .sidebar-footer {
   margin-top: auto;
   padding: 12px;
   color: rgba(255,255,255,0.3);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   text-align: center;
   line-height: 1.6;
 }
+.sidebar-footer a { color: rgba(255,255,255,0.4); text-decoration: none; }
 
 /* ── Content Pane ── */
 .content-pane {
   flex: 1;
   overflow-y: auto;
-  padding: 36px 40px;
+  padding: 32px 40px;
   background: var(--surface);
+  transition: background 0.3s;
 }
 
 .tab-panel { display: none; animation: fadeIn 0.22s ease; }
@@ -137,33 +249,34 @@ body {
 
 .section-title {
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   color: var(--ink);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 .section-desc {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--ink2);
-  margin-bottom: 28px;
+  margin-bottom: 26px;
   opacity: 0.7;
 }
 
 /* ── Cards / Groups ── */
 .card-group {
-  background: #fff;
+  background: var(--card-bg);
   border-radius: var(--radius);
   border: 1px solid var(--border);
-  padding: 26px;
-  margin-bottom: 22px;
+  padding: 22px;
+  margin-bottom: 18px;
   box-shadow: var(--shadow);
+  transition: background 0.3s, border-color 0.3s;
 }
 .card-group-title {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent);
-  margin-bottom: 18px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -186,16 +299,16 @@ input[type="text"], input[type="password"], textarea, select {
   font-family: var(--font-body);
   font-size: 0.92rem;
   color: var(--ink);
-  background: var(--surface);
+  background: var(--input-bg);
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.3s;
   appearance: none;
   -webkit-appearance: none;
 }
 input:focus, textarea:focus, select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(124,92,191,0.13);
-  background: #fff;
+  background: var(--input-focus-bg);
 }
 textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
 select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237c5cbf' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 38px; cursor: pointer; }
@@ -203,6 +316,12 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .form-field { margin-bottom: 16px; }
 .form-field:last-child { margin-bottom: 0; }
+
+/* Character counter */
+.field-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+.char-count { font-size: 0.7rem; color: var(--ink2); opacity: 0.5; }
+.char-count.warn { color: var(--gold); opacity: 1; }
+.char-count.over { color: var(--danger); opacity: 1; }
 
 /* ── Checkbox ── */
 .checkbox-label {
@@ -271,7 +390,7 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   font-weight: 600;
   color: var(--ink2);
   text-align: center;
-  background: #fff;
+  background: var(--card-bg);
   border-top: 1px solid var(--border);
 }
 .img-slot-label small { display: block; font-weight: 400; color: #aaa; margin-top: 1px; }
@@ -279,14 +398,16 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   display: none;
   width: 100%;
   border: none;
-  background: #fff4f4;
+  background: rgba(224,82,82,0.1);
   color: var(--danger);
   font-size: 0.68rem;
   font-weight: 600;
   padding: 5px;
   cursor: pointer;
-  border-top: 1px solid #fdd;
+  border-top: 1px solid rgba(224,82,82,0.2);
+  transition: background 0.15s;
 }
+.img-clear-btn:hover { background: rgba(224,82,82,0.2); }
 .img-slot.has-img .img-clear-btn { display: block; }
 input[type="file"] { display: none; }
 
@@ -300,8 +421,8 @@ input[type="file"] { display: none; }
   transition: all 0.18s;
   background: var(--surface2);
 }
-.audio-zone:hover { border-color: var(--accent); background: #f0ecff; }
-.audio-zone.has-audio { border-style: solid; border-color: var(--success); background: #f0fff6; }
+.audio-zone:hover { border-color: var(--accent); background: var(--surface2); filter: brightness(1.05); }
+.audio-zone.has-audio { border-style: solid; border-color: var(--success); background: rgba(76,175,125,0.08); }
 .audio-zone .audio-icon { font-size: 2rem; margin-bottom: 8px; }
 .audio-zone p { font-size: 0.85rem; color: var(--ink2); }
 .audio-zone .audio-name { font-weight: 600; color: var(--success); }
@@ -491,13 +612,14 @@ input[type="color"] {
 }
 .modal-overlay.show { opacity: 1; pointer-events: all; }
 .modal-box {
-  background: #fff;
+  background: var(--modal-bg);
   border-radius: 20px;
   padding: 40px;
   max-width: 440px;
   width: 90%;
   text-align: center;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
 }
 .modal-icon { font-size: 3rem; margin-bottom: 16px; }
 .modal-title {
@@ -515,6 +637,157 @@ input[type="color"] {
   border-radius: 4px; width: 0%; transition: width 0.25s ease;
 }
 .modal-status { font-size: 0.82rem; color: var(--accent); font-weight: 600; min-height: 20px; }
+
+/* ── Card Preview Modal ── */
+.preview-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,8,30,0.85);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9998;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.preview-overlay.show { opacity: 1; pointer-events: all; }
+.preview-container {
+  position: relative;
+  width: 90vw;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+}
+.preview-close {
+  position: absolute;
+  top: -14px; right: -14px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--danger);
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.15s;
+}
+.preview-close:hover { transform: scale(1.1); }
+.preview-header {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.preview-header h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 4px; }
+.preview-header p { font-size: 0.78rem; opacity: 0.6; }
+.preview-tabs {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.preview-tab-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+.preview-tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Card visual preview */
+.card-visual-wrap {
+  perspective: 1200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 340px;
+}
+.card-visual {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  cursor: pointer;
+}
+.card-visual.open { transform: rotateY(-30deg); }
+.card-face, .card-inside {
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+.card-face {
+  width: 280px;
+  height: 380px;
+  background: linear-gradient(135deg, #2d1b69, #7c5cbf);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 30px;
+  text-align: center;
+}
+.card-face-emoji { font-size: 3rem; }
+.card-face-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: #fff;
+  line-height: 1.2;
+}
+.card-face-sub { font-size: 0.78rem; color: rgba(255,255,255,0.55); letter-spacing: 0.1em; text-transform: uppercase; }
+.card-face-lock { font-size: 1.2rem; margin-top: 10px; opacity: 0.5; }
+.card-inside-wrap {
+  display: none;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.card-inside-wrap.show { display: flex; }
+.card-inside {
+  width: 260px;
+  min-height: 340px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--modal-bg);
+}
+.card-inside-panel {
+  flex: 1;
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 14px;
+}
+.card-inside-panel h4 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent); margin-bottom: 6px; }
+.card-inside-panel p { font-size: 0.8rem; color: var(--ink2); line-height: 1.5; }
+.card-inside-images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.card-img-thumb {
+  aspect-ratio: 1;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+  color: var(--ink2);
+  opacity: 0.5;
+  overflow: hidden;
+}
+.card-img-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.preview-hint {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+}
+.preview-hint kbd { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
 
 /* ── Download button ── */
 .download-btn {
@@ -570,7 +843,7 @@ input[type="color"] {
 
 /* ── Info box ── */
 .info-box {
-  background: linear-gradient(135deg, #f0ecff, #ece4ff);
+  background: linear-gradient(135deg, rgba(124,92,191,0.08), rgba(176,132,245,0.06));
   border-left: 3px solid var(--accent);
   border-radius: 9px;
   padding: 14px 18px;
@@ -605,13 +878,115 @@ input[type="color"] {
 }
 .drag-target-overlay.active { display: block; }
 
+/* ── Layout variant: split preview ── */
+.layout-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 900px) { .layout-split { grid-template-columns: 1fr; } }
+
+/* ── Occasion badges ── */
+.occasion-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.occasion-chip {
+  padding: 7px 14px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--ink2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.occasion-chip:hover { border-color: var(--accent); color: var(--accent); }
+.occasion-chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── Stat bar (images filled) ── */
+.progress-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border-radius: 9px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+.progress-indicator .pi-label { font-size: 0.78rem; color: var(--ink2); flex: 1; }
+.pi-pips { display: flex; gap: 4px; }
+.pi-pip {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s;
+}
+.pi-pip.filled { background: var(--accent); }
+.pi-pip.filled.audio { background: var(--success); }
+
+/* ── Next step button ── */
+.next-step-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: all 0.2s;
+  margin-top: 14px;
+}
+.next-step-btn:hover { background: var(--accent); color: #fff; }
+
+/* ── Collapsible section ── */
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 0;
+}
+.collapsible-header:hover .card-group-title { color: var(--accent2); }
+.collapsible-arrow {
+  font-size: 0.8rem;
+  color: var(--accent);
+  transition: transform 0.25s;
+  opacity: 0.7;
+}
+.collapsible-header.open .collapsible-arrow { transform: rotate(180deg); }
+.collapsible-body {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+.collapsible-body.closed { max-height: 0; opacity: 0; }
+
 @media (max-width: 700px) {
   .app-body { flex-direction: column; }
-  .tab-bar { width: 100%; flex-direction: row; padding: 12px 10px; overflow-x: auto; gap: 4px; }
-  .tab-btn { padding: 9px 12px; white-space: nowrap; }
-  .content-pane { padding: 22px 18px; }
+  .tab-bar { width: 100%; flex-direction: row; padding: 10px 8px; overflow-x: auto; gap: 4px; height: auto; position: static; }
+  .tab-btn { padding: 8px 10px; white-space: nowrap; font-size: 0.78rem; }
+  .content-pane { padding: 18px 16px; }
   .form-row { grid-template-columns: 1fr; }
   .theme-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .header-steps { display: none; }
+  .app-header { padding: 12px 16px; }
+  .sidebar-footer { display: none; }
 }
 </style>
 </head>
@@ -621,7 +996,28 @@ input[type="color"] {
   <span class="header-icon">🎴</span>
   <div>
     <h1>Ultimate Card Builder</h1>
-    <div class="subtitle">Create encrypted surprise cards — runs 100% in your browser</div>
+    <div class="subtitle">Encrypted surprise cards · 100% local</div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="header-steps" id="header-steps">
+    <div class="header-step active" id="hstep-content" onclick="switchTabById('content')">
+      <span class="header-step-num">1</span> Content
+    </div>
+    <div class="header-step-divider"></div>
+    <div class="header-step" id="hstep-images" onclick="switchTabById('images')">
+      <span class="header-step-num">2</span> Images
+    </div>
+    <div class="header-step-divider"></div>
+    <div class="header-step" id="hstep-style" onclick="switchTabById('style')">
+      <span class="header-step-num">3</span> Style
+    </div>
+    <div class="header-step-divider"></div>
+    <div class="header-step" id="hstep-finalize" onclick="switchTabById('finalize')">
+      <span class="header-step-num">4</span> Finalize
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle-btn" onclick="toggleDarkMode()" id="dark-toggle">🌙 Dark</button>
   </div>
 </header>
 
@@ -631,20 +1027,27 @@ input[type="color"] {
 <div class="app-body">
   <!-- Sidebar -->
   <nav class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('content', this)">
+    <button class="tab-btn active" id="tabBtn-content" onclick="switchTab('content', this)">
       <span class="tab-num">1</span> Content
     </button>
-    <button class="tab-btn" onclick="switchTab('images', this)">
+    <button class="tab-btn" id="tabBtn-images" onclick="switchTab('images', this)">
       <span class="tab-num">2</span> Images
     </button>
-    <button class="tab-btn" onclick="switchTab('style', this)">
+    <button class="tab-btn" id="tabBtn-style" onclick="switchTab('style', this)">
       <span class="tab-num">3</span> Style & Audio
     </button>
-    <button class="tab-btn" onclick="switchTab('finalize', this)">
+    <button class="tab-btn" id="tabBtn-finalize" onclick="switchTab('finalize', this)">
       <span class="tab-num">4</span> Finalize
     </button>
+
+    <div class="sidebar-divider"></div>
+    <button class="preview-btn-sidebar" onclick="openPreview()">
+      👁 Preview Card
+    </button>
+
     <div class="sidebar-footer">
-      All processing happens locally.<br>No data is uploaded.
+      All processing is local.<br>No data leaves your device.<br>
+      <span style="opacity:0.4;font-size:0.65rem;">AES-256 · PBKDF2</span>
     </div>
   </nav>
 
@@ -656,11 +1059,25 @@ input[type="color"] {
       <div class="section-title">Card Messages</div>
       <div class="section-desc">Fill in the text that will be encrypted inside your card.</div>
 
+      <!-- Occasion quick-fill -->
+      <div class="card-group">
+        <div class="card-group-title">✨ Quick Occasion</div>
+        <div class="occasion-grid" id="occasion-grid">
+          <div class="occasion-chip" data-cover="For You 💕" data-title="Happy Birthday!" data-msg="Wishing you all the joy in the world on your special day. You deserve every happiness!">🎂 Birthday</div>
+          <div class="occasion-chip" data-cover="Congratulations 🎓" data-title="You Did It!" data-msg="All your hard work has paid off. So incredibly proud of everything you've achieved!">🎓 Graduation</div>
+          <div class="occasion-chip" data-cover="Happy Anniversary ❤️" data-title="To Us 💕" data-msg="Every day with you is a gift. Here's to all the memories we've made and all the ones yet to come.">💍 Anniversary</div>
+          <div class="occasion-chip" data-cover="With Love 💌" data-title="You Mean the World" data-msg="Just wanted to remind you how much you mean to me. Thank you for being you.">💌 Just Because</div>
+          <div class="occasion-chip" data-cover="Thank You 🙏" data-title="From the Heart" data-msg="Your kindness means more than words can say. Thank you so much for everything.">🙏 Thank You</div>
+          <div class="occasion-chip" data-cover="Get Well Soon 🌸" data-title="Thinking of You" data-msg="Sending you all my warmth and good vibes. Wishing you a speedy recovery!">🌸 Get Well</div>
+        </div>
+      </div>
+
       <div class="card-group">
         <div class="card-group-title">✦ Cover</div>
         <div class="form-field">
           <label>Cover Title (shown on the outside)</label>
-          <input type="text" id="cover-title" value="For You" placeholder="e.g. For You, Happy Birthday!">
+          <input type="text" id="cover-title" value="For You" placeholder="e.g. For You, Happy Birthday!" maxlength="40" oninput="updateCharCount('cover-title-count', this, 40)">
+          <div class="field-footer"><span class="char-count" id="cover-title-count">0 / 40</span></div>
         </div>
       </div>
 
@@ -668,11 +1085,13 @@ input[type="color"] {
         <div class="card-group-title">✦ Inside Message</div>
         <div class="form-field">
           <label>Main Title (inside center)</label>
-          <input type="text" id="main-title" value="Happy Birthday!" placeholder="e.g. Happy Birthday!">
+          <input type="text" id="main-title" value="Happy Birthday!" placeholder="e.g. Happy Birthday!" maxlength="60" oninput="updateCharCount('main-title-count', this, 60)">
+          <div class="field-footer"><span class="char-count" id="main-title-count">0 / 60</span></div>
         </div>
         <div class="form-field">
           <label>Heartfelt Message</label>
-          <textarea id="main-message" placeholder="Write your heartfelt message here…">Here's to the moments we share and the memories we make.</textarea>
+          <textarea id="main-message" placeholder="Write your heartfelt message here…" maxlength="600" oninput="updateCharCount('main-msg-count', this, 600)">Here's to the moments we share and the memories we make.</textarea>
+          <div class="field-footer"><span class="char-count" id="main-msg-count">0 / 600</span></div>
         </div>
       </div>
 
@@ -689,6 +1108,8 @@ input[type="color"] {
           </div>
         </div>
       </div>
+
+      <button class="next-step-btn" onclick="switchTabById('images')">Next: Add Photos →</button>
     </div>
 
     <!-- TAB 2: IMAGES -->
