@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Card Builder</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+:root {
+  --ink: #1a1a2e;
+  --ink2: #3a3a5c;
+  --surface: #f8f7ff;
+  --surface2: #eeedf8;
+  --accent: #7c5cbf;
+  --accent2: #b084f5;
+  --gold: #e8b86d;
+  --danger: #e05252;
+  --success: #4caf7d;
+  --border: rgba(124,92,191,0.18);
+  --shadow: 0 4px 24px rgba(60,40,120,0.10);
+  --radius: 14px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.app-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b69 60%, #1a1a2e 100%);
+  padding: 22px 40px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+.app-header h1 {
+  font-family: var(--font-display);
+  color: #fff;
+  font-size: 1.7rem;
+  letter-spacing: 0.01em;
+}
+.app-header .subtitle {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.55);
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.header-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 8px rgba(176,132,245,0.5));
+}
+
+/* ── Main Layout ── */
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── Tabs Sidebar ── */
+.tab-bar {
+  width: 230px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #1e1b3a 0%, #2d1b69 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 28px 16px;
+  gap: 6px;
+}
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.18s ease;
+  letter-spacing: 0.01em;
+}
+.tab-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(124,92,191,0.4), rgba(176,132,245,0.2));
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(124,92,191,0.25);
+  border: 1px solid rgba(176,132,245,0.3);
+}
+.tab-btn .tab-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.tab-btn.active .tab-num { background: var(--accent2); color: #fff; }
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 12px;
+  color: rgba(255,255,255,0.3);
+  font-size: 0.72rem;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* ── Content Pane ── */
+.content-pane {
+  flex: 1;
+  overflow-y: auto;
+  padding: 36px 40px;
+  background: var(--surface);
+}
+
+.tab-panel { display: none; animation: fadeIn 0.22s ease; }
+.tab-panel.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.section-desc {
+  font-size: 0.85rem;
+  color: var(--ink2);
+  margin-bottom: 28px;
+  opacity: 0.7;
+}
+
+/* ── Cards / Groups ── */
+.card-group {
+  background: #fff;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 26px;
+  margin-bottom: 22px;
+  box-shadow: var(--shadow);
+}
+.card-group-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Form Controls ── */
+label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink2);
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+input[type="text"], input[type="password"], textarea, select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: var(--surface);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(124,92,191,0.13);
+  background: #fff;
+}
+textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237c5cbf' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 38px; cursor: pointer; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form-field { margin-bottom: 16px; }
+.form-field:last-child { margin-bottom: 0; }
+
+/* ── Checkbox ── */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  color: var(--ink2);
+  font-weight: 400;
+}
+.checkbox-label input[type="checkbox"] {
+  width: 18px; height: 18px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* ── Image Grid ── */
+.img-section-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--accent);
+  margin: 24px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.img-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.img-slot {
+  width: 110px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 2px dashed var(--border);
+  overflow: hidden;
+  background: var(--surface2);
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+.img-slot:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(124,92,191,0.18); transform: translateY(-2px); }
+.img-slot.has-img { border-style: solid; border-color: var(--accent); }
+.img-slot-preview {
+  width: 100%; height: 80px;
+  object-fit: cover;
+  display: block;
+  background: var(--surface2);
+}
+.img-slot-placeholder {
+  width: 100%; height: 80px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: var(--accent);
+  opacity: 0.6;
+}
+.img-slot-placeholder .plus { font-size: 1.6rem; line-height: 1; }
+.img-slot-label {
+  padding: 6px 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ink2);
+  text-align: center;
+  background: #fff;
+  border-top: 1px solid var(--border);
+}
+.img-slot-label small { display: block; font-weight: 400; color: #aaa; margin-top: 1px; }
+.img-clear-btn {
+  display: none;
+  width: 100%;
+  border: none;
+  background: #fff4f4;
+  color: var(--danger);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 5px;
+  cursor: pointer;
+  border-top: 1px solid #fdd;
+}
+.img-slot.has-img .img-clear-btn { display: block; }
+input[type="file"] { display: none; }
+
+/* ── Audio ── */
+.audio-zone {
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--surface2);
+}
+.audio-zone:hover { border-color: var(--accent); background: #f0ecff; }
+.audio-zone.has-audio { border-style: solid; border-color: var(--success); background: #f0fff6; }
+.audio-zone .audio-icon { font-size: 2rem; margin-bottom: 8px; }
+.audio-zone p { font-size: 0.85rem; color: var(--ink2); }
+.audio-zone .audio-name { font-weight: 600; color: var(--success); }
+
+/* ── Themes ── */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+.theme-chip {
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.theme-chip:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+.theme-chip.selected { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,191,0.2); }
+.theme-chip-swatch {
+  height: 36px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+.theme-chip-name {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: inherit;
+  line-height: 1.2;
+}
+.theme-check {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 18px; height: 18px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.65rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.theme-chip.selected .theme-check { display: flex; }
+
+.theme-search {
+  margin-bottom: 16px;
+}
+.theme-group-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin: 20px 0 10px;
+  padding-left: 2px;
+  opacity: 0.75;
+}
+
+/* ── Custom Colors ── */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 12px;
+}
+.color-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border-radius: 9px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+}
+.color-swatch {
+  width: 34px; height: 34px;
+  border-radius: 7px;
+  border: 2px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.color-swatch:hover { transform: scale(1.12); }
+.color-info { flex: 1; min-width: 0; }
+.color-info label { font-size: 0.72rem; color: var(--ink2); margin-bottom: 2px; }
+.color-info .color-hex {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-family: monospace;
+}
+input[type="color"] {
+  width: 0; height: 0; padding: 0; border: none; opacity: 0; position: absolute;
+}
+
+/* ── Font Controls ── */
+.font-preview-box {
+  margin-top: 10px;
+  padding: 14px;
+  background: var(--surface2);
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  text-align: center;
+  font-size: 1.3rem;
+  min-height: 52px;
+  line-height: 1.4;
+  transition: all 0.3s;
+}
+.range-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.range-row input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+.range-val {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 38px;
+  text-align: right;
+  color: var(--accent);
+}
+
+/* ── Security / Finalize ── */
+.password-strength {
+  height: 4px;
+  border-radius: 2px;
+  background: #eee;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.password-strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s, background 0.3s;
+  background: var(--danger);
+}
+.strength-label {
+  font-size: 0.72rem;
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.generate-btn {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #7c5cbf, #b084f5);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(124,92,191,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+.generate-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(124,92,191,0.45);
+}
+.generate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ── Progress Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(10,8,30,0.7);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-icon { font-size: 3rem; margin-bottom: 16px; }
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.modal-sub { font-size: 0.88rem; color: var(--ink2); margin-bottom: 24px; opacity: 0.75; }
+.modal-progress-bar {
+  height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; margin-bottom: 10px;
+}
+.modal-progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 4px; width: 0%; transition: width 0.25s ease;
+}
+.modal-status { font-size: 0.82rem; color: var(--accent); font-weight: 600; min-height: 20px; }
+
+/* ── Download button ── */
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, var(--success), #33995e);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 20px;
+  box-shadow: 0 4px 16px rgba(76,175,125,0.35);
+  transition: all 0.18s;
+}
+.download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(76,175,125,0.45); }
+
+.close-modal-btn {
+  margin-top: 12px;
+  background: none;
+  border: none;
+  color: var(--ink2);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  opacity: 0.6;
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.25s;
+  z-index: 10000;
+}
+.toast.show { transform: none; opacity: 1; }
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* ── Info box ── */
+.info-box {
+  background: linear-gradient(135deg, #f0ecff, #ece4ff);
+  border-left: 3px solid var(--accent);
+  border-radius: 9px;
+  padding: 14px 18px;
+  font-size: 0.84rem;
+  color: var(--ink2);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+.info-box strong { color: var(--accent); }
+
+.img-slot-placeholder .drag-hint {
+  font-size: 0.65rem;
+  opacity: 0.5;
+  display: block;
+  margin-top: 2px;
+}
+.img-slot.drag-over {
+  border-color: var(--accent2);
+  background: #ede4ff;
+  box-shadow: 0 0 0 3px rgba(176,132,245,0.35), inset 0 0 20px rgba(176,132,245,0.08);
+  transform: scale(1.04) translateY(-3px);
+}
+.img-slot.drag-over .img-slot-placeholder { color: var(--accent); opacity: 1; }
+
+/* Whole-page drag target area for images tab */
+.drag-target-overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 8000;
+  background: rgba(124,92,191,0.08);
+  border: 3px dashed var(--accent2);
+  pointer-events: none;
+}
+.drag-target-overlay.active { display: block; }
+
+@media (max-width: 700px) {
+  .app-body { flex-direction: column; }
+  .tab-bar { width: 100%; flex-direction: row; padding: 12px 10px; overflow-x: auto; gap: 4px; }
+  .tab-btn { padding: 9px 12px; white-space: nowrap; }
+  .content-pane { padding: 22px 18px; }
+  .form-row { grid-template-columns: 1fr; }
+  .theme-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="header-icon">🎴</span>
+  <div>
+    <h1>Ultimate Card Builder</h1>
+    <div class="subtitle">Create encrypted surprise cards — runs 100% in your browser</div>
+  </div>
+</header>
+
+<!-- Whole-page drag indicator (shown when dragging over Images tab) -->
+<div class="drag-target-overlay" id="drag-overlay"></div>
+
+<div class="app-body">
+  <!-- Sidebar -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('content', this)">
+      <span class="tab-num">1</span> Content
+    </button>
+    <button class="tab-btn" onclick="switchTab('images', this)">
+      <span class="tab-num">2</span> Images
+    </button>
+    <button class="tab-btn" onclick="switchTab('style', this)">
+      <span class="tab-num">3</span> Style & Audio
+    </button>
+    <button class="tab-btn" onclick="switchTab('finalize', this)">
+      <span class="tab-num">4</span> Finalize
+    </button>
+    <div class="sidebar-footer">
+      All processing happens locally.<br>No data is uploaded.
+    </div>
+  </nav>
+
+  <!-- Content Area -->
+  <main class="content-pane">
+
+    <!-- TAB 1: CONTENT -->
+    <div id="tab-content" class="tab-panel active">
+      <div class="section-title">Card Messages</div>
+      <div class="section-desc">Fill in the text that will be encrypted inside your card.</div>
+
+      <div class="card-group">
+        <div class="card-group-title">✦ Cover</div>
+        <div class="form-field">
+          <label>Cover Title (shown on the outside)</label>
+          <input type="text" id="cover-title" value="For You" placeholder="e.g. For You, Happy Birthday!">
+        </div>
+      </div>
+
+      <div class="card-group">
+        <div class="card-group-title">✦ Inside Message</div>
+        <div class="form-field">
+          <label>Main Title (inside center)</label>
+          <input type="text" id="main-title" value="Happy Birthday!" placeholder="e.g. Happy Birthday!">
+        </div>
+        <div class="form-field">
+          <label>Heartfelt Message</label>
+          <textarea id="main-message" placeholder="Write your heartfelt message here…">Here's to the moments we share and the memories we make.</textarea>
+        </div>
+      </div>
+
+      <div class="card-group">
+        <div class="card-group-title">✦ Panel Headers</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Left Panel Header</label>
+            <input type="text" id="left-title" value="Memories" placeholder="e.g. Memories">
+          </div>
+          <div class="form-field">
+            <label>Right Panel Header</label>
+            <input type="text" id="right-title" value="Adventures" placeholder="e.g. Adventures">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: IMAGES -->
+    <div id="tab-images" class="tab-panel">
+      <div class="section-title">Select Photos</div>
+      <div class="section-desc">Choose photos for the card. All images are processed locally and embedded as encrypted data.</div>
+
+      <div class="card-group" style="margin-bottom:18px;">
+        <label class="checkbox-label">
+          <input type="checkbox" id="autofill" checked>
+          Auto-fill empty slots using other selected images
+        </label>
+      </div>
+
+      <div id="image-sections"></div>
+    </div>
+
+    <!-- TAB 3: STYLE & AUDIO -->
+    <div id="tab-style" class="tab-panel">
+      <div class="section-title">Style & Audio</div>
+      <div class="section-desc">Choose a visual theme, customize fonts, and optionally add background music.</div>
+
+      <!-- Theme -->
+      <div class="card-group">
+        <div class="card-group-title">🎨 Color Theme</div>
+        <div class="form-field theme-search">
+          <label>Search themes</label>
+          <input type="text" id="theme-search" placeholder="e.g. pink, dark, ocean…" oninput="filterThemes(this.value)">
+        </div>
+        <div id="theme-list"></div>
+      </div>
+
+      <!-- Custom Colors (shown when Custom selected) -->
+      <div class="card-group" id="custom-colors-section" style="display:none;">
+        <div class="card-group-title">🖌️ Custom Colors</div>
+        <div class="color-grid" id="color-grid"></div>
+      </div>
+
+      <!-- Typography -->
+      <div class="card-group">
+        <div class="card-group-title">✒️ Typography</div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Header Font (Titles)</label>
+            <select id="font-header" onchange="updateFontPreview()">
+              <option>Dancing Script</option>
+              <option>Great Vibes</option>
+              <option>Playfair Display</option>
+              <option>Cookie</option>
+              <option>Sacramento</option>
+              <option>Pacifico</option>
+              <option>Lobster</option>
+              <option>Cinzel</option>
+              <option>Alex Brush</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Body Font (Message)</label>
+            <select id="font-main" onchange="updateFontPreview()">
+              <option>Poppins</option>
+              <option>Montserrat</option>
+              <option>Lato</option>
+              <option>Roboto</option>
+              <option>DM Sans</option>
+            </select>
+          </div>
+        </div>
+        <div class="font-preview-box" id="font-preview">Happy Birthday! 🎉</div>
+        <div class="form-row" style="margin-top:16px;">
+          <div class="form-field">
+            <label>Title Size</label>
+            <div class="range-row">
+              <input type="range" id="size-title" min="20" max="80" value="35" oninput="document.getElementById('size-title-val').textContent=this.value">
+              <span class="range-val" id="size-title-val">35</span>
+              <span style="font-size:0.78rem;color:#aaa;">px</span>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Message Size</label>
+            <div class="range-row">
+              <input type="range" id="size-msg" min="10" max="40" value="16" oninput="document.getElementById('size-msg-val').textContent=this.value">
+              <span class="range-val" id="size-msg-val">16</span>
+              <span style="font-size:0.78rem;color:#aaa;">px</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio -->
+      <div class="card-group">
+        <div class="card-group-title">🎵 Background Music</div>
+        <div class="info-box">Tip: For best performance, keep audio files <strong>under 5 MB</strong>. Supported: MP3, WAV, OGG, M4A, AAC.</div>
+        <div class="audio-zone" id="audio-zone" onclick="document.getElementById('audio-file').click()">
+          <div class="audio-icon">🎵</div>
+          <p id="audio-label">Click to select an audio file<br><small style="opacity:0.6">MP3, WAV, OGG, M4A, AAC</small></p>
+        </div>
+        <input type="file" id="audio-file" accept=".mp3,.wav,.ogg,.m4a,.aac,audio/*" onchange="handleAudio(this)">
+        <button onclick="clearAudio()" id="audio-clear-btn" style="display:none; margin-top:10px; background:none; border:1.5px solid var(--danger); color:var(--danger); border-radius:7px; padding:7px 16px; cursor:pointer; font-size:0.82rem; font-weight:600;">✕ Remove Audio</button>
+      </div>
+    </div>
+
+    <!-- TAB 4: FINALIZE -->
+    <div id="tab-finalize" class="tab-panel">
+      <div class="section-title">Lock & Generate</div>
+      <div class="section-desc">Set a password — your recipient will need it to unlock the card.</div>
+
+      <div class="card-group">
+        <div class="card-group-title">🔐 Security</div>
+        <div class="form-field">
+          <label>Unlock Password</label>
+          <input type="password" id="password" placeholder="Enter a password for your recipient" oninput="checkPasswordStrength(this.value)">
+          <div class="password-strength"><div class="password-strength-fill" id="pw-strength-bar"></div></div>
+          <div class="strength-label" id="pw-strength-label" style="color:#aaa;font-size:0.72rem;margin-top:4px;"></div>
+        </div>
+        <div class="form-field">
+          <label>Password Hint (Optional)</label>
+          <input type="text" id="hint-text" placeholder="e.g. It's the name of our song">
+        </div>
+      </div>
+
+      <div class="info-box" style="margin-top:0;">
+        <strong>How it works:</strong> Your photos, audio, and messages are encrypted with AES-256 using your password. 
+        The recipient opens the HTML file in any browser and enters the password to unlock the card. 
+        Nothing is sent to any server — everything stays on your device.
+      </div>
+
+      <button class="generate-btn" id="gen-btn" onclick="startGeneration()">
+        <span>⚡</span> Generate Encrypted Card
+      </button>
+    </div>
+
+  </main>
+</div>
+
+<!-- Progress Modal -->
+<div class="modal-overlay" id="progress-modal">
+  <div class="modal-box">
+    <div class="modal-icon" id="modal-icon">⚙️</div>
+    <div class="modal-title" id="modal-title">Generating Card…</div>
+    <div class="modal-sub" id="modal-sub">Processing images and encrypting your data</div>
+    <div class="modal-progress-bar"><div class="modal-progress-fill" id="modal-progress"></div></div>
+    <div class="modal-status" id="modal-status">Initialising…</div>
+    <div id="modal-actions" style="display:none;margin-top:20px;">
+      <a id="download-link" class="download-btn" download="surprise_card.html">⬇ Download Card HTML</a><br>
+      <button class="close-modal-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════════════
+
+const THEMES = {
+  "Valentine (Default)": {"primary":"#ff9a9e","primary_dark":"#ff758c","bg":"#fceceb","paper":"#fffbfb","text":"#5d4037","gradient_start":"rgb(255,241,242)","gradient_end":"rgb(255,248,240)"},
+  "Classic Red Rose": {"primary":"#d32f2f","primary_dark":"#b71c1c","bg":"#ffebee","paper":"#ffffff","text":"#4e0e0e","gradient_start":"#ffcdd2","gradient_end":"#ffebee"},
+  "Blushing Bride": {"primary":"#f8bbd0","primary_dark":"#c48b9f","bg":"#fff0f5","paper":"#ffffff","text":"#5c3a45","gradient_start":"#fff0f5","gradient_end":"#ffe4e1"},
+  "Champagne Gold": {"primary":"#d4af37","primary_dark":"#aa8c2c","bg":"#faf8f0","paper":"#ffffff","text":"#4a4a4a","gradient_start":"#fdfcf5","gradient_end":"#f3e5ab"},
+  "Silver Anniversary": {"primary":"#b0bec5","primary_dark":"#78909c","bg":"#f5f5f5","paper":"#ffffff","text":"#37474f","gradient_start":"#eceff1","gradient_end":"#ffffff"},
+  "Lavender Love": {"primary":"#ce93d8","primary_dark":"#ab47bc","bg":"#f3e5f5","paper":"#ffffff","text":"#4a148c","gradient_start":"#f3e5f5","gradient_end":"#e1bee7"},
+  "Midnight Proposal": {"primary":"#304ffe","primary_dark":"#0026ca","bg":"#1a237e","paper":"#283593","text":"#e8eaf6","gradient_start":"#1a237e","gradient_end":"#000051"},
+  "Sweetheart Pink": {"primary":"#ff4081","primary_dark":"#c51162","bg":"#ffeef5","paper":"#ffffff","text":"#880e4f","gradient_start":"#ff80ab","gradient_end":"#ff4081"},
+  "Passion Crimson": {"primary":"#b71c1c","primary_dark":"#7f0000","bg":"#210505","paper":"#3e0a0a","text":"#ffcdd2","gradient_start":"#2b0505","gradient_end":"#000000"},
+  "Tuscan Wedding": {"primary":"#8d6e63","primary_dark":"#5d4037","bg":"#efebe9","paper":"#fff8e1","text":"#3e2723","gradient_start":"#d7ccc8","gradient_end":"#efebe9"},
+  "Golden Hour": {"primary":"#ffb300","primary_dark":"#c68400","bg":"#fff8e1","paper":"#ffffff","text":"#3e2723","gradient_start":"#ffecb3","gradient_end":"#ffe0b2"},
+  "Dove White": {"primary":"#cfd8dc","primary_dark":"#90a4ae","bg":"#ffffff","paper":"#f5f5f5","text":"#546e7a","gradient_start":"#ffffff","gradient_end":"#eceff1"},
+  "Forest Green": {"primary":"#43a047","primary_dark":"#2e7d32","bg":"#e8f5e9","paper":"#ffffff","text":"#1b5e20","gradient_start":"#e8f5e9","gradient_end":"#c8e6c9"},
+  "Ocean Breeze": {"primary":"#26c6da","primary_dark":"#00838f","bg":"#e0f7fa","paper":"#ffffff","text":"#004d40","gradient_start":"#b2ebf2","gradient_end":"#e0f7fa"},
+  "Autumn Maple": {"primary":"#e65100","primary_dark":"#bf360c","bg":"#fbe9e7","paper":"#ffffff","text":"#3e2723","gradient_start":"#ffccbc","gradient_end":"#fbe9e7"},
+  "Nordic Snow": {"primary":"#90caf9","primary_dark":"#42a5f5","bg":"#f0f4f8","paper":"#ffffff","text":"#2c3e50","gradient_start":"#e3f2fd","gradient_end":"#f0f4f8"},
+  "Spring Meadow": {"primary":"#76ff03","primary_dark":"#64dd17","bg":"#f1f8e9","paper":"#ffffff","text":"#33691e","gradient_start":"#ccff90","gradient_end":"#f1f8e9"},
+  "Desert Sand": {"primary":"#fbc02d","primary_dark":"#c49000","bg":"#fff9c4","paper":"#ffffff","text":"#5d4037","gradient_start":"#fff59d","gradient_end":"#fffde7"},
+  "Tropical Rainforest": {"primary":"#00c853","primary_dark":"#009624","bg":"#e8f5e9","paper":"#ffffff","text":"#1b5e20","gradient_start":"#b9f6ca","gradient_end":"#69f0ae"},
+  "Sunset Horizon": {"primary":"#ff5722","primary_dark":"#bf360c","bg":"#fff3e0","paper":"#ffffff","text":"#3e2723","gradient_start":"#ffccbc","gradient_end":"#ffab91"},
+  "Deep Sea": {"primary":"#01579b","primary_dark":"#002f6c","bg":"#e1f5fe","paper":"#ffffff","text":"#012d3c","gradient_start":"#81d4fa","gradient_end":"#e1f5fe"},
+  "Mountain Slate": {"primary":"#607d8b","primary_dark":"#455a64","bg":"#eceff1","paper":"#ffffff","text":"#263238","gradient_start":"#cfd8dc","gradient_end":"#b0bec5"},
+  "Cherry Blossom": {"primary":"#f48fb1","primary_dark":"#c2185b","bg":"#fff0f6","paper":"#ffffff","text":"#880e4f","gradient_start":"#fce4ec","gradient_end":"#f8bbd0"},
+  "Midnight Sky": {"primary":"#5c6bc0","primary_dark":"#3949ab","bg":"#1a237e","paper":"#283593","text":"#e8eaf6","gradient_start":"#303f9f","gradient_end":"#1a237e"},
+  "Sage Brush": {"primary":"#9ccc65","primary_dark":"#689f38","bg":"#f1f8e9","paper":"#ffffff","text":"#33691e","gradient_start":"#dcedc8","gradient_end":"#c5e1a5"},
+  "Confetti Pop": {"primary":"#ff4081","primary_dark":"#f50057","bg":"#fff8e1","paper":"#ffffff","text":"#3e2723","gradient_start":"#ffe57f","gradient_end":"#ff9e80"},
+  "Electric Neon": {"primary":"#00e5ff","primary_dark":"#00b0ff","bg":"#212121","paper":"#333333","text":"#ffffff","gradient_start":"#333333","gradient_end":"#000000"},
+  "Cotton Candy": {"primary":"#81d4fa","primary_dark":"#f48fb1","bg":"#e1f5fe","paper":"#ffffff","text":"#880e4f","gradient_start":"#fce4ec","gradient_end":"#e1f5fe"},
+  "Lemon Zest": {"primary":"#ffeb3b","primary_dark":"#fdd835","bg":"#fffde7","paper":"#ffffff","text":"#f57f17","gradient_start":"#fff9c4","gradient_end":"#fff59d"},
+  "Bubblegum": {"primary":"#ea80fc","primary_dark":"#aa00ff","bg":"#f3e5f5","paper":"#ffffff","text":"#4a148c","gradient_start":"#e1bee7","gradient_end":"#ea80fc"},
+  "Princess Pink": {"primary":"#ff80ab","primary_dark":"#c51162","bg":"#fce4ec","paper":"#ffffff","text":"#880e4f","gradient_start":"#ff4081","gradient_end":"#f8bbd0"},
+  "Space Cadet": {"primary":"#7c4dff","primary_dark":"#651fff","bg":"#311b92","paper":"#4527a0","text":"#ede7f6","gradient_start":"#4527a0","gradient_end":"#12005e"},
+  "Mermaid Teal": {"primary":"#1de9b6","primary_dark":"#00bfa5","bg":"#e0f2f1","paper":"#ffffff","text":"#004d40","gradient_start":"#a7ffeb","gradient_end":"#64ffda"},
+  "Unicorn Dream": {"primary":"#ff80ab","primary_dark":"#ea80fc","bg":"#f3e5f5","paper":"#ffffff","text":"#4a148c","gradient_start":"#8c9eff","gradient_end":"#ff8a80"},
+  "Elegant Gold": {"primary":"#d4af37","primary_dark":"#aa8c2c","bg":"#111","paper":"#222","text":"#f8f8f8","gradient_start":"#232526","gradient_end":"#414345"},
+  "Royal Purple": {"primary":"#7b1fa2","primary_dark":"#4a148c","bg":"#f3e5f5","paper":"#ffffff","text":"#2a073a","gradient_start":"#ce93d8","gradient_end":"#f3e5f5"},
+  "Midnight Blue": {"primary":"#4facfe","primary_dark":"#00f2fe","bg":"#0f172a","paper":"#1e293b","text":"#e2e8f0","gradient_start":"#0f172a","gradient_end":"#1e293b"},
+  "Black Tie": {"primary":"#212121","primary_dark":"#000000","bg":"#bdbdbd","paper":"#ffffff","text":"#000000","gradient_start":"#e0e0e0","gradient_end":"#9e9e9e"},
+  "Ruby Red": {"primary":"#b71c1c","primary_dark":"#7f0000","bg":"#212121","paper":"#3e2723","text":"#ffebee","gradient_start":"#3e0a0a","gradient_end":"#000000"},
+  "Sapphire": {"primary":"#0d47a1","primary_dark":"#002171","bg":"#e3f2fd","paper":"#ffffff","text":"#0d47a1","gradient_start":"#1565c0","gradient_end":"#0d47a1"},
+  "Emerald": {"primary":"#00695c","primary_dark":"#004d40","bg":"#e0f2f1","paper":"#ffffff","text":"#004d40","gradient_start":"#26a69a","gradient_end":"#00695c"},
+  "Onyx & Gold": {"primary":"#ffd700","primary_dark":"#c5a000","bg":"#000000","paper":"#1a1a1a","text":"#fff8e1","gradient_start":"#333333","gradient_end":"#000000"},
+  "Christmas Classic": {"primary":"#d32f2f","primary_dark":"#b71c1c","bg":"#e8f5e9","paper":"#ffffff","text":"#1b5e20","gradient_start":"#c8e6c9","gradient_end":"#e8f5e9"},
+  "Halloween Spooky": {"primary":"#ff6d00","primary_dark":"#e65100","bg":"#212121","paper":"#424242","text":"#ffecb3","gradient_start":"#3e2723","gradient_end":"#000000"},
+  "Easter Pastel": {"primary":"#ce93d8","primary_dark":"#ab47bc","bg":"#fff9c4","paper":"#ffffff","text":"#6a1b9a","gradient_start":"#e1bee7","gradient_end":"#fff9c4"},
+  "Diwali Light": {"primary":"#ff9800","primary_dark":"#f57c00","bg":"#3e2723","paper":"#5d4037","text":"#fff3e0","gradient_start":"#d84315","gradient_end":"#3e2723"},
+  "Coffee Mocha": {"primary":"#8d6e63","primary_dark":"#5d4037","bg":"#efebe9","paper":"#ffffff","text":"#3e2723","gradient_start":"#d7ccc8","gradient_end":"#efebe9"},
+  "Matcha Tea": {"primary":"#aed581","primary_dark":"#7cb342","bg":"#f1f8e9","paper":"#ffffff","text":"#33691e","gradient_start":"#dcedc8","gradient_end":"#c5e1a5"},
+  "Dark Chocolate": {"primary":"#5d4037","primary_dark":"#3e2723","bg":"#d7ccc8","paper":"#efebe9","text":"#3e2723","gradient_start":"#a1887f","gradient_end":"#8d6e63"},
+  "Minimal Gray": {"primary":"#9e9e9e","primary_dark":"#616161","bg":"#f5f5f5","paper":"#ffffff","text":"#212121","gradient_start":"#eeeeee","gradient_end":"#f5f5f5"},
+  "Corporate Blue": {"primary":"#1976d2","primary_dark":"#0d47a1","bg":"#e3f2fd","paper":"#ffffff","text":"#0d47a1","gradient_start":"#bbdefb","gradient_end":"#e3f2fd"},
+  "Modern Dark": {"primary":"#424242","primary_dark":"#212121","bg":"#121212","paper":"#1e1e1e","text":"#e0e0e0","gradient_start":"#212121","gradient_end":"#000000"},
+  "Cyber Neon": {"primary":"#00e5ff","primary_dark":"#00b0ff","bg":"#0d1117","paper":"#161b22","text":"#e6edf3","gradient_start":"#0d1117","gradient_end":"#161b22"},
+  "Galaxy Violet": {"primary":"#b388ff","primary_dark":"#651fff","bg":"#12002f","paper":"#1e014f","text":"#ede7f6","gradient_start":"#1a003d","gradient_end":"#12002f"},
+  "Vaporwave": {"primary":"#ff4081","primary_dark":"#c51162","bg":"#311b92","paper":"#4527a0","text":"#80d8ff","gradient_start":"#1a237e","gradient_end":"#311b92"},
+  "Hacker Matrix": {"primary":"#00e676","primary_dark":"#00c853","bg":"#000000","paper":"#1b1b1b","text":"#00e676","gradient_start":"#050505","gradient_end":"#000000"},
+  "Santorini Blue": {"primary":"#0277bd","primary_dark":"#01579b","bg":"#ffffff","paper":"#e1f5fe","text":"#01579b","gradient_start":"#b3e5fc","gradient_end":"#ffffff"},
+  "Kyoto Garden": {"primary":"#66bb6a","primary_dark":"#2e7d32","bg":"#e8f5e9","paper":"#ffffff","text":"#1b5e20","gradient_start":"#c8e6c9","gradient_end":"#a5d6a7"},
+  "Miami Vice": {"primary":"#ea80fc","primary_dark":"#aa00ff","bg":"#e0f7fa","paper":"#ffffff","text":"#0091ea","gradient_start":"#80d8ff","gradient_end":"#b388ff"},
+  "Arctic Aurora": {"primary":"#00e676","primary_dark":"#00c853","bg":"#000000","paper":"#1b1b1b","text":"#69f0ae","gradient_start":"#1a237e","gradient_end":"#004d40"},
+  "Custom": null
+};
+
+const THEME_GROUPS = {
+  "Romance & Celebrations": ["Valentine (Default)","Classic Red Rose","Blushing Bride","Champagne Gold","Silver Anniversary","Lavender Love","Midnight Proposal","Sweetheart Pink","Passion Crimson","Tuscan Wedding","Golden Hour","Dove White"],
+  "Nature & Seasons": ["Forest Green","Ocean Breeze","Autumn Maple","Nordic Snow","Spring Meadow","Desert Sand","Tropical Rainforest","Sunset Horizon","Deep Sea","Mountain Slate","Cherry Blossom","Midnight Sky","Sage Brush"],
+  "Parties & Birthdays": ["Confetti Pop","Electric Neon","Cotton Candy","Lemon Zest","Bubblegum","Princess Pink","Space Cadet","Mermaid Teal","Unicorn Dream"],
+  "Luxury & Elegance": ["Elegant Gold","Royal Purple","Midnight Blue","Black Tie","Ruby Red","Sapphire","Emerald","Onyx & Gold"],
+  "Holidays & Cultural": ["Christmas Classic","Halloween Spooky","Easter Pastel","Diwali Light"],
+  "Food & Drink": ["Coffee Mocha","Matcha Tea","Dark Chocolate"],
+  "Professional & Minimal": ["Minimal Gray","Corporate Blue","Modern Dark"],
+  "Abstract & Art": ["Cyber Neon","Galaxy Violet","Vaporwave","Hacker Matrix"],
+  "Travel & Places": ["Santorini Blue","Kyoto Garden","Miami Vice","Arctic Aurora"]
+};
+
+const IMAGE_SECTIONS = [
+  { key: 'stack', title: 'Center Stack', count: 5, desc: '5 stacked polaroid photos' },
+  { key: 'left',  title: 'Left Panel',   count: 4, desc: '4 photos in collage grid' },
+  { key: 'right', title: 'Right Panel',  count: 5, desc: '5 photos in collage grid' },
+];
+
+const COLOR_KEYS = [
+  { key: 'primary',        label: 'Highlights / Ribbon' },
+  { key: 'primary_dark',   label: 'Headings & Accents' },
+  { key: 'text',           label: 'Text Color' },
+  { key: 'paper',          label: 'Card Body Color' },
+  { key: 'bg',             label: 'Page Background' },
+  { key: 'gradient_start', label: 'Gradient Inner' },
+  { key: 'gradient_end',   label: 'Gradient Outer' },
+];
+
+const GOOGLE_FONTS = ['Dancing Script','Great Vibes','Playfair Display','Cookie','Sacramento','Pacifico','Lobster','Cinzel','Alex Brush','Poppins','Montserrat','Lato','Roboto','DM Sans'];
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+
+const state = {
+  imagePaths: { stack: [null,null,null,null,null], left: [null,null,null,null], right: [null,null,null,null,null] },
+  imageFiles: { stack: [null,null,null,null,null], left: [null,null,null,null], right: [null,null,null,null,null] },
+  audioFile: null,
+  selectedTheme: 'Valentine (Default)',
+  customColors: { primary:'#ff9a9e', primary_dark:'#ff758c', bg:'#fceceb', paper:'#ffffff', text:'#5d4037', gradient_start:'#ffffff', gradient_end:'#f0f0f0' },
+  generatedHTML: null,
+};
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+
+function init() {
+  buildImageSections();
+  buildThemeList();
+  buildColorGrid();
+  loadFontPreview();
+}
+
+// ═══════════════════════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════════════════════
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════
+//  IMAGE SECTIONS
+// ═══════════════════════════════════════════════════════
+
+function buildImageSections() {
+  const container = document.getElementById('image-sections');
+  IMAGE_SECTIONS.forEach(sec => {
+    const wrap = document.createElement('div');
+    wrap.className = 'card-group';
+    wrap.innerHTML = `<div class="card-group-title">📷 ${sec.title} <span style="font-weight:400;opacity:0.6;font-size:0.78rem;">(${sec.desc})</span></div><div class="img-grid" id="grid-${sec.key}"></div>`;
+    container.appendChild(wrap);
+
+    const grid = wrap.querySelector(`#grid-${sec.key}`);
+    for (let i = 0; i < sec.count; i++) {
+      grid.appendChild(makeSlot(sec.key, i));
+    }
+  });
+}
+
+function makeSlot(section, idx) {
+  const div = document.createElement('div');
+  div.className = 'img-slot';
+  div.id = `slot-${section}-${idx}`;
+
+  // Aspect ratio label per slot type
+  const dimLabels = {
+    stack: 'Portrait (4:5)',
+    left:  ['Portrait (4:5)', 'Square (1:1)', 'Square (1:1)', 'Landscape (3:2)'][idx] || 'Square',
+    right: ['Square (1:1)', 'Square (1:1)', 'Landscape (3:2)', 'Square (1:1)', 'Square (1:1)'][idx] || 'Square',
+  };
+
+  div.innerHTML = `
+    <div class="img-slot-placeholder" id="ph-${section}-${idx}">
+      <span class="plus">+</span>
+      <span>Add Photo</span>
+      <span class="drag-hint">or drag here</span>
+    </div>
+    <div class="img-slot-label">
+      Photo ${idx + 1}
+      <small>${dimLabels[section]}</small>
+    </div>
+    <button class="img-clear-btn" onclick="clearImage('${section}',${idx},event)">✕ Remove</button>
+    <input type="file" id="file-${section}-${idx}" accept="image/*" onchange="handleImage('${section}',${idx},this)">
+  `;
+
+  // Click to pick
+  div.addEventListener('click', (e) => {
+    if (e.target.classList.contains('img-clear-btn')) return;
+    document.getElementById(`file-${section}-${idx}`).click();
+  });
+
+  // Drag & Drop
+  div.addEventListener('dragover',  (e) => { e.preventDefault(); div.classList.add('drag-over'); });
+  div.addEventListener('dragleave', (e) => { div.classList.remove('drag-over'); });
+  div.addEventListener('drop',      (e) => {
+    e.preventDefault();
+    div.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setSlotFile(section, idx, file);
+    }
+  });
+
+  return div;
+}
+
+// Shared helper — called by both file input and drag-drop
+function setSlotFile(section, idx, file) {
+  state.imageFiles[section][idx] = file;
+  const slot = document.getElementById(`slot-${section}-${idx}`);
+  slot.classList.add('has-img');
+
+  // Replace placeholder with preview img
+  const existing = slot.querySelector('.img-slot-preview');
+  if (existing) existing.remove();
+  const ph = slot.querySelector(`#ph-${section}-${idx}`);
+
+  const img = document.createElement('img');
+  img.className = 'img-slot-preview';
+  img.src = URL.createObjectURL(file);
+  if (ph) {
+    ph.replaceWith(img);
+  } else {
+    slot.insertBefore(img, slot.firstChild);
+  }
+}
+
+function handleImage(section, idx, input) {
+  const file = input.files[0];
+  if (file) setSlotFile(section, idx, file);
+}
+
+function clearImage(section, idx, e) {
+  e.stopPropagation();
+  state.imageFiles[section][idx] = null;
+
+  const slot  = document.getElementById(`slot-${section}-${idx}`);
+  const input = document.getElementById(`file-${section}-${idx}`);
+  slot.classList.remove('has-img');
+
+  // Remove preview and restore placeholder
+  const prev = slot.querySelector('.img-slot-preview');
+  const dimLabels = {
+    stack: 'Portrait (4:5)',
+    left:  ['Portrait (4:5)', 'Square (1:1)', 'Square (1:1)', 'Landscape (3:2)'][idx] || 'Square',
+    right: ['Square (1:1)', 'Square (1:1)', 'Landscape (3:2)', 'Square (1:1)', 'Square (1:1)'][idx] || 'Square',
+  };
+  if (prev) {
+    const ph = document.createElement('div');
+    ph.className = 'img-slot-placeholder';
+    ph.id = `ph-${section}-${idx}`;
+    ph.innerHTML = '<span class="plus">+</span><span>Add Photo</span><span class="drag-hint">or drag here</span>';
+    prev.replaceWith(ph);
+  }
+
+  // Reset file input — clone trick guarantees onChange fires again for same file
+  const newInput = input.cloneNode(true);
+  newInput.addEventListener('change', () => handleImage(section, idx, newInput));
+  input.replaceWith(newInput);
+}
+
+// ═══════════════════════════════════════════════════════
+//  AUDIO
+// ═══════════════════════════════════════════════════════
+
+function handleAudio(input) {
+  const file = input.files[0];
+  if (!file) return;
+  state.audioFile = file;
+  document.getElementById('audio-zone').classList.add('has-audio');
+  document.getElementById('audio-label').innerHTML = `<span class="audio-name">🎵 ${file.name}</span><br><small style="opacity:0.6">${(file.size/1024/1024).toFixed(2)} MB</small>`;
+  document.getElementById('audio-clear-btn').style.display = 'inline-block';
+}
+
+function clearAudio() {
+  state.audioFile = null;
+  document.getElementById('audio-zone').classList.remove('has-audio');
+  document.getElementById('audio-label').innerHTML = 'Click to select an audio file<br><small style="opacity:0.6">MP3, WAV, OGG, M4A, AAC</small>';
+  document.getElementById('audio-clear-btn').style.display = 'none';
+  document.getElementById('audio-file').value = '';
+}
+
+// ═══════════════════════════════════════════════════════
+//  THEMES
+// ═══════════════════════════════════════════════════════
+
+function buildThemeList(filter = '') {
+  const container = document.getElementById('theme-list');
+  container.innerHTML = '';
+  const fl = filter.toLowerCase();
+
+  // Custom chip first
+  if (!fl || 'custom'.includes(fl)) {
+    const g = document.createElement('div');
+    g.innerHTML = '<div class="theme-group-label">✦ Custom</div>';
+    const grid = document.createElement('div');
+    grid.className = 'theme-grid';
+    grid.appendChild(makeThemeChip('Custom'));
+    g.appendChild(grid);
+    container.appendChild(g);
+  }
+
+  Object.entries(THEME_GROUPS).forEach(([group, names]) => {
+    const matched = names.filter(n => !fl || n.toLowerCase().includes(fl));
+    if (!matched.length) return;
+    const g = document.createElement('div');
+    g.innerHTML = `<div class="theme-group-label">${group}</div>`;
+    const grid = document.createElement('div');
+    grid.className = 'theme-grid';
+    matched.forEach(n => grid.appendChild(makeThemeChip(n)));
+    g.appendChild(grid);
+    container.appendChild(g);
+  });
+}
+
+function makeThemeChip(name) {
+  const t = THEMES[name];
+  const div = document.createElement('div');
+  div.className = 'theme-chip' + (state.selectedTheme === name ? ' selected' : '');
+  div.onclick = () => selectTheme(name);
+
+  if (name === 'Custom') {
+    div.innerHTML = `
+      <div class="theme-chip-swatch" style="background: linear-gradient(135deg, ${state.customColors.primary}, ${state.customColors.primary_dark});"></div>
+      <div class="theme-chip-name">Custom Colors</div>
+      <div class="theme-check">✓</div>`;
+    div.style.background = state.customColors.paper;
+    div.style.color = state.customColors.text;
+  } else {
+    div.innerHTML = `
+      <div class="theme-chip-swatch" style="background: linear-gradient(135deg, ${t.primary}, ${t.primary_dark});"></div>
+      <div class="theme-chip-name">${name}</div>
+      <div class="theme-check">✓</div>`;
+    div.style.background = t.paper;
+    div.style.color = t.text;
+  }
+  return div;
+}
+
+function selectTheme(name) {
+  state.selectedTheme = name;
+  buildThemeList(document.getElementById('theme-search').value);
+  document.getElementById('custom-colors-section').style.display = (name === 'Custom') ? 'block' : 'none';
+}
+
+function filterThemes(val) {
+  buildThemeList(val);
+}
+
+// ═══════════════════════════════════════════════════════
+//  CUSTOM COLORS
+// ═══════════════════════════════════════════════════════
+
+function buildColorGrid() {
+  const grid = document.getElementById('color-grid');
+  grid.innerHTML = '';
+  COLOR_KEYS.forEach(({ key, label }) => {
+    const item = document.createElement('div');
+    item.className = 'color-item';
+    item.innerHTML = `
+      <div class="color-swatch" id="swatch-${key}" style="background:${state.customColors[key]};" onclick="document.getElementById('picker-${key}').click()"></div>
+      <div class="color-info">
+        <label>${label}</label>
+        <div class="color-hex" id="hex-${key}">${state.customColors[key]}</div>
+      </div>
+      <input type="color" id="picker-${key}" value="${state.customColors[key]}" oninput="updateColor('${key}', this.value)">
+    `;
+    grid.appendChild(item);
+  });
+}
+
+function updateColor(key, val) {
+  state.customColors[key] = val;
+  document.getElementById(`swatch-${key}`).style.background = val;
+  document.getElementById(`hex-${key}`).textContent = val;
+  // refresh theme chip
+  buildThemeList(document.getElementById('theme-search').value);
+}
+
+// ═══════════════════════════════════════════════════════
+//  FONTS
+// ═══════════════════════════════════════════════════════
+
+function updateFontPreview() {
+  const hf = document.getElementById('font-header').value;
+  const mf = document.getElementById('font-main').value;
+  const preview = document.getElementById('font-preview');
+
+  // Load font from Google Fonts dynamically
+  const url = `https://fonts.googleapis.com/css2?family=${hf.replace(/ /g,'+')}&family=${mf.replace(/ /g,'+')}&display=swap`;
+  let link = document.getElementById('dynamic-font-link');
+  if (!link) { link = document.createElement('link'); link.id = 'dynamic-font-link'; link.rel = 'stylesheet'; document.head.appendChild(link); }
+  link.href = url;
+
+  preview.style.fontFamily = `'${hf}', cursive`;
+  preview.textContent = 'Happy Birthday! 🎉';
+}
+
+function loadFontPreview() { updateFontPreview(); }
+
+// ═══════════════════════════════════════════════════════
+//  PASSWORD STRENGTH
+// ═══════════════════════════════════════════════════════
+
+function checkPasswordStrength(pw) {
+  const bar = document.getElementById('pw-strength-bar');
+  const lbl = document.getElementById('pw-strength-label');
+  let score = 0;
+  if (pw.length >= 6) score++;
+  if (pw.length >= 10) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  const levels = [{w:0,c:'#ccc',t:''},{w:20,c:'#e05252',t:'Weak'},{w:40,c:'#f07d3a',t:'Fair'},{w:65,c:'#e8b86d',t:'Good'},{w:85,c:'#4caf7d',t:'Strong'},{w:100,c:'#2e7d52',t:'Very Strong'}];
+  const l = levels[Math.min(score, levels.length-1)];
+  bar.style.width = l.w + '%';
+  bar.style.background = l.c;
+  lbl.textContent = l.t;
+  lbl.style.color = l.c;
+}
+
+// ═══════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════
+
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+//  MODAL
+// ═══════════════════════════════════════════════════════
+
+function showModal() {
+  document.getElementById('progress-modal').classList.add('show');
+  document.getElementById('modal-actions').style.display = 'none';
+  document.getElementById('modal-icon').textContent = '⚙️';
+  document.getElementById('modal-title').textContent = 'Generating Card…';
+  document.getElementById('modal-sub').textContent = 'Processing images and encrypting your data';
+  document.getElementById('modal-progress').style.width = '0%';
+  document.getElementById('modal-status').textContent = 'Initialising…';
+}
+
+function closeModal() {
+  document.getElementById('progress-modal').classList.remove('show');
+}
+
+function setProgress(pct, status) {
+  document.getElementById('modal-progress').style.width = pct + '%';
+  document.getElementById('modal-status').textContent = status;
+}
+
+// ═══════════════════════════════════════════════════════
+//  IMAGE PROCESSING (Canvas-based, no PIL)
+// ═══════════════════════════════════════════════════════
+
+// Image dimensions matching config.py exactly (scaled down 2x for web perf)
+const IMG_DIMS = {
+  portrait:  { w: 700, h: 875 },   // config: 1400x1750
+  landscape: { w: 950, h: 625 },   // config: 1900x1250
+  square:    { w: 700, h: 700 },   // config: 1400x1400
+};
+
+function processImageFile(file, w, h) {
+  return new Promise((resolve, reject) => {
+    if (!file) { resolve(null); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+
+        // object-fit: CONTAIN — scale so entire image fits inside canvas, no cropping
+        const scaleX = w / img.width;
+        const scaleY = h / img.height;
+        const scale  = Math.min(scaleX, scaleY);           // contain = min, no crop
+        const sw = img.width  * scale;
+        const sh = img.height * scale;
+        const sx = (w - sw) / 2;                           // centre horizontally
+        const sy = (h - sh) / 2;                           // centre vertically
+        ctx.drawImage(img, sx, sy, sw, sh);
+
+        // Prefer WebP; fall back to JPEG if WebP is unsupported (old Safari)
+        let dataUrl = canvas.toDataURL('image/webp', 0.80);
+        if (!dataUrl.startsWith('data:image/webp')) {
+          dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+        }
+        resolve(dataUrl);
+      };
+      img.onerror = () => reject(new Error('Image load failed'));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error('File read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  AUDIO PROCESSING  (chunked btoa — avoids stack overflow on large files)
+// ═══════════════════════════════════════════════════════
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  const CHUNK = 8192;                // safe chunk size for spread operator
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += CHUNK) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + CHUNK));
+  }
+  return btoa(binary);
+}
+
+function processAudioFile(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) { resolve(null); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const mime = file.type || 'audio/mpeg';
+        const b64 = arrayBufferToBase64(e.target.result);
+        resolve(`data:${mime};base64,${b64}`);
+      } catch (err) {
+        reject(err);
+      }
+    };
+    reader.onerror = () => reject(new Error('Audio read failed'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  ENCRYPTION (CryptoJS AES-CBC + PBKDF2)
+// ═══════════════════════════════════════════════════════
+
+function deriveKey(password, saltHex) {
+  const salt = CryptoJS.enc.Hex.parse(saltHex);
+  return CryptoJS.PBKDF2(password, salt, { keySize: 256/32, iterations: 1000, hasher: CryptoJS.algo.SHA256 });
+}
+
+function encryptData(key, dataStr) {
+  const iv = CryptoJS.lib.WordArray.random(16);
+  const ct = CryptoJS.AES.encrypt(dataStr, key, { iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+  return { iv: iv.toString(CryptoJS.enc.Hex), ct: ct.toString() };
+}
+
+function randHex(bytes) {
+  return CryptoJS.lib.WordArray.random(bytes).toString(CryptoJS.enc.Hex);
+}
+
+// ═══════════════════════════════════════════════════════
+//  HTML TEMPLATE (embedded)
+// ═══════════════════════════════════════════════════════
+
+function getTemplate() {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Special Surprise</title>
+<link href="https://fonts.googleapis.com/css2?family={FONT_HEADER_URL}&family={FONT_MAIN_URL}&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"><\/script>
+<style>
+:root {
+  --primary:{PRIMARY}; --primary-dark:{PRIMARY_DARK}; --bg-color:{BG_COLOR};
+  --paper-color:{PAPER_COLOR}; --text-color:{TEXT_COLOR};
+  --font-header:'{FONT_HEADER}',cursive; --font-main:'{FONT_MAIN}',sans-serif;
+  --size-title:{SIZE_TITLE}px; --size-msg:{SIZE_MSG}px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{height:100vh;width:100vw;background-color:var(--bg-color);background-image:radial-gradient(circle at 10% 20%,{GRAD_START} 0%,{GRAD_END} 90%);display:flex;justify-content:center;align-items:center;font-family:var(--font-main);overflow:hidden;color:var(--text-color);}
+#login-overlay{position:fixed;inset:0;background:var(--bg-color);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity 0.5s ease;}
+.login-box{background:var(--paper-color);padding:30px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.2);text-align:center;width:90%;max-width:350px;border:1px solid rgba(255,255,255,0.5);}
+.login-input{width:100%;padding:12px;margin:10px 0;border:2px solid #ccc;border-radius:8px;font-size:1rem;outline:none;text-align:center;background:rgba(255,255,255,0.9);}
+.login-input:focus{border-color:var(--primary);}
+.login-btn{background:var(--primary);color:white;border:none;padding:12px 30px;border-radius:30px;font-size:1rem;cursor:pointer;font-weight:600;width:100%;transition:transform 0.1s;}
+.login-btn:active{transform:scale(0.98);}
+.progress-bar{width:100%;height:6px;background:#eee;border-radius:3px;margin-top:15px;overflow:hidden;display:none;}
+.progress-fill{height:100%;width:0%;background:var(--primary);transition:width 0.2s;}
+.status-text{font-size:0.8rem;margin-top:8px;color:var(--text-color);opacity:0.7;min-height:20px;}
+#view-wrapper{position:absolute;top:50%;left:50%;width:0;height:0;display:flex;justify-content:center;align-items:center;opacity:0;transition:opacity 1s;pointer-events:none;}
+.scene{perspective:2500px;width:1000px;height:600px;transform-origin:center;display:flex;justify-content:center;align-items:center;}
+.card-anchor{position:relative;width:390px;height:600px;background:var(--paper-color);border-radius:12px;display:flex;flex-direction:column;align-items:center;box-shadow:0 20px 50px rgba(0,0,0,0.25);transform-style:preserve-3d;transition:transform 1s cubic-bezier(0.25,1,0.5,1);padding-top:20px;}
+.wing{position:absolute;top:0;width:100%;height:100%;transform-style:preserve-3d;transition:transform 1.2s cubic-bezier(0.25,1,0.5,1);border-radius:12px;cursor:pointer;}
+.wing-left{right:100%;transform-origin:right center;transform:rotateY(180deg);z-index:20;}
+.wing-right{left:100%;transform-origin:left center;transform:rotateY(-180deg);z-index:1;}
+.face{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:12px;overflow:hidden;}
+.wing-left .face-front{background:var(--paper-color);z-index:2;}
+.wing-left .face-back{background:linear-gradient(135deg,var(--bg-color),var(--paper-color));transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;border:12px solid var(--paper-color);z-index:5;}
+.wing-right .face-front{background:var(--paper-color);}
+.wing-right .face-back{background:var(--paper-color);transform:rotateY(180deg);opacity:0.8;}
+.card-anchor.open .wing-left,.card-anchor.open .wing-right{transform:rotateY(0deg);}
+h1,h2{font-family:var(--font-header);color:var(--primary-dark);text-align:center;}
+p{font-size:0.9rem;text-align:center;line-height:1.6;padding:0 15px;color:var(--text-color);}
+.ribbon{position:absolute;top:0;bottom:0;left:40px;width:40px;background:rgba(255,255,255,0.2);border-left:2px dashed var(--primary);border-right:2px dashed var(--primary);pointer-events:none;}
+.stack-container{position:relative;width:240px;height:280px;margin:20px auto;cursor:pointer;}
+.polaroid{position:absolute;width:100%;height:100%;background:#fff;padding:10px 10px 45px 10px;box-shadow:0 4px 15px rgba(0,0,0,0.15);transition:0.5s;border:1px solid #eee;}
+.polaroid img,.c-item img{width:100%;height:100%;object-fit:cover;background:#eee;}
+.p1{transform:rotate(-4deg);z-index:5;}.p2{transform:rotate(3deg);z-index:4;}
+.p3{transform:rotate(-2deg);z-index:3;}.p4{transform:rotate(-5deg);z-index:2;}
+.p5{transform:rotate(4deg);z-index:1;}
+.polaroid.shuffle-out{transform:translate(150px,20px) rotate(40deg);opacity:0;}
+.collage-container{width:85%;height:85%;padding:20px;margin:auto;}
+.grid-left{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1.2fr 0.8fr 1.2fr;gap:8px;height:100%;}
+.grid-right{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:8px;height:100%;}
+.c-item{position:relative;background:#fff;padding:4px;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:transform 0.35s cubic-bezier(0.25,1,0.5,1),box-shadow 0.35s ease;transform-origin:center center;will-change:transform;}
+@media (hover:hover){.c-item:hover{transform:scale(1.08) translateY(-6px) rotateZ(0deg) perspective(600px) rotateX(2deg);box-shadow:0 12px 30px rgba(0,0,0,0.25);z-index:20;}}
+.tape{position:absolute;top:-6px;left:50%;transform:translateX(-50%);width:30px;height:10px;background:rgba(255,255,255,0.4);box-shadow:0 1px 2px rgba(0,0,0,0.1);z-index:5;}
+.l1{grid-column:1;grid-row:1/span 2;transform:rotate(-2deg);}
+.l2{grid-column:2;grid-row:1;transform:rotate(3deg);}
+.l3{grid-column:2;grid-row:2;transform:rotate(-1deg);}
+.l4{grid-column:1/span 2;grid-row:3;transform:rotate(1deg);}
+.r1{grid-column:1;grid-row:1;transform:rotate(-3deg);}
+.r2{grid-column:2;grid-row:1;transform:rotate(2deg);}
+.r3{grid-column:1/span 2;grid-row:2;transform:rotate(0deg);z-index:5;}
+.r4{grid-column:1;grid-row:3;transform:rotate(2deg);}
+.r5{grid-column:2;grid-row:3;transform:rotate(-4deg);}
+.audio-controls{position:fixed;bottom:20px;right:20px;width:40px;height:40px;background:rgba(255,255,255,0.8);border-radius:50%;display:flex;justify-content:center;align-items:center;cursor:pointer;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+.tap-hint{margin-top:15px;font-size:0.9rem;color:var(--primary-dark);background:rgba(255,255,255,0.8);padding:5px 12px;border-radius:20px;animation:pulse 2s infinite;}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+</style>
+</head>
+<body>
+<div id="login-overlay">
+  <div class="login-box">
+    <h2 style="font-size:2rem;margin-bottom:15px;color:var(--primary);">Unlock Surprise</h2>
+    <input type="password" id="pass-input" class="login-input" placeholder="Enter Password" onkeydown="if(event.key==='Enter')startUnlock()">
+    <button onclick="startUnlock()" id="btn-unlock" class="login-btn">Open</button>
+    <div class="status-text" id="status-msg"></div>
+    <div class="progress-bar" id="p-bar"><div class="progress-fill" id="p-fill"></div></div>
+    <div style="margin-top:10px;font-size:0.8rem;text-decoration:underline;opacity:0.6;cursor:pointer;" onclick="alert('{HINT_TEXT}')">Need a hint?</div>
+  </div>
+</div>
+<div id="view-wrapper">
+  <div class="scene" id="scene">
+    <div class="card-anchor" id="card">
+      <div class="center-content" style="display:flex;flex-direction:column;align-items:center;padding:20px;width:100%;">
+        <h1 style="font-size:2.2rem;margin-top:5px;" id="main-title"></h1>
+        <p style="margin:5px 0 15px 0;" id="main-message"></p>
+        <div class="stack-container" onclick="event.stopPropagation();shufflePhotos();" id="stack-container">
+          <div class="polaroid p5" id="p5"><img data-idx="s4"></div>
+          <div class="polaroid p4" id="p4"><img data-idx="s3"></div>
+          <div class="polaroid p3" id="p3"><img data-idx="s2"></div>
+          <div class="polaroid p2" id="p2"><img data-idx="s1"></div>
+          <div class="polaroid p1" id="p1"><img data-idx="s0"></div>
+        </div>
+        <div style="font-size:0.75rem;opacity:0.6;">(Tap photos to shuffle)</div>
+      </div>
+      <div class="wing wing-left" onclick="toggleCard()">
+        <div class="face face-back">
+          <div class="ribbon"></div>
+          <div style="font-size:5rem;">🎁</div>
+          <h1 style="font-size:3rem;margin-top:10px;" id="cover-title">For You</h1>
+          <div class="tap-hint">Tap to Open</div>
+        </div>
+        <div class="face face-front">
+          <div class="collage-container">
+            <h2 id="left-title"></h2>
+            <div class="grid-left">
+              <div class="c-item l1"><div class="tape"></div><img data-idx="l0"></div>
+              <div class="c-item l2"><div class="tape"></div><img data-idx="l1"></div>
+              <div class="c-item l3"><div class="tape"></div><img data-idx="l2"></div>
+              <div class="c-item l4"><div class="tape"></div><img data-idx="l3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wing wing-right">
+        <div class="face face-back"></div>
+        <div class="face face-front">
+          <div class="collage-container">
+            <h2 id="right-title"></h2>
+            <div class="grid-right">
+              <div class="c-item r1"><div class="tape"></div><img data-idx="r0"></div>
+              <div class="c-item r2"><div class="tape"></div><img data-idx="r1"></div>
+              <div class="c-item r3"><div class="tape"></div><img data-idx="r2"></div>
+              <div class="c-item r4"><div class="tape"></div><img data-idx="r3"></div>
+              <div class="c-item r5"><div class="tape"></div><img data-idx="r4"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<audio id="bg-music" loop></audio>
+<div class="audio-controls" onclick="toggleAudio()" id="audio-btn" style="display:none;">🔊</div>
+<script>
+const SALT="{SALT_PH}";
+const IV_META="{IV_META_PH}";
+const CIPHER_META="{CIPHER_META_PH}";
+const ASSETS={ASSETS_JSON};
+let derivedKey=null;
+async function startUnlock(){
+  const pass=document.getElementById('pass-input').value;
+  const status=document.getElementById('status-msg');
+  const pBar=document.getElementById('p-bar');
+  const pFill=document.getElementById('p-fill');
+  if(!pass)return;
+  document.getElementById('btn-unlock').disabled=true;
+  status.innerText="Verifying & Decrypting...";
+  pBar.style.display='block';
+  await new Promise(r=>setTimeout(r,50));
+  try{
+    const salt=CryptoJS.enc.Hex.parse(SALT);
+    derivedKey=CryptoJS.PBKDF2(pass,salt,{keySize:256/32,iterations:1000,hasher:CryptoJS.algo.SHA256});
+    const ivMeta=CryptoJS.enc.Hex.parse(IV_META);
+    const decryptedMeta=CryptoJS.AES.decrypt(CIPHER_META,derivedKey,{iv:ivMeta,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.Pkcs7});
+    const metaStr=decryptedMeta.toString(CryptoJS.enc.Utf8);
+    if(!metaStr)throw new Error("Wrong Password");
+    const meta=JSON.parse(metaStr);
+    applyMeta(meta);
+    const assetKeys=Object.keys(ASSETS);
+    const total=assetKeys.length;
+    let loaded=0;
+    for(const key of assetKeys){
+      await new Promise(r=>setTimeout(r,10));
+      try{
+        const[ivHex,cipherText]=ASSETS[key];
+        const iv=CryptoJS.enc.Hex.parse(ivHex);
+        const dec=CryptoJS.AES.decrypt(cipherText,derivedKey,{iv:iv,mode:CryptoJS.mode.CBC,padding:CryptoJS.pad.Pkcs7});
+        const b64=dec.toString(CryptoJS.enc.Utf8);
+        if(key==='audio'){
+          const audio=document.getElementById('bg-music');
+          audio.src=b64;
+          document.getElementById('audio-btn').style.display='flex';
+        } else {
+          document.querySelectorAll(\`img[data-idx="\${key}"]\`).forEach(img=>img.src=b64);
+        }
+      }catch(e){console.warn("Failed asset",key);}
+      loaded++;
+      pFill.style.width=((loaded/total)*100)+"%";
+    }
+    status.innerText="Ready!";
+    setTimeout(()=>{
+      document.getElementById('login-overlay').style.opacity=0;
+      const wrapper=document.getElementById('view-wrapper');
+      wrapper.style.opacity=1;
+      wrapper.style.pointerEvents="all";
+      setTimeout(()=>{
+        document.getElementById('login-overlay').style.display='none';
+        fireConfetti();
+        adjustView();
+        const aud=document.getElementById('bg-music');
+        if(aud.src&&aud.src!==window.location.href)aud.play().catch(e=>console.log("Autoplay blocked"));
+      },500);
+    },500);
+  }catch(e){
+    console.error(e);
+    status.innerText="Incorrect Password";
+    pBar.style.display='none';
+    document.getElementById('btn-unlock').disabled=false;
+  }
+}
+function applyMeta(meta){
+  document.getElementById('cover-title').innerText=meta.cover;
+  document.getElementById('main-title').innerText=meta.main_t;
+  document.getElementById('main-message').innerText=meta.main_m;
+  document.getElementById('left-title').innerText=meta.left;
+  document.getElementById('right-title').innerText=meta.right;
+}
+let isOpen=false;
+function toggleCard(){
+  document.getElementById('card').classList.toggle('open');
+  isOpen=!isOpen;
+  if(isOpen){setTimeout(fireConfetti,800);const h=document.querySelector('.tap-hint');if(h)h.style.display='none';}
+}
+function adjustView(){
+  const wrapper=document.getElementById('view-wrapper');
+  const scene=document.getElementById('scene');
+  const cW=1100,cH=650,winW=window.innerWidth,winH=window.innerHeight;
+  let scale;
+  const isPortrait=winH>winW,isMobile=winW<768;
+  if(isMobile&&isPortrait){scale=Math.min(winH/cW,winW/cH)*0.95;wrapper.style.transform='translate(-50%,-50%) rotate(90deg)';}
+  else{scale=Math.min(winW/cW,winH/cH)*0.95;wrapper.style.transform='translate(-50%,-50%) rotate(0deg)';}
+  scene.style.transform='scale('+Math.min(scale,1.2)+')';
+}
+window.addEventListener('resize',adjustView);
+function shufflePhotos(){
+  if(!isOpen)return;
+  const ids=['p1','p2','p3','p4','p5'];
+  const elements=ids.map(id=>document.getElementById(id));
+  let topEl=elements.find(el=>el.classList.contains('p1'));
+  if(!topEl)return;
+  topEl.classList.add('shuffle-out');
+  setTimeout(()=>{
+    topEl.classList.remove('shuffle-out');
+    elements.forEach(el=>{
+      const cls=Array.from(el.classList).find(c=>c.startsWith('p')&&c.length===2);
+      let num=parseInt(cls.substring(1));
+      el.classList.remove(cls);
+      el.classList.add('p'+((num===1)?5:num-1));
+    });
+  },500);
+}
+function toggleAudio(){const a=document.getElementById('bg-music');a.paused?a.play():a.pause();}
+function fireConfetti(){
+  var count=200,defaults={origin:{y:0.7}};
+  function fire(r,opts){confetti(Object.assign({},defaults,opts,{particleCount:Math.floor(count*r)}));}
+  fire(0.25,{spread:26,startVelocity:55});fire(0.2,{spread:60});
+  fire(0.35,{spread:100,decay:0.91,scalar:0.8});fire(0.1,{spread:120,startVelocity:25,decay:0.92,scalar:1.2});
+  fire(0.1,{spread:120,startVelocity:45});
+}
+<\/script>
+</body>
+</html>`;
+}
+
+// ═══════════════════════════════════════════════════════
+//  GENERATION PIPELINE
+// ═══════════════════════════════════════════════════════
+
+async function startGeneration() {
+  const password = document.getElementById('password').value.trim();
+  if (!password) {
+    showToast('Please set a password first.', 'error');
+    // switchTab by id, not fragile index
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-finalize').classList.add('active');
+    document.querySelector('[onclick*="finalize"]').classList.add('active');
+    return;
+  }
+
+  showModal();
+  document.getElementById('gen-btn').disabled = true;
+
+  try {
+    // 1. Gather text  (main-message is a <textarea>, use .value)
+    const meta = {
+      cover:  document.getElementById('cover-title').value.trim()   || 'For You',
+      main_t: document.getElementById('main-title').value.trim()    || 'Happy Birthday!',
+      main_m: document.getElementById('main-message').value.trim(),
+      left:   document.getElementById('left-title').value.trim()    || 'Memories',
+      right:  document.getElementById('right-title').value.trim()   || 'Adventures',
+    };
+
+    setProgress(5, 'Deriving encryption key…');
+    await sleep(30);
+
+    // 2. Derive key
+    const saltHex = randHex(16);
+    const key = deriveKey(password, saltHex);
+
+    setProgress(10, 'Encrypting card text…');
+    await sleep(20);
+
+    // 3. Encrypt meta
+    const { iv: ivMeta, ct: cipherMeta } = encryptData(key, JSON.stringify(meta));
+
+    // 4. Process images — build list of all (section, idx, dims) jobs
+    const autofill = document.getElementById('autofill').checked;
+    const allFiles = [
+      ...state.imageFiles.stack,
+      ...state.imageFiles.left,
+      ...state.imageFiles.right,
+    ].filter(Boolean);
+
+    const assetsEncrypted = {};
+
+    const leftDims  = [IMG_DIMS.portrait, IMG_DIMS.square, IMG_DIMS.square, IMG_DIMS.landscape];
+    const rightDims = [IMG_DIMS.square, IMG_DIMS.square, IMG_DIMS.landscape, IMG_DIMS.square, IMG_DIMS.square];
+
+    // Count only slots that will actually produce an image (file present OR autofill can fill)
+    const willProcess = (sec, count) =>
+      Array.from({length: count}, (_, i) =>
+        !!(state.imageFiles[sec][i] || (autofill && allFiles.length > 0))
+      ).filter(Boolean).length;
+
+    const totalImgSlots = willProcess('stack', 5) + willProcess('left', 4) + willProcess('right', 5);
+    const totalAssets   = totalImgSlots + (state.audioFile ? 1 : 0);
+    let processed = 0;
+
+    async function processSlot(section, idx, dims) {
+      let file = state.imageFiles[section][idx];
+      if (!file && autofill && allFiles.length > 0) {
+        file = allFiles[idx % allFiles.length];
+      }
+      if (!file) return null;
+      const dataUrl = await processImageFile(file, dims.w, dims.h);
+      processed++;
+      const total = totalAssets || 1;
+      setProgress(10 + (processed / total) * 72, `Processing image ${processed} of ${totalImgSlots}…`);
+      return dataUrl;
+    }
+
+    // Stack  — reversed order: first photo selected appears on TOP (s0)
+    for (let i = 0; i < 5; i++) {
+      const data = await processSlot('stack', i, IMG_DIMS.portrait);
+      if (data) {
+        const { iv, ct } = encryptData(key, data);
+        assetsEncrypted[`s${4 - i}`] = [iv, ct];
+      }
+    }
+
+    // Left panel
+    for (let i = 0; i < 4; i++) {
+      const data = await processSlot('left', i, leftDims[i]);
+      if (data) {
+        const { iv, ct } = encryptData(key, data);
+        assetsEncrypted[`l${i}`] = [iv, ct];
+      }
+    }
+
+    // Right panel
+    for (let i = 0; i < 5; i++) {
+      const data = await processSlot('right', i, rightDims[i]);
+      if (data) {
+        const { iv, ct } = encryptData(key, data);
+        assetsEncrypted[`r${i}`] = [iv, ct];
+      }
+    }
+
+    // Audio
+    if (state.audioFile) {
+      setProgress(84, 'Processing audio…');
+      const audiob64 = await processAudioFile(state.audioFile);
+      if (audiob64) {
+        const { iv, ct } = encryptData(key, audiob64);
+        assetsEncrypted['audio'] = [iv, ct];
+      }
+    }
+
+    setProgress(92, 'Building HTML…');
+    await sleep(50);
+
+    // 5. Theme & typography
+    const theme      = state.selectedTheme === 'Custom' ? state.customColors : THEMES[state.selectedTheme];
+    const fontHeader = document.getElementById('font-header').value;
+    const fontMain   = document.getElementById('font-main').value;
+    const sizeTitle  = document.getElementById('size-title').value;
+    const sizeMsg    = document.getElementById('size-msg').value;
+    const rawHint    = document.getElementById('hint-text').value || '';
+    // Escape for JS string inside alert('...')
+    const hint = rawHint.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, ' ');
+
+    // 6. Inject into template
+    let html = getTemplate();
+    html = html.replace(/{PRIMARY}/g,        theme.primary);
+    html = html.replace(/{PRIMARY_DARK}/g,   theme.primary_dark);
+    html = html.replace(/{BG_COLOR}/g,       theme.bg);
+    html = html.replace(/{PAPER_COLOR}/g,    theme.paper);
+    html = html.replace(/{TEXT_COLOR}/g,     theme.text);
+    html = html.replace(/{GRAD_START}/g,     theme.gradient_start);
+    html = html.replace(/{GRAD_END}/g,       theme.gradient_end);
+    html = html.replace(/{FONT_HEADER}/g,    fontHeader);
+    html = html.replace(/{FONT_MAIN}/g,      fontMain);
+    html = html.replace(/{FONT_HEADER_URL}/g, fontHeader.replace(/ /g, '+'));
+    html = html.replace(/{FONT_MAIN_URL}/g,  fontMain.replace(/ /g, '+'));
+    html = html.replace(/{SIZE_TITLE}/g,     sizeTitle);
+    html = html.replace(/{SIZE_MSG}/g,       sizeMsg);
+    html = html.replace(/{SALT_PH}/g,        saltHex);
+    html = html.replace(/{IV_META_PH}/g,     ivMeta);
+    html = html.replace(/{CIPHER_META_PH}/g, cipherMeta);
+    html = html.replace(/{ASSETS_JSON}/g,    JSON.stringify(assetsEncrypted));
+    html = html.replace(/{HINT_TEXT}/g,      hint);
+
+    setProgress(100, 'Done!');
+    await sleep(300);
+
+    // 7. Offer download
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const dlLink = document.getElementById('download-link');
+    dlLink.href     = url;
+    dlLink.download = 'surprise_card.html';
+
+    document.getElementById('modal-icon').textContent  = '🎉';
+    document.getElementById('modal-title').textContent = 'Card Ready!';
+    document.getElementById('modal-sub').textContent   = 'Your encrypted surprise card is ready. Download it and share with your recipient!';
+    document.getElementById('modal-actions').style.display = 'block';
+    document.getElementById('modal-status').textContent = '';
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('modal-icon').textContent  = '❌';
+    document.getElementById('modal-title').textContent = 'Generation Failed';
+    document.getElementById('modal-sub').textContent   = err.message || 'An unexpected error occurred.';
+    document.getElementById('modal-status').textContent = '';
+    document.getElementById('modal-actions').innerHTML = '<button class="close-modal-btn" onclick="closeModal()">Close</button>';
+    document.getElementById('modal-actions').style.display = 'block';
+  } finally {
+    document.getElementById('gen-btn').disabled = false;
+  }
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ═══════════════════════════════════════════════════════
+//  START
+// ═══════════════════════════════════════════════════════
+
+function init() {
+  buildImageSections();
+  buildThemeList();
+  buildColorGrid();
+  loadFontPreview();
+  setupGlobalDrag();
+}
+
+// Prevent browser from navigating when user accidentally drops a file outside a slot
+function setupGlobalDrag() {
+  let dragCounter = 0;
+  const overlay = document.getElementById('drag-overlay');
+
+  document.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    dragCounter++;
+    // Only show overlay on the Images tab
+    if (document.getElementById('tab-images').classList.contains('active')) {
+      overlay.classList.add('active');
+    }
+  });
+
+  document.addEventListener('dragleave', (e) => {
+    dragCounter--;
+    if (dragCounter <= 0) { dragCounter = 0; overlay.classList.remove('active'); }
+  });
+
+  document.addEventListener('dragover', (e) => {
+    e.preventDefault(); // needed to allow drop
+  });
+
+  // If dropped on body (outside a slot), eat the event so browser doesn't navigate
+  document.addEventListener('drop', (e) => {
+    dragCounter = 0;
+    overlay.classList.remove('active');
+    // If not dropped on a slot, check if it's an image and find first empty slot
+    if (!e.target.closest('.img-slot')) {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        // Auto-assign to first empty slot across all sections
+        for (const sec of ['stack', 'left', 'right']) {
+          const count = sec === 'left' ? 4 : 5;
+          for (let i = 0; i < count; i++) {
+            if (!state.imageFiles[sec][i]) {
+              setSlotFile(sec, i, file);
+              showToast(`Photo added to ${sec} slot ${i + 1}`, 'success');
+              return;
+            }
+          }
+        }
+        showToast('All slots are filled. Remove a photo first.', '');
+      }
+    }
+  });
+
+  // Audio zone also accepts drag-drop
+  const audioZone = document.getElementById('audio-zone');
+  audioZone.addEventListener('dragover',  (e) => { e.preventDefault(); audioZone.style.borderColor = 'var(--success)'; });
+  audioZone.addEventListener('dragleave', ()  => { audioZone.style.borderColor = ''; });
+  audioZone.addEventListener('drop',      (e) => {
+    e.preventDefault();
+    audioZone.style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('audio/')) {
+      state.audioFile = file;
+      document.getElementById('audio-zone').classList.add('has-audio');
+      document.getElementById('audio-label').innerHTML =
+        `<span class="audio-name">🎵 ${file.name}</span><br><small style="opacity:0.6">${(file.size/1024/1024).toFixed(2)} MB</small>`;
+      document.getElementById('audio-clear-btn').style.display = 'inline-block';
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
