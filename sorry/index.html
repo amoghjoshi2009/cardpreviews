@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>50 Cards — a full apology</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Pinyon+Script&family=Space+Mono:wght@400;700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --rose:#f2a7b8;--blush:#fce4ec;--peach:#ffd8c2;
+  --lav:#e8d5f5;--mint:#d5f0e8;--cream:#fff8f2;
+  --dusty:#c9a0b4;--text:#3d2535;--soft:#8a6070;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Lora',serif;color:var(--text);
+  background:var(--cream);
+  min-height:100vh;
+}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:40px 24px;
+  background:linear-gradient(160deg,#fce4ec 0%,#fff8f2 45%,#e8d5f5 100%);
+  position:relative;overflow:hidden;
+}
+.hero-petals span{
+  position:absolute;border-radius:50% 0 50% 0;opacity:0.35;pointer-events:none;
+  animation:floatP ease-in-out infinite;
+}
+@keyframes floatP{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-30px) rotate(20deg)}}
+.hero-script{
+  font-family:'Pinyon Script',cursive;
+  font-size:clamp(64px,18vw,120px);
+  color:var(--dusty);line-height:1;
+  animation:fadeUp 1.2s ease forwards;
+  filter:drop-shadow(0 4px 24px rgba(200,140,160,.18));
+}
+.hero-sub{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:clamp(14px,4vw,20px);
+  color:var(--soft);margin-top:10px;max-width:340px;
+  animation:fadeUp 1.4s .15s ease both;
+}
+.hero-count{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--dusty);margin-top:24px;opacity:.7;
+  animation:fadeUp 1.4s .3s ease both;
+}
+.hero-arrow{
+  margin-top:32px;font-size:22px;color:var(--dusty);
+  animation:bounce 2s ease infinite;
+}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── MAIN CONTENT ── */
+main{max-width:900px;margin:0 auto;padding:40px 20px 80px;}
+
+/* ── TIER SECTIONS ── */
+.tier-section{margin-bottom:48px;}
+.tier-heading{
+  font-family:'Space Mono',monospace;
+  font-size:9px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--soft);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.tier-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── GRID ── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:12px;
+}
+
+/* ── CARD TILE ── */
+.card-tile{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px 14px 16px;border-radius:18px;
+  background:var(--bg);
+  border:1.5px solid transparent;
+  text-decoration:none;color:var(--text);
+  transition:transform .22s cubic-bezier(.34,1.56,.64,1),
+             box-shadow .22s ease,
+             border-color .22s ease;
+  cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.card-tile::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.0));
+  pointer-events:none;
+}
+.card-tile:hover{
+  transform:translateY(-5px) scale(1.03);
+  box-shadow:0 10px 30px rgba(0,0,0,.10),0 2px 8px rgba(200,140,160,.18);
+  border-color:var(--accent);
+}
+.card-num{
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:2px;color:var(--accent);
+  margin-bottom:8px;opacity:.7;
+}
+.card-emoji{font-size:26px;margin-bottom:8px;line-height:1;}
+.card-title{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:clamp(12px,3.2vw,14px);
+  text-align:center;color:var(--text);
+  line-height:1.4;
+}
+
+/* ── SCROLL REVEAL ── */
+.card-tile{opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease,box-shadow .22s ease,border-color .22s ease;}
+.card-tile.visible{opacity:1;transform:translateY(0);}
+.card-tile:hover{transform:translateY(-5px) scale(1.03)!important;}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;padding:28px;
+  font-family:'Space Mono',monospace;font-size:9px;
+  letter-spacing:3px;color:var(--dusty);
+  text-transform:uppercase;opacity:.55;
+}
+
+/* ── MOBILE ── */
+@media(max-width:480px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-petals">
+    <span style="background:#f2a7b8;width:18px;height:18px;top:12%;left:8%;animation-duration:7s;"></span>
+    <span style="background:#e8d5f5;width:14px;height:14px;top:20%;right:12%;animation-duration:9s;animation-delay:1.2s;"></span>
+    <span style="background:#ffd8c2;width:20px;height:20px;bottom:28%;left:15%;animation-duration:8s;animation-delay:2.1s;"></span>
+    <span style="background:#d5f0e8;width:12px;height:12px;top:42%;left:4%;animation-duration:11s;animation-delay:3s;"></span>
+    <span style="background:#f2a7b8;width:16px;height:16px;bottom:18%;right:14%;animation-duration:10s;animation-delay:.6s;"></span>
+    <span style="background:#e8d5f5;width:10px;height:10px;top:60%;right:6%;animation-duration:13s;animation-delay:1.8s;"></span>
+  </div>
+  <div class="hero-script">sorry.</div>
+  <p class="hero-sub">fifty ways to say the one thing that needed saying.</p>
+  <p class="hero-count">50 cards · 5 tiers · 1 apology</p>
+  <div class="hero-arrow">↓</div>
+</section>
+
+<!-- CARDS -->
+<main>
+<div class="tier-section" data-tier="tier 1 — a gentle note">
+  <div class="tier-heading"><span class="tier-dot" style="background:#c9a0b4"></span>tier 1 — a gentle note</div>
+  <div class="grid">
+    <a href="card_01.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">01</div>
+      <div class="card-emoji">🌸</div>
+      <div class="card-title">a little note, for you</div>
+    </a>
+    <a href="card_02.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">02</div>
+      <div class="card-emoji">📏</div>
+      <div class="card-title">the tall & the small</div>
+    </a>
+    <a href="card_03.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">03</div>
+      <div class="card-emoji">✨</div>
+      <div class="card-title">dissolving into sorry</div>
+    </a>
+    <a href="card_04.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">04</div>
+      <div class="card-emoji">🌹</div>
+      <div class="card-title">blooming, just for you</div>
+    </a>
+    <a href="card_05.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">05</div>
+      <div class="card-emoji">🌊</div>
+      <div class="card-title">the apology wave</div>
+    </a>
+    <a href="card_06.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">06</div>
+      <div class="card-emoji">🌸</div>
+      <div class="card-title">like sakura</div>
+    </a>
+    <a href="card_07.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">07</div>
+      <div class="card-emoji">⭐</div>
+      <div class="card-title">you're the constant</div>
+    </a>
+    <a href="card_08.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">08</div>
+      <div class="card-emoji">✍️</div>
+      <div class="card-title">things I want to say</div>
+    </a>
+    <a href="card_09.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">09</div>
+      <div class="card-emoji">📜</div>
+      <div class="card-title">a poem</div>
+    </a>
+    <a href="card_10.html" class="card-tile" style="--accent:#c9a0b4;--bg:#fce4ec;">
+      <div class="card-num">10</div>
+      <div class="card-emoji">💌</div>
+      <div class="card-title">a letter I kept rewriting</div>
+    </a>
+  </div>
+</div>
+<div class="tier-section" data-tier="tier 2 — i mean it">
+  <div class="tier-heading"><span class="tier-dot" style="background:#9070b0"></span>tier 2 — i mean it</div>
+  <div class="grid">
+    <a href="card_11.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">11</div>
+      <div class="card-emoji">🪐</div>
+      <div class="card-title">in the same orbit</div>
+    </a>
+    <a href="card_12.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">12</div>
+      <div class="card-emoji">📊</div>
+      <div class="card-title">distance over time</div>
+    </a>
+    <a href="card_13.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">13</div>
+      <div class="card-emoji">🌌</div>
+      <div class="card-title">our constellation</div>
+    </a>
+    <a href="card_14.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">14</div>
+      <div class="card-emoji">🎙️</div>
+      <div class="card-title">voice memo</div>
+    </a>
+    <a href="card_15.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">15</div>
+      <div class="card-emoji">🪞</div>
+      <div class="card-title">two worlds</div>
+    </a>
+    <a href="card_16.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">16</div>
+      <div class="card-emoji">🔮</div>
+      <div class="card-title">you are the pattern</div>
+    </a>
+    <a href="card_17.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">17</div>
+      <div class="card-emoji">📐</div>
+      <div class="card-title">our measurements</div>
+    </a>
+    <a href="card_18.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">18</div>
+      <div class="card-emoji">🪲</div>
+      <div class="card-title">the fireflies know</div>
+    </a>
+    <a href="card_19.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">19</div>
+      <div class="card-emoji">🌀</div>
+      <div class="card-title">sand mandala</div>
+    </a>
+    <a href="card_20.html" class="card-tile" style="--accent:#9070b0;--bg:#e8d5f5;">
+      <div class="card-num">20</div>
+      <div class="card-emoji">💗</div>
+      <div class="card-title">heart equation</div>
+    </a>
+  </div>
+</div>
+<div class="tier-section" data-tier="tier 3 — this matters deeply">
+  <div class="tier-heading"><span class="tier-dot" style="background:#c07060"></span>tier 3 — this matters deeply</div>
+  <div class="grid">
+    <a href="card_21.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">21</div>
+      <div class="card-emoji">🏺</div>
+      <div class="card-title">kintsugi</div>
+    </a>
+    <a href="card_22.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">22</div>
+      <div class="card-emoji">🌤️</div>
+      <div class="card-title">internal weather report</div>
+    </a>
+    <a href="card_23.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">23</div>
+      <div class="card-emoji">⏳</div>
+      <div class="card-title">loading: sorry</div>
+    </a>
+    <a href="card_24.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">24</div>
+      <div class="card-emoji">📸</div>
+      <div class="card-title">moments that mattered</div>
+    </a>
+    <a href="card_25.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">25</div>
+      <div class="card-emoji">💬</div>
+      <div class="card-title">things I should have said</div>
+    </a>
+    <a href="card_26.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">26</div>
+      <div class="card-emoji">🎹</div>
+      <div class="card-title">play me an apology</div>
+    </a>
+    <a href="card_27.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">27</div>
+      <div class="card-emoji">⌛</div>
+      <div class="card-title">time I wasted being stubborn</div>
+    </a>
+    <a href="card_28.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">28</div>
+      <div class="card-emoji">〰️</div>
+      <div class="card-title">two paths</div>
+    </a>
+    <a href="card_29.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">29</div>
+      <div class="card-emoji">🌅</div>
+      <div class="card-title">every evening</div>
+    </a>
+    <a href="card_30.html" class="card-tile" style="--accent:#c07060;--bg:#ffd8c2;">
+      <div class="card-num">30</div>
+      <div class="card-emoji">📡</div>
+      <div class="card-title">in code</div>
+    </a>
+  </div>
+</div>
+<div class="tier-section" data-tier="tier 4 — raw honesty">
+  <div class="tier-heading"><span class="tier-dot" style="background:#4070a0"></span>tier 4 — raw honesty</div>
+  <div class="grid">
+    <a href="card_31.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">31</div>
+      <div class="card-emoji">☁️</div>
+      <div class="card-title">what you mean to me</div>
+    </a>
+    <a href="card_32.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">32</div>
+      <div class="card-emoji">🌧️</div>
+      <div class="card-title">it rained that night</div>
+    </a>
+    <a href="card_33.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">33</div>
+      <div class="card-emoji">🌍</div>
+      <div class="card-title">sorry, every language</div>
+    </a>
+    <a href="card_34.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">34</div>
+      <div class="card-emoji">🕊️</div>
+      <div class="card-title">1000 cranes</div>
+    </a>
+    <a href="card_35.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">35</div>
+      <div class="card-emoji">🌊</div>
+      <div class="card-title">tide of my stubbornness</div>
+    </a>
+    <a href="card_36.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">36</div>
+      <div class="card-emoji">⚖️</div>
+      <div class="card-title">cause and effect</div>
+    </a>
+    <a href="card_37.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">37</div>
+      <div class="card-emoji">🌿</div>
+      <div class="card-title">it's growing</div>
+    </a>
+    <a href="card_38.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">38</div>
+      <div class="card-emoji">📱</div>
+      <div class="card-title">drafts I never sent</div>
+    </a>
+    <a href="card_39.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">39</div>
+      <div class="card-emoji">🕯️</div>
+      <div class="card-title">still burning</div>
+    </a>
+    <a href="card_40.html" class="card-tile" style="--accent:#4070a0;--bg:#ddeeff;">
+      <div class="card-num">40</div>
+      <div class="card-emoji">🌌</div>
+      <div class="card-title">small in the grand scheme</div>
+    </a>
+  </div>
+</div>
+<div class="tier-section" data-tier="tier 5 — please stay">
+  <div class="tier-heading"><span class="tier-dot" style="background:#407060"></span>tier 5 — please stay</div>
+  <div class="grid">
+    <a href="card_41.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">41</div>
+      <div class="card-emoji">🪑</div>
+      <div class="card-title">empty chair</div>
+    </a>
+    <a href="card_42.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">42</div>
+      <div class="card-emoji">💡</div>
+      <div class="card-title">light it up</div>
+    </a>
+    <a href="card_43.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">43</div>
+      <div class="card-emoji">📋</div>
+      <div class="card-title">things better with you</div>
+    </a>
+    <a href="card_44.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">44</div>
+      <div class="card-emoji">🌄</div>
+      <div class="card-title">a new start</div>
+    </a>
+    <a href="card_45.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">45</div>
+      <div class="card-emoji">♾️</div>
+      <div class="card-title">infinitely sorry</div>
+    </a>
+    <a href="card_46.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">46</div>
+      <div class="card-emoji">🕰️</div>
+      <div class="card-title">all the times I should've</div>
+    </a>
+    <a href="card_47.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">47</div>
+      <div class="card-emoji">🌳</div>
+      <div class="card-title">growing towards each other</div>
+    </a>
+    <a href="card_48.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">48</div>
+      <div class="card-emoji">🍾</div>
+      <div class="card-title">message in a bottle</div>
+    </a>
+    <a href="card_49.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">49</div>
+      <div class="card-emoji">💐</div>
+      <div class="card-title">final poem</div>
+    </a>
+    <a href="card_50.html" class="card-tile" style="--accent:#407060;--bg:#d5f0e8;">
+      <div class="card-num">50</div>
+      <div class="card-emoji">🎊</div>
+      <div class="card-title">sorry.</div>
+    </a>
+  </div>
+</div>
+
+</main>
+
+<footer>made with care · open any card · take your time</footer>
+
+<script>
+// Scroll-reveal with staggered delay
+const tiles = document.querySelectorAll('.card-tile');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // stagger within each grid
+      const siblings = [...entry.target.parentElement.querySelectorAll('.card-tile:not(.visible)')];
+      const idx = siblings.indexOf(entry.target);
+      setTimeout(() => entry.target.classList.add('visible'), idx * 50);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+tiles.forEach(t => observer.observe(t));
+</script>
+</body>
+</html>
